@@ -7,6 +7,7 @@
 typedef	struct s_glob
 {
 	int		nb_pipes;
+	t_dblist	*list;
 } t_glob;
 
 //Structure pour cmd line sans pipe
@@ -14,10 +15,19 @@ typedef	struct s_datas
 {
 	char	*data;
 	char	*type;
+	int		pos;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
 	struct s_glob	*glob;	
 } t_datas;
+
+// Struct pour points d'entrée de la liste
+typedef struct s_dblist
+{
+	int		number;
+	t_datas *first;
+	t_datas *last;
+} t_dblist;
 
 //Structure pour cmd line ac pipe
 typedef	struct s_blocks

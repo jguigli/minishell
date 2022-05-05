@@ -8,4 +8,5 @@ int	main(int argc, char *argv[], char *env[])
 	//ATTENTION PLUSIEURS MALLOC DANS GET_COPY. A FREE A LA FIN
 	my_env = get_copy(env);
 	get_prompt(my_env);
+	return (0);
 }
