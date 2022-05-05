@@ -29,8 +29,8 @@ int	get_tokens(char *entry)
 	unsigned int j;
 	int pos;
 
-	i = 1;
-	pos = 0;
+	i = 0;
+	pos = 1;
 	/*  *********************************
 	AMINA : COMMENTAIRES COMPREHENSION 
 	La variable g_get_chr_class est un tableau regroupant des t_chr_class et prend en param le caractere et nous renvoie sa valeur dans la liste enum
@@ -51,15 +51,20 @@ int	get_tokens(char *entry)
 		j = 0;
 		// avec token_type, on recupere le type de token a partir du premier caractere
 		//printf("%u\n", g_get_chr_class[entry[0]]);
-		token_type = g_get_tok_type[g_get_chr_class[entry[0]]];
+		token_type = g_get_tok_type[g_get_chr_class[entry[i]]]; // TOKENIZER : indique si le caractere est un WORD, ESP, PIPE, etc..
 		//printf("%u\n", token_type);
-		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]])
+		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]) // LEXER : verifie si le token [i] est bon a etre enregistré
 		{
 
 			//printf("%c", entry[i]);
 			//printf("%d\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]);
 			i++;
-			//fct qui permet de creer la cellule de la liste chaine
+			/*
+			fct qui permet de creer la cellule de la liste chaine
+			on recupere : le type de token, la valeur du token, sa position
+			*/
+			if (!g_token_chr_rules[token_type][g_get_chr_class[entry[i + 1]]]) // si l'element a i + 1 est pas un token valide on augmente la position pour le prochain token valide quand on rerentrera dans la boucle while
+				pos++; 
 		}
 		//str = malloc(sizeof(char) * i + 1);
 		str = ft_substr(entry, j, i);
