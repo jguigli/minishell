@@ -62,6 +62,7 @@ typedef	struct s_myBuiltins
 	int  pos;
 }	t_tokens;*/
 
+// on définit tokens selon grammaire shell
 typedef enum		e_toktype {
 	TOKEN_ERROR,
 	TOKEN_SP,
@@ -81,9 +82,11 @@ typedef enum		e_toktype {
 	TOKEN_RPAREN,
 	TOKEN_LBRACE,
 	TOKEN_RBRACE,
+	TOKEN_WILDC,
 	TOKEN_MAX
 }					t_toktype;
 
+// on definit des enums pour reconnaitre chaque char et le categoriser
 typedef enum		e_chr_class {
 	CHR_ERROR,
 	CHR_SP,
@@ -103,10 +106,12 @@ typedef enum		e_chr_class {
 	CHR_RPAREN,
 	CHR_LBRACE,
 	CHR_RBRACE,
+	CHR_WILDC,
 	CHR_MAX
 }					t_chr_class;
 
 
+// Total abstraction = representing only the essential details in the program. Ici on definit tous les enums pour abstraire les char qui nous interessent. Tableau de t_chr_class, prend en param, la valeur entre crochet pour donner l'index
 static t_chr_class		g_get_chr_class[255] =
 {
 	[' '] = CHR_SP,
@@ -115,20 +120,42 @@ static t_chr_class		g_get_chr_class[255] =
 	['$'] = CHR_DOL,
 	['#'] = CHR_WORD,
 	['|'] = CHR_PIPE,
+	['-'] = CHR_WORD,
+	['('] = CHR_RPAREN,
+	[')'] = CHR_LPAREN,
+	['*'] = CHR_WILDC,
+	// ["'"] = CHR_SQUOTE,
+	//[] = CHR_DQUOTE,
+	['['] = CHR_LBRACE,
+	[']'] = CHR_RBRACE,
+	['!'] = CHR_BANG,
 	['A'...'Z'] = CHR_WORD,
 	['a'...'z'] = CHR_WORD,
 	['0'...'9'] = CHR_DIGIT,
 
 };
 
+// tableau de t_toktype pour definir le token courant avant le de le processer à partir du premier carac
 static t_toktype		g_get_tok_type[CHR_MAX] = {
+//Ici lindex est CHR MAX pour prevoir large en terme dalloc despace mem. Comme CHR MAX EST LE DERNIER DE LA LISTE ENUM "t_chr_class" donc il aura la derniere position (ex : 30 ou 40)
 	[CHR_SP] = TOKEN_SP,
+	[CHR_AND] = TOKEN_AND,
 	[CHR_PIPE] = TOKEN_PIPE,
 	[CHR_WORD] = TOKEN_WORD,
 	[CHR_ESCAPE] = TOKEN_WORD,
 	[CHR_DASH] = TOKEN_WORD,
 	[CHR_DIGIT] = TOKEN_WORD,
 	[CHR_BANG] = TOKEN_BANG,
+	[CHR_SEMI] = TOKEN_SEMI,
+	[CHR_DOL] = TOKEN_DOL,
+	[CHR_WILDC] = TOKEN_WILDC,
+	[CHR_DQUOTE] = TOKEN_DQUOTE,
+	[CHR_SQUOTE] = TOKEN_SQUOTE,
+	[CHR_LBRACE] = TOKEN_LBRACE,
+	[CHR_RBRACE] = TOKEN_RBRACE,
+	[CHR_LPAREN] = TOKEN_LPAREN,
+	[CHR_RPAREN] = TOKEN_RPAREN,
+	[CHR_BQUOTE] = TOKEN_BQUOTE,
 };
 
 static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
@@ -139,7 +166,7 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 	[TOKEN_WORD] = {
 		[CHR_WORD] = 1,
 		[CHR_DIGIT] = 1,
-		[CHR_ESCAPE] = 1,
+		//[CHR_ESCAPE] = 1,
 		[CHR_SQUOTE] = 1,
 		[CHR_DQUOTE] = 1,
 		[CHR_BQUOTE] = 1,
@@ -147,9 +174,21 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RPAREN] = 0,
 		[CHR_LBRACE] = 1,
 		[CHR_RBRACE] = 0,
-		[CHR_PIPE] = 1,
+		//[CHR_PIPE] = 1,
 		[CHR_DOL] = 1,
 		[CHR_DASH] = 1
+	},
+	[TOKEN_PIPE] = {
+		[CHR_PIPE] = 0
+	},
+	[TOKEN_DQUOTE] = {
+		//[CHR_DQUOTE] = 1,
+		[CHR_WORD] = 1,
+		[CHR_DQUOTE] = 0
+	},
+	[TOKEN_SQUOTE] = {
+		[CHR_WORD] = 1,
+		[CHR_SQUOTE] = 0
 	},
 };
 

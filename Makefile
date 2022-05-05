@@ -10,7 +10,7 @@ SRC = minishell.c \
 
 OBJ = $(SRC:.c=.o)
 
-CC = cc
+CC = gcc
 
 FLAG = -Wall -Werror -Wextra
 
