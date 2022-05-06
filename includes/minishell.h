@@ -25,7 +25,7 @@ void		*get_ll(char **args);
 // void	    init_struct(t_glob *global);
 int	        check_quote(char *str);
 t_dblist	*get_tokens(char *entry);
-void	    init_linked_list(t_dblist *liste);
+t_dblist	*init_linked_list(void);
 
 
 

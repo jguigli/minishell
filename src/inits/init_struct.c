@@ -8,13 +8,16 @@ void	init_global(t_glob *global)
 	global->list = NULL;
 }
 
-void	init_linked_list(t_dblist *liste)
+t_dblist	*init_linked_list(void)
 {
-	liste = ft_calloc(1, sizeof(t_dblist));
-	//liste = malloc(sizeof(t_dblist));
+	t_dblist	*liste;
+
+	//liste = ft_calloc(1, sizeof(t_dblist));
+	liste = malloc(sizeof(t_dblist));
 	if (!liste)
 		exit(EXIT_FAILURE);
 	liste->number = 0;
 	liste->first = NULL;
 	liste->last = NULL;
+	return (liste);
 }
