@@ -22,9 +22,11 @@ char		**get_copy(char **d_tab);
 void		parse_args(char	*str);
 t_blocks	*fromtab_toll(char **args);
 void		*get_ll(char **args);
-void	init_struct(t_glob *global);
-int	check_quote(char *str);
-int	get_tokens(char *entry);
+// void	    init_struct(t_glob *global);
+int	        check_quote(char *str);
+t_dblist	*get_tokens(char *entry);
+void	    init_linked_list(t_dblist *liste);
+
 
 
 

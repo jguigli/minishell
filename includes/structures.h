@@ -3,19 +3,12 @@
 
 #include "structures.h"
 
-//Structure globale partagee par tous les noeux
-typedef	struct s_glob
-{
-	int		nb_pipes;
-	t_dblist	*list;
-} t_glob;
-
-//Structure pour cmd line sans pipe
 typedef	struct s_datas
 {
-	char	*data;
-	char	*type;
-	int		pos;
+	char			*data;
+	unsigned int	type;
+	char			*t_token;
+	int				pos;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
 	struct s_glob	*glob;	
@@ -28,6 +21,13 @@ typedef struct s_dblist
 	t_datas *first;
 	t_datas *last;
 } t_dblist;
+
+//Structure globale partagee par tous les noeux
+typedef	struct s_glob
+{
+	int		nb_pipes;
+	t_dblist	*list;
+} t_glob;
 
 //Structure pour cmd line ac pipe
 typedef	struct s_blocks
@@ -46,31 +46,6 @@ typedef	struct s_myBuiltins
 	char *name;
 	int (*func)(void);	
 } t_myBuiltins;
-
-/*typedef struct s_tokens
-{
-	enum
-	{
-		TOKEN_HYPHEN,
-		TOKEN_RR,
-		TOKEN_LL,
-		TOKEN_RD,
-		TOKEN_PIPE,
-		TOKEN_SLASH,
-		TOKEN_BSLASH,
-		TOKEN_DOLLAR,
-		TOKEN_PARENR,
-		TOKEN_PARENL,
-		TOKEN_BACKETR,
-		TOKEN_BRACKETL,
-		TOKEN_DQUOTEL,
-		TOKEN_DQUOTER,
-		TOKEN_SQUOTEL,
-		TOKEN_SQUOTER,
-	} type;
-	char *value;
-	int  pos;
-}	t_tokens;*/
 
 // on définit tokens selon grammaire shell
 typedef enum		e_toktype {
@@ -134,8 +109,8 @@ static t_chr_class		g_get_chr_class[255] =
 	['('] = CHR_RPAREN,
 	[')'] = CHR_LPAREN,
 	['*'] = CHR_WILDC,
-	// ["'"] = CHR_SQUOTE,
-	//[] = CHR_DQUOTE,
+	[39] = CHR_SQUOTE,
+	[34] = CHR_DQUOTE,
 	['['] = CHR_LBRACE,
 	[']'] = CHR_RBRACE,
 	['!'] = CHR_BANG,
@@ -176,9 +151,8 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 	[TOKEN_WORD] = {
 		[CHR_WORD] = 1,
 		[CHR_DIGIT] = 1,
-		//[CHR_ESCAPE] = 1,
-		[CHR_SQUOTE] = 1,
-		[CHR_DQUOTE] = 1,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
 		[CHR_BQUOTE] = 1,
 		[CHR_LPAREN] = 1,
 		[CHR_RPAREN] = 0,
@@ -186,13 +160,14 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RBRACE] = 0,
 		//[CHR_PIPE] = 1,
 		[CHR_DOL] = 1,
-		[CHR_DASH] = 1
+		[CHR_DASH] = 1,
 	},
 	[TOKEN_PIPE] = {
-		[CHR_PIPE] = 0
+		[CHR_PIPE] = 1,
+		[CHR_WORD] = 0,
+		[CHR_SP] = 0,
 	},
 	[TOKEN_DQUOTE] = {
-		//[CHR_DQUOTE] = 1,
 		[CHR_WORD] = 1,
 		[CHR_DQUOTE] = 0
 	},

@@ -4,6 +4,7 @@ SRC = minishell.c \
 		./src/prompt/get_prompt.c \
 		./src/env/get_copy.c \
 		./src/parse_args/parsing_args.c \
+		./src/inits/init_struct.c \
 		./src/exit_free/exit_free.c \
 		./src/check/check_quote.c \
 		./src/tokenisation/get_tokens.c \
