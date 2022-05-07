@@ -51,7 +51,6 @@ typedef	struct s_myBuiltins
 typedef enum		e_toktype {
 	TOKEN_ERROR,
 	TOKEN_SP,
-	TOKEN_DASH,
 	TOKEN_BANG,
 	TOKEN_AND,
 	TOKEN_SEMI,
@@ -65,6 +64,7 @@ typedef enum		e_toktype {
 	TOKEN_BQUOTE,
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
+	TOKEN_HYPHEN,
 	TOKEN_LBRACE,
 	TOKEN_RBRACE,
 	TOKEN_WILDC,
@@ -76,7 +76,6 @@ typedef enum		e_chr_class {
 	CHR_ERROR,
 	CHR_SP,
 	CHR_PIPE,
-	CHR_DASH,
 	CHR_BANG,
 	CHR_AND,
 	CHR_SEMI,
@@ -119,7 +118,6 @@ static t_chr_class		g_get_chr_class[255] =
 	['A'...'Z'] = CHR_WORD,
 	['a'...'z'] = CHR_WORD,
 	['0'...'9'] = CHR_DIGIT,
-
 };
 
 // tableau de t_toktype pour definir le token courant avant le de le processer à partir du premier carac
@@ -131,8 +129,7 @@ static t_toktype		g_get_tok_type[CHR_MAX] = {
 	[CHR_WORD] = TOKEN_WORD,
 	[CHR_ESCAPE] = TOKEN_WORD,
 	[CHR_DIEZ] = TOKEN_WORD,
-	[CHR_HYPHEN] = TOKEN_WORD,
-	[CHR_DASH] = TOKEN_WORD,
+	[CHR_HYPHEN] = TOKEN_HYPHEN,
 	[CHR_DIGIT] = TOKEN_WORD,
 	[CHR_BANG] = TOKEN_BANG,
 	[CHR_SEMI] = TOKEN_SEMI,
@@ -162,9 +159,7 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RPAREN] = 0,
 		[CHR_LBRACE] = 1,
 		[CHR_RBRACE] = 0,
-		//[CHR_PIPE] = 1,
 		[CHR_DOL] = 1,
-		[CHR_DASH] = 1,
 	},
 	[TOKEN_PIPE] = {
 		[CHR_PIPE] = 1,
@@ -178,6 +173,11 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 	[TOKEN_SQUOTE] = {
 		[CHR_WORD] = 1,
 		[CHR_SQUOTE] = 0
+	},
+	[TOKEN_HYPHEN] = {
+		[CHR_HYPHEN] = 1,
+		[CHR_WORD] = 1,
+		[CHR_SP] = 0
 	},
 };
 
