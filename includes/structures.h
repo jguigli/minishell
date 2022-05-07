@@ -149,6 +149,9 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 	[TOKEN_SP] = {
 		[CHR_SP] = 0
 	},
+	[TOKEN_ESCAPE] = {
+		[CHR_ESCAPE] = 0
+	},
 	[TOKEN_WORD] = {
 		[CHR_WORD] = 1,
 		[CHR_DIGIT] = 1,

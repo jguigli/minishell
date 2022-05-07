@@ -83,6 +83,32 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	}
 }
 
+t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
+{
+	t_dblist	*list;
+	int	pos;
+
+	list = l;
+	pos = 0;
+	while (list->first && list->first->next)
+	{
+		if (list->first->type == list->first->next->type)
+		{
+			list->first->data = ft_strjoin(list->first->data, " ");
+			list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
+			list->first = list->first->next->next;
+		}
+		else
+		{
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
+			list->first = list->first->next;
+		}
+	}
+	
+	return (gr_list);
+}
+
 t_dblist	*get_tokens(char *entry)
 {
 	int	counter;
@@ -91,12 +117,14 @@ t_dblist	*get_tokens(char *entry)
 	unsigned int i;
 	unsigned int j;
 	t_dblist	*list;
+	t_dblist	*gr_list;
 	int pos;
 
 	i = 0;
 	pos = 0;
 	j = 0;
-	list = init_linked_list(); // PRB RESOLU : j'ai renvoyé un pointeur sur t_dblist dans la fonction au lieu de le prendre en argument (avant -> init_linked_list(list))
+	list = init_linked_list(); // PRB RESOLU : j'ai renvoyé un pointeur sur t_dblist dans la fonction 	 au lieu de le prendre en argument (avant -> init_linked_list(list))
+	gr_list = init_linked_list();
 	char *str;
 	char *temp;
 	while (entry[i]) // METTRE A JOUR LES CHR RULES (voir commentaires dans cette fonction)
@@ -108,9 +136,17 @@ t_dblist	*get_tokens(char *entry)
 		}
 		str = malloc(sizeof(char) * (i - j) + 1);
 		str = ft_substr(entry, j, i - j);
+		pos++;
 		create_token_list(list, str, pos, token_type);
 		i++;
 		j = i;
 	}
-	return (list);
+	//printf("test\n");
+	gr_list = get_grps_tok(list, gr_list);
+	while (gr_list->first)
+	{
+		printf("%s\n", gr_list->first->data);
+		gr_list->first = gr_list->first->next;
+	}
+	return (gr_list);
 }
