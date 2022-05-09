@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "structures.h"
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
@@ -17,11 +18,14 @@
 
 
 //Main functions
-void		get_prompt(char **env);
+void		get_prompt(void);
 char		**get_copy(char **d_tab);
 void		parse_args(char	*str);
 t_blocks	*fromtab_toll(char **args);
 void		*get_ll(char **args);
+
+int manage_signal(void);
+
 // void	    init_struct(t_glob *global);
 int	        check_quote(char *str);
 t_dblist	*get_tokens(char *entry);

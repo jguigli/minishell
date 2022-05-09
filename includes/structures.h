@@ -11,21 +11,33 @@ typedef	struct s_datas
 	int				pos;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
-	struct s_glob	*glob;	
+	struct s_glob	*glob;	// utilité ?
 } t_datas;
 
 // Struct pour points d'entrée de la liste
 typedef struct s_dblist
 {
 	int		number;
+	int		has_pipe;
+	int		has_redir;
 	t_datas *first;
 	t_datas *last;
 } t_dblist;
+
+// Struct arbre syntaxique abstrait
+typedef struct s_ast
+{
+	t_datas *s_list;
+	struct s_ast *parent;
+	struct s_ast *right;
+	struct s_ast *left;
+} t_ast;
 
 //Structure globale partagee par tous les noeux
 typedef	struct s_glob
 {
 	int		nb_pipes;
+	int		should_run;
 	t_dblist	*list;
 } t_glob;
 

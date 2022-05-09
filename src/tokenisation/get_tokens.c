@@ -110,6 +110,7 @@ t_dblist	*get_tokens(char *entry)
 			//printf("rules = %d\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]);
 			i++;
 			// QUOTES CAS 1: est ce qu'on les gères ici avec le tokenizer ?
+		}
 		if (i != j) // si i différent de j ca veut dire que gtoken chr rules à avancer dans la str, du coup on vient substr ce qu'il faut
 		{
 			if (token_type == preced && preced == TOKEN_WORD) // si le token précédent est un token word et que le token actuel est aussi un word alors on strjoin le tout
