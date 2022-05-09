@@ -55,6 +55,8 @@ typedef enum		e_toktype {
 	TOKEN_AND,
 	TOKEN_SEMI,
 	TOKEN_WORD,
+	TOKEN_RRED,
+	TOKEN_LRED,
 	TOKEN_ESCAPE,
 	TOKEN_DIGIT,
 	TOKEN_DOL,
@@ -86,13 +88,15 @@ typedef enum		e_chr_class {
 	CHR_SQUOTE,
 	CHR_DQUOTE,
 	CHR_BQUOTE,
+	CHR_RRED,
+	CHR_LRED,
 	CHR_LPAREN,
 	CHR_RPAREN,
 	CHR_LBRACE,
 	CHR_RBRACE,
 	CHR_WILDC,
 	CHR_DIEZ,
-	CHR_HYPHEN,
+	//CHR_HYPHEN,
 	CHR_MAX
 }					t_chr_class;
 
@@ -106,7 +110,10 @@ static t_chr_class		g_get_chr_class[255] =
 	['$'] = CHR_DOL,
 	['#'] = CHR_DIEZ,
 	['|'] = CHR_PIPE,
-	['-'] = CHR_HYPHEN,
+	['-'] = CHR_WORD,
+	['>'] = CHR_RRED,
+	['<'] = CHR_LRED,
+	//['>>'] = CHR_DRED,
 	['('] = CHR_RPAREN,
 	[')'] = CHR_LPAREN,
 	['*'] = CHR_WILDC,
@@ -129,7 +136,9 @@ static t_toktype		g_get_tok_type[CHR_MAX] = {
 	[CHR_WORD] = TOKEN_WORD,
 	[CHR_ESCAPE] = TOKEN_WORD,
 	[CHR_DIEZ] = TOKEN_WORD,
-	[CHR_HYPHEN] = TOKEN_HYPHEN,
+	[CHR_RRED] = TOKEN_RRED,
+	[CHR_LRED] = TOKEN_LRED,
+	//[CHR_HYPHEN] = TOKEN_HYPHEN,
 	[CHR_DIGIT] = TOKEN_WORD,
 	[CHR_BANG] = TOKEN_BANG,
 	[CHR_SEMI] = TOKEN_SEMI,
@@ -177,11 +186,38 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_WORD] = 1,
 		[CHR_SQUOTE] = 0
 	},
-	[TOKEN_HYPHEN] = {
-		[CHR_HYPHEN] = 1,
-		[CHR_WORD] = 1,
-		[CHR_SP] = 0
+	[TOKEN_RRED] = {
+		[CHR_RRED] = 1,
+		[CHR_WORD] = 0,
+		[CHR_DIGIT] = 0,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
+		[CHR_BQUOTE] = 0,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+		[CHR_DOL] = 0
+
 	},
+	[TOKEN_LRED] = {
+		[CHR_LRED] = 1,
+		[CHR_WORD] = 0,
+		[CHR_DIGIT] = 0,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
+		[CHR_BQUOTE] = 0,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+		[CHR_DOL] = 0
+	},
+	// [TOKEN_HYPHEN] = {
+	// 	[CHR_HYPHEN] = 1,
+	// 	[CHR_WORD] = 1,
+	// 	[CHR_SP] = 0
+	// },
 };
 
 #endif
