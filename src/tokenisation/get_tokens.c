@@ -148,7 +148,6 @@ t_dblist	*get_tokens(char *entry)
 		}
 			i++;
 	}
-	}
 	affiche(list);
 	return (list);
 	// Amina Version

@@ -7,7 +7,7 @@ void	exec_complex_cmd(t_ast *ast) // exécution de la ligne de commande avec l'a
 
 void	exec_simple_cmd(t_dblist *list) // exécution de la ligne de commande avec le process classique (pid, execve, etc..)
 {
-	
+
 }
 
 t_ast	*build_complex_cmd(t_dblist *list) // construit l'AST à partir de la liste de tokens

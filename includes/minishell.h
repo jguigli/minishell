@@ -10,6 +10,11 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 
+#include <stddef.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
 #define OP  "OPERATOR"
 #define CMD "COMMANDE"
 #define OPT "OPTIONS"
