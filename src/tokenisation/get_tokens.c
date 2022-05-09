@@ -146,8 +146,10 @@ t_dblist	*get_tokens(char *entry)
 				preced = token_type;
 			}
 		}
-		i++;
+			i++;
+	}
 	}
 	affiche(list);
 	return (list);
+	// Amina Version
 }
