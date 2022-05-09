@@ -113,12 +113,13 @@ static t_chr_class		g_get_chr_class[255] =
 	['-'] = CHR_WORD,
 	['>'] = CHR_RRED,
 	['<'] = CHR_LRED,
-	//['>>'] = CHR_DRED,
+	['\"'] = CHR_DQUOTE,
+	['\''] = CHR_SQUOTE,
 	['('] = CHR_RPAREN,
 	[')'] = CHR_LPAREN,
 	['*'] = CHR_WILDC,
-	[39] = CHR_SQUOTE,
-	[34] = CHR_DQUOTE,
+	// [39] = CHR_SQUOTE,
+	// [34] = CHR_DQUOTE,
 	['['] = CHR_LBRACE,
 	[']'] = CHR_RBRACE,
 	['!'] = CHR_BANG,
@@ -138,7 +139,6 @@ static t_toktype		g_get_tok_type[CHR_MAX] = {
 	[CHR_DIEZ] = TOKEN_WORD,
 	[CHR_RRED] = TOKEN_RRED,
 	[CHR_LRED] = TOKEN_LRED,
-	//[CHR_HYPHEN] = TOKEN_HYPHEN,
 	[CHR_DIGIT] = TOKEN_WORD,
 	[CHR_BANG] = TOKEN_BANG,
 	[CHR_SEMI] = TOKEN_SEMI,
@@ -177,14 +177,6 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_PIPE] = 1,
 		[CHR_WORD] = 0,
 		[CHR_SP] = 0,
-	},
-	[TOKEN_DQUOTE] = {
-		[CHR_WORD] = 1,
-		[CHR_DQUOTE] = 0
-	},
-	[TOKEN_SQUOTE] = {
-		[CHR_WORD] = 1,
-		[CHR_SQUOTE] = 0
 	},
 	[TOKEN_RRED] = {
 		[CHR_RRED] = 1,
@@ -239,7 +231,30 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_LBRACE] = 0,
 		[CHR_RBRACE] = 0,
 	},
-
+	[TOKEN_DQUOTE] = {
+		[CHR_DQUOTE] = 1,
+		[CHR_LRED] = 1,
+		[CHR_WORD] = 1,
+		[CHR_DIGIT] = 1,
+		[CHR_SQUOTE] = 1,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+		[CHR_SP] = 0,	
+	},
+	[TOKEN_SQUOTE] = {
+		[CHR_SQUOTE] = 1,
+		[CHR_DQUOTE] = 1,
+		[CHR_LRED] = 1,
+		[CHR_WORD] = 1,
+		[CHR_DIGIT] = 1,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+		[CHR_SP] = 0,	
+	},
 };
 
 #endif

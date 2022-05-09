@@ -113,9 +113,10 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 				pos++;
 				create_token_list(gr_list, list->first->data, pos, list->first->type);
 				list->first = list->first->next;
+				list->first->type = 21;
 			}
 			pos++;
-			create_token_list(gr_list, list->first->data, pos, 21);
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
 			list->first = list->first->next;
 		}
 	}
