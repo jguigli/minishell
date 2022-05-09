@@ -96,15 +96,18 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 		{
 			list->first->data = ft_strjoin(list->first->data, " ");
 			list->first->data = ft_strjoin(list->first->data, list->first->next->data);
-			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			list->first = list->first->next->next;
 			pos++;
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
+			if (list->first->next->next)
+				list->first = list->first->next->next;
+			else
+				return (gr_list);
 		}
 		else
 		{
+			pos++;
 			create_token_list(gr_list, list->first->data, pos, list->first->type);
 			list->first = list->first->next;
-			pos++;
 		}
 	}
 	if (list)
