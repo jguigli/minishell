@@ -89,7 +89,6 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 {
 	t_dblist	*list;
 	int	pos;
-	//char	*types[g_get_chr_class[CHR_MAX]];
 
 	list = l;
 	pos = 0;
