@@ -213,11 +213,33 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RBRACE] = 0,
 		[CHR_DOL] = 0
 	},
-	// [TOKEN_HYPHEN] = {
-	// 	[CHR_HYPHEN] = 1,
-	// 	[CHR_WORD] = 1,
-	// 	[CHR_SP] = 0
-	// },
+	[TOKEN_DOL] = {
+		[CHR_DOL] = 1,
+		[CHR_LRED] = 0,
+		[CHR_WORD] = 1,
+		[CHR_DIGIT] = 1,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
+		[CHR_BQUOTE] = 0,
+		[CHR_LPAREN] = 1,
+		[CHR_RPAREN] = 1,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+	},
+	[TOKEN_WILDC] = {
+		[CHR_WILDC] = 1,
+		[CHR_LRED] = 0,
+		[CHR_WORD] = 1,
+		[CHR_DIGIT] = 1,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
+		[CHR_BQUOTE] = 0,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+	},
+
 };
 
 #endif

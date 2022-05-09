@@ -49,6 +49,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	t_datas *element;
 	t_datas *current;
 
+	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_MAX"};
 	element = malloc(sizeof(t_datas));
 	if (!element)
 		exit(EXIT_FAILURE);
@@ -59,6 +60,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		element->t_token = NULL;
 		element->pos = pos;
 		element->type = t;
+		element->t_token = types[t];
 		element->next = NULL;
 		element->previous = NULL;
 		l->last = element;
@@ -73,7 +75,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		}
 		current->next = element;
 		element->data = s;
-		element->t_token = NULL;
+		element->t_token = types[t];
 		element->pos = pos;
 		element->type = t;
 		element->next = NULL;
@@ -87,9 +89,11 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 {
 	t_dblist	*list;
 	int	pos;
+	//char	*types[g_get_chr_class[CHR_MAX]];
 
 	list = l;
 	pos = 0;
+
 	while (list->first && list->first->next)
 	{
 		if (list->first->type == list->first->next->type)
@@ -148,10 +152,6 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 	}
 	gr_list = get_grps_tok(list, gr_list);
-	while (gr_list->first)
-	{
-		printf("%s\n", gr_list->first->data);
-		gr_list->first = gr_list->first->next;
-	}
+	affiche(gr_list);
 	return (gr_list);
 }
