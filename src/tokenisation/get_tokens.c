@@ -151,6 +151,7 @@ t_dblist	*get_tokens(char *entry)
 		token_type = g_get_tok_type[g_get_chr_class[entry[i]]];
 		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]])
 		{
+			printf("%c \n", entry[i]);
 			i++;
 		}
 		str = malloc(sizeof(char) * (i - j) + 1);

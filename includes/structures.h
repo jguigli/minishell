@@ -172,6 +172,7 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_LBRACE] = 1,
 		[CHR_RBRACE] = 0,
 		[CHR_DOL] = 1,
+		[CHR_SP] = 0
 	},
 	[TOKEN_PIPE] = {
 		[CHR_PIPE] = 1,
@@ -232,6 +233,7 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RBRACE] = 0,
 	},
 	[TOKEN_DQUOTE] = {
+		[CHR_DQUOTE] = 1,
 		[CHR_SP] = 1,
 		[CHR_AND] = 1,
 		[CHR_PIPE] = 1,
