@@ -133,8 +133,6 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 // 	return (gr_list);
 // }
 
-
-
 t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 {
 	t_dblist	*list;
@@ -146,6 +144,7 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 	{
 		if (list->first->type == list->first->next->type)
 		{
+			printf("%s\n", list->first->data);
 			while (list->first->type == list->first->next->type)
 			{
 				//printf("TYPE --> %s\n", list->first->t_token);
@@ -155,7 +154,8 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 				if (list->first->next->next)
 					list->first->next = list->first->next->next;
 				else
-					break ;
+					return (gr_list);
+				
 			}
 			pos++;
 			create_token_list(gr_list, list->first->data, pos, list->first->type);
@@ -172,8 +172,14 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 			}
 			pos++;
 			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			if (list->first->next)
+			if (list->first->next && list->first->next->next)
 				list->first = list->first->next;
+			else if (!list->first->next->next)
+			{
+				list->first = list->first->next;
+				pos++;
+				create_token_list(gr_list, list->first->data, pos, list->first->type);
+			}
 			else
 				return (gr_list);
 		}
@@ -217,6 +223,7 @@ t_dblist	*get_tokens(char *entry)
 				i ++;
 				break ;
 			}
+			is_quoted = 1;
 			if (entry[i] == 39)
 			{
 				while(is_quoted == 1)
