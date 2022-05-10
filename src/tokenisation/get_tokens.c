@@ -85,6 +85,56 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	}
 }
 
+// int	tok_sametype(t_dblist *index)
+// {
+
+// }
+
+// t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
+// {
+// 	t_dblist	*list;
+// 	int	pos;
+
+// 	list = l;
+// 	pos = 0;
+// 	while (list->first && list->first->next)
+// 		if (list->first->type == list->first->next->type)
+// 		{
+// 			list->first->data = ft_strjoin(list->first->data, " ");
+// 			list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+// 			pos++;
+// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 			if (list->first->next->next)
+// 				list->first = list->first->next->next;
+// 			else
+// 				return (gr_list);
+// 		}
+// 		else
+// 		{
+// 			if (list->first->type == 6)
+// 			{
+// 				pos++;
+// 				create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 				list->first = list->first->next;
+// 				list->first->type = 21;
+// 			}
+// 			pos++;
+// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 			if (list->first->next)
+// 				list->first = list->first->next;
+// 			else
+// 				return (gr_list);
+// 		}
+// 	if (list)
+// 	{
+// 		pos++;
+// 		create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 	}
+// 	return (gr_list);
+// }
+
+
+
 t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 {
 	t_dblist	*list;
@@ -92,19 +142,24 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 
 	list = l;
 	pos = 0;
-
 	while (list->first && list->first->next)
-	{		
+	{
 		if (list->first->type == list->first->next->type)
 		{
-			list->first->data = ft_strjoin(list->first->data, " ");
-			list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+			while (list->first->type == list->first->next->type)
+			{
+				//printf("TYPE --> %s\n", list->first->t_token);
+				list->first->data = ft_strjoin(list->first->data, " ");
+				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+				//printf("inside la boucle %s \n", list->first->data);
+				if (list->first->next->next)
+					list->first->next = list->first->next->next;
+				else
+					break ;
+			}
 			pos++;
 			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			if (list->first->next->next)
-				list->first = list->first->next->next;
-			else
-				return (gr_list);
+			list->first = list->first->next;
 		}
 		else
 		{
@@ -117,13 +172,11 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 			}
 			pos++;
 			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			list->first = list->first->next;
+			if (list->first->next)
+				list->first = list->first->next;
+			else
+				return (gr_list);
 		}
-	}
-	if (list)
-	{
-		pos++;
-		create_token_list(gr_list, list->first->data, pos, list->first->type);
 	}
 	return (gr_list);
 }
@@ -135,26 +188,49 @@ t_dblist	*get_tokens(char *entry)
 	unsigned int token_typess;
 	unsigned int i;
 	unsigned int j;
+	int			is_quoted;
 	t_dblist	*list;
 	t_dblist	*gr_list;
 	int pos;
 
 	i = 0;
 	pos = 0;
+	is_quoted = 1;
 	j = 0;
 	list = init_linked_list(); // PRB RESOLU : j'ai renvoyé un pointeur sur t_dblist dans la fonction 	 au lieu de le prendre en argument (avant -> init_linked_list(list))
 	gr_list = init_linked_list();
 	char *str;
-	char *temp;
 	while (entry[i]) // METTRE A JOUR LES CHR RULES (voir commentaires dans cette fonction)
 	{
 		token_type = g_get_tok_type[g_get_chr_class[entry[i]]];
 		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]])
 		{
-			printf("%c \n", entry[i]);
+			if (entry[i] == 34)
+			{
+				while(is_quoted == 1)
+				{
+					i++;
+					if (entry[i] == 34)
+						is_quoted = 0;
+				}
+				g_token_chr_rules[token_type][g_get_chr_class[entry[i]]] = 0;
+				i ++;
+				break ;
+			}
+			if (entry[i] == 39)
+			{
+				while(is_quoted == 1)
+				{
+					i++;
+					if (entry[i] == 39)
+						is_quoted = 0;
+				}
+				g_token_chr_rules[token_type][g_get_chr_class[entry[i]]] = 0;
+				i ++;
+				break ;
+			}
 			i++;
 		}
-		str = malloc(sizeof(char) * (i - j) + 1);
 		str = ft_substr(entry, j, i - j);
 		pos++;
 		create_token_list(list, str, pos, token_type);

@@ -13,7 +13,6 @@ void	get_prompt(char **my_env)
 		if (int_mode == 1)
 		{
 			entry = readline(my_prompt);
-			// RAJOUTER CONDITION SI CA FOIRE
 	        add_history(entry); //add it to the history
 			parse_args(entry);
         }

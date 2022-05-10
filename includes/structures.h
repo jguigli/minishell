@@ -96,7 +96,6 @@ typedef enum		e_chr_class {
 	CHR_RBRACE,
 	CHR_WILDC,
 	CHR_DIEZ,
-	//CHR_HYPHEN,
 	CHR_MAX
 }					t_chr_class;
 
@@ -118,8 +117,6 @@ static t_chr_class		g_get_chr_class[255] =
 	['('] = CHR_RPAREN,
 	[')'] = CHR_LPAREN,
 	['*'] = CHR_WILDC,
-	// [39] = CHR_SQUOTE,
-	// [34] = CHR_DQUOTE,
 	['['] = CHR_LBRACE,
 	[']'] = CHR_RBRACE,
 	['!'] = CHR_BANG,
@@ -190,8 +187,8 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RPAREN] = 0,
 		[CHR_LBRACE] = 0,
 		[CHR_RBRACE] = 0,
-		[CHR_DOL] = 0
-
+		[CHR_DOL] = 0,
+		[CHR_SP] = 0,
 	},
 	[TOKEN_LRED] = {
 		[CHR_LRED] = 1,
@@ -204,7 +201,8 @@ static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 		[CHR_RPAREN] = 0,
 		[CHR_LBRACE] = 0,
 		[CHR_RBRACE] = 0,
-		[CHR_DOL] = 0
+		[CHR_DOL] = 0,
+		[CHR_SP] = 0,
 	},
 	[TOKEN_DOL] = {
 		[CHR_DOL] = 1,
