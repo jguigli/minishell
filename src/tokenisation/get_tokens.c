@@ -195,7 +195,10 @@ t_dblist	*get_tokens(char *entry)
 		i++;
 		j = i;
 	}
-	gr_list = get_grps_tok(list, gr_list);
+	if (ft_lstsize(list) == 1)
+		create_token_list(gr_list, list->first->data, pos, list->first->type);
+	else
+		gr_list = get_grps_tok(list, gr_list);
 	affiche(gr_list);
 	return (gr_list);
 }

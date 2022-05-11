@@ -70,6 +70,7 @@ typedef enum		e_toktype {
 	TOKEN_LBRACE,
 	TOKEN_RBRACE,
 	TOKEN_WILDC,
+	TOKEN_EQ,
 	TOKEN_MAX
 }					t_toktype;
 
@@ -96,6 +97,7 @@ typedef enum		e_chr_class {
 	CHR_RBRACE,
 	CHR_WILDC,
 	CHR_DIEZ,
+	CHR_EQ,
 	CHR_MAX
 }					t_chr_class;
 
@@ -123,6 +125,7 @@ static t_chr_class		g_get_chr_class[255] =
 	['A'...'Z'] = CHR_WORD,
 	['a'...'z'] = CHR_WORD,
 	['0'...'9'] = CHR_DIGIT,
+	['='] = CHR_EQ,
 };
 
 // tableau de t_toktype pour definir le token courant avant le de le processer à partir du premier carac
@@ -148,11 +151,25 @@ static t_toktype		g_get_tok_type[CHR_MAX] = {
 	[CHR_LPAREN] = TOKEN_LPAREN,
 	[CHR_RPAREN] = TOKEN_RPAREN,
 	[CHR_BQUOTE] = TOKEN_BQUOTE,
+	[CHR_EQ] = TOKEN_EQ,
 };
 
 static int				g_token_chr_rules[TOKEN_MAX][CHR_MAX] =
 {
 	[TOKEN_SP] = {
+		[CHR_SP] = 0
+	},
+	[TOKEN_EQ] = {
+		[CHR_EQ] = 1,
+		[CHR_DIGIT] = 0,
+		[CHR_SQUOTE] = 0,
+		[CHR_DQUOTE] = 0,
+		[CHR_BQUOTE] = 0,
+		[CHR_LPAREN] = 0,
+		[CHR_RPAREN] = 0,
+		[CHR_LBRACE] = 0,
+		[CHR_RBRACE] = 0,
+		[CHR_DOL] = 0,
 		[CHR_SP] = 0
 	},
 	[TOKEN_ESCAPE] = {
