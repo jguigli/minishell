@@ -1,7 +1,7 @@
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
-#include "structures.h"
+#include "minishell.h"
 
 typedef	struct s_datas
 {

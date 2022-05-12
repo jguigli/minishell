@@ -1,4 +1,5 @@
 #include "../../includes/minishell.h"
+#include "../../libft/libft.h"
 
 int	iswhitespace(char c)
 {
@@ -131,10 +132,17 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 				list->first = list->first->next;
 				pos++;
 				create_token_list(gr_list, list->first->data, pos, list->first->type);
+				return (gr_list);
 			}
 			else
 				return (gr_list) ;
 		}
+	}
+	if (list->first && !list->first->next)
+	{
+		pos++;
+		create_token_list(gr_list, list->first->data, pos, list->first->type);
+		return (gr_list);
 	}
 	return (gr_list);
 }
@@ -155,10 +163,10 @@ t_dblist	*get_tokens(char *entry)
 	pos = 0;
 	is_quoted = 1;
 	j = 0;
-	list = init_linked_list(); // PRB RESOLU : j'ai renvoyé un pointeur sur t_dblist dans la fonction 	 au lieu de le prendre en argument (avant -> init_linked_list(list))
+	list = init_linked_list();
 	gr_list = init_linked_list();
 	char *str;
-	while (entry[i]) // METTRE A JOUR LES CHR RULES (voir commentaires dans cette fonction)
+	while (entry[i])
 	{
 		token_type = g_get_tok_type[g_get_chr_class[entry[i]]];
 
@@ -195,10 +203,7 @@ t_dblist	*get_tokens(char *entry)
 		i++;
 		j = i;
 	}
-	if (ft_lstsize(list) == 1)
-		create_token_list(gr_list, list->first->data, pos, list->first->type);
-	else
-		gr_list = get_grps_tok(list, gr_list);
+	gr_list = get_grps_tok(list, gr_list);
 	affiche(gr_list);
 	return (gr_list);
 }
