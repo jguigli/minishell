@@ -8,6 +8,7 @@ typedef	struct s_datas
 	char			*data;
 	unsigned int	type;
 	char			*t_token;
+	int				level;
 	int				pos;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
@@ -46,6 +47,14 @@ typedef	struct s_myBuiltins
 	char *name;
 	int (*func)(void);	
 } t_myBuiltins;
+
+// Struct pur construire les built-in
+typedef	struct s_treenode
+{
+	t_dblist 		*first;
+	struct treenode *left;
+	struct treenode *right;
+} t_treenode;
 
 // on définit tokens selon grammaire shell
 typedef enum		e_toktype {

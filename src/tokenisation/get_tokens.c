@@ -37,7 +37,8 @@ int affiche(t_dblist *list)
 		printf("\t- Valeur token : %s\n", current->data);
 		printf("\t- Position token : %d\n", current->pos);
 		printf("\t- Type de token : %s\n", current->t_token);
-		printf("\t- Numero du token : %d\n\n", current->type);
+		printf("\t- Numero du token : %d\n", current->type);
+		printf("\t- Level : %d\n\n", current->level);
 		current = current->next;
 		i++;
 	}
@@ -51,6 +52,14 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	t_datas *current;
 
 	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_FILE", "TOKEN_MAX"};
+	/* POur les niveaux :
+		- Niveau 4 = pipes, &, $
+		- Niveau 3 = redirection ; > >> <
+		- Niveau 2 = mots
+		- Niveau 1 = doubleQ / SingleQ / brackets / parenthesis
+		- Niveau 0 = file
+	*/
+	int levels[1024] = {0, 1, 0, 4, 4, 2, 2, 3, 2 ,2, 4, 4, 1, 1, 1, 1, 1, 2, 1, 1, 2, 0, 10};
 	element = malloc(sizeof(t_datas));
 	if (!element)
 		exit(EXIT_FAILURE);
@@ -62,6 +71,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		element->pos = pos;
 		element->type = t;
 		element->t_token = types[t];
+		element->level = levels[t];
 		element->next = NULL;
 		element->previous = NULL;
 		l->last = element;
@@ -77,6 +87,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		current->next = element;
 		element->data = s;
 		element->t_token = types[t];
+		element->level = levels[t];
 		element->pos = pos;
 		element->type = t;
 		element->next = NULL;
