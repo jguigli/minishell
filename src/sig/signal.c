@@ -6,8 +6,9 @@ static void    handler(int sig)
     {
         // affiche un nouveau prompt (SIGINT = ctrl -c)
         //ft_putchar_fd('\n', 0);
-        write(0, "\n", 1);
+        write(1, "\n", 1);
         //printf("la\n");
+		get_prompt();
     }
     else if (sig == SIGQUIT)
     {
