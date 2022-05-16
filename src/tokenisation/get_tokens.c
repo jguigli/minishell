@@ -176,12 +176,14 @@ t_dblist	*get_tokens(char *entry)
 	j = 0;
 	list = init_linked_list();
 	gr_list = init_linked_list();
+	//printf("test120\n");
 	char *str;
+	// printf("entry[i] %c\n", entry[i]);
 	while (entry[i])
 	{
-		token_type = g_get_tok_type[g_get_chr_class[entry[i]]];
-
-		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]])
+		token_type = list->infos->get_chr_c[entry[i]];
+		//g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]
+		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]])
 		{
 			if (entry[i] == '\"')
 			{
