@@ -90,8 +90,9 @@ void	init_tokens(t_glob_infos *tok_info)
 
 void	init_rules(t_glob_infos *tok_info)
 {
-	tok_info->get_chr_rules[1024][1024];
+	tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
 
+	//printf("")
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DIGIT] = 1;
@@ -147,7 +148,7 @@ t_glob_infos	*initst_infos()
 		return (NULL);
 	init_classes(tok_info);
 	init_tokens(tok_info);
-	//init_rules(tok_info);
+	init_rules(tok_info);
 	printf("test1\n");
 	//printf("%d\n", tok_info->get_chr_c['=']);
 	return (tok_info);
