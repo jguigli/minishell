@@ -251,9 +251,9 @@ typedef enum		e_chr_class {
 
 typedef	struct s_glob_infos
 {
-	t_chr_class	*get_chr_c;
-	t_toktype	*get_tok_type;
-	int		**get_chr_rules;
+	t_chr_class	get_chr_c[255];
+	t_toktype	get_tok_type[255];
+	int		get_chr_rules[255][255];
 }	t_glob_infos;
 
 typedef	struct s_datas

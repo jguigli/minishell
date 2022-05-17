@@ -176,15 +176,15 @@ t_dblist	*get_tokens(char *entry)
 	j = 0;
 	list = init_linked_list();
 	gr_list = init_linked_list();
-	//printf("test120\n");
 	char *str;
-	// printf("entry[i] %c\n", entry[i]);
 	while (entry[i])
 	{
-		token_type = list->infos->get_chr_c[entry[i]];
-		//g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]
+		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+		// printf("tokenTY %d\n", token_type);
+		// printf("chr class %d\n", list->infos->get_chr_c[entry[i]]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]])
 		{
+			printf("entry[i] %c\n", entry[i]);
 			if (entry[i] == '\"')
 			{
 				i++;
@@ -210,6 +210,7 @@ t_dblist	*get_tokens(char *entry)
 			}
 			i++;
 		}
+		//printf("test156978\n");
 		str = ft_substr(entry, j, (i - j));
 		pos++;
 		create_token_list(list, str, pos, token_type);
@@ -219,4 +220,6 @@ t_dblist	*get_tokens(char *entry)
 	gr_list = get_grps_tok(list, gr_list);
 	affiche(gr_list);
 	return (gr_list);
+	// affiche(list);
+	// return (list);
 }
