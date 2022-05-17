@@ -59,6 +59,9 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['8'] = CHR_DIGIT;
 	tok_info->get_chr_c['9'] = CHR_DIGIT;
 	tok_info->get_chr_c['='] = CHR_EQ;
+	tok_info->get_chr_c['\0'] = CHR_EOF;
+	tok_info->get_chr_c['\\'] = CHR_WORD;
+	tok_info->get_chr_c['/'] = CHR_WORD;
 }
 
 void	init_tokens(t_glob_infos *tok_info)
@@ -86,6 +89,7 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_RPAREN] = TOKEN_WORD;
 	tok_info->get_tok_type[CHR_BQUOTE] = TOKEN_WORD;
 	tok_info->get_tok_type[CHR_EQ] = TOKEN_EQ;
+	tok_info->get_tok_type[CHR_EOF] = TOKEN_EOF;
 }
 
 void	init_rules(t_glob_infos *tok_info)
@@ -105,10 +109,11 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 0;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 1;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_RRED] = 0;
+	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_DIGIT] = 0;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_SQUOTE] = 0;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_DQUOTE] = 0;
@@ -136,7 +141,6 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RBRACE] = 1;
-	//printf("test2\n");
 }
 
 t_glob_infos	*initst_infos()
@@ -149,8 +153,6 @@ t_glob_infos	*initst_infos()
 	init_classes(tok_info);
 	init_tokens(tok_info);
 	init_rules(tok_info);
-	printf("test1\n");
-	//printf("%d\n", tok_info->get_chr_c['=']);
 	return (tok_info);
 }
 
@@ -162,7 +164,6 @@ void	parse_args(char	*entry)
 	if (check_quote(entry) == 1 && ft_strlen(entry) > 0)
 	{
 		fin_li = get_tokens(entry);
-		//bst(fin_li);
 	}
 
 	else

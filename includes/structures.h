@@ -27,6 +27,7 @@ typedef enum		e_toktype {
 	TOKEN_RBRACE,
 	TOKEN_WILDC,
 	TOKEN_EQ,
+	TOKEN_EOF,
 	TOKEN_MAX
 }					t_toktype;
 
@@ -54,6 +55,7 @@ typedef enum		e_chr_class {
 	CHR_WILDC,
 	CHR_DIEZ,
 	CHR_EQ,
+	CHR_EOF,
 	CHR_MAX
 }					t_chr_class;
 
