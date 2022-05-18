@@ -17,8 +17,6 @@ typedef enum		e_toktype {
 	TOKEN_DIGIT,
 	TOKEN_DOL,
 	TOKEN_PIPE,
-	TOKEN_SQUOTE,
-	TOKEN_DQUOTE,
 	TOKEN_BQUOTE,
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
@@ -27,6 +25,7 @@ typedef enum		e_toktype {
 	TOKEN_RBRACE,
 	TOKEN_WILDC,
 	TOKEN_EQ,
+	TOKEN_WORDQ,
 	TOKEN_EOF,
 	TOKEN_MAX
 }					t_toktype;
@@ -43,8 +42,6 @@ typedef enum		e_chr_class {
 	CHR_ESCAPE,
 	CHR_DIGIT,
 	CHR_DOL,
-	CHR_SQUOTE,
-	CHR_DQUOTE,
 	CHR_BQUOTE,
 	CHR_RRED,
 	CHR_LRED,
@@ -55,6 +52,7 @@ typedef enum		e_chr_class {
 	CHR_WILDC,
 	CHR_DIEZ,
 	CHR_EQ,
+	CHR_WORDQ,
 	CHR_EOF,
 	CHR_MAX
 }					t_chr_class;
