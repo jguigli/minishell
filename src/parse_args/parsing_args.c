@@ -97,7 +97,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
 
 	//printf("")
-	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 0;
+	//tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = ;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_SQUOTE] = 1;
@@ -141,7 +141,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RBRACE] = 1;
-	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DQUOTE] = 0;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DQUOTE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SQUOTE] = 1;
@@ -153,7 +153,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
-	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SQUOTE] = 0;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SQUOTE] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DQUOTE] = 1;
