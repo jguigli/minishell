@@ -50,8 +50,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 {
 	t_datas *element;
 	t_datas *current;
-	printf("type  %d -- %s\n", t, s);
-	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_EQ", "TOKEN_WORDQ", "TOKEN_EOF", "TOKEN_MAX"};
+	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_EQ", "TOKEN_WORDQ", "TOKEN_EOF", "TOKEN_MAX"};
 	/* POur les niveaux :
 		- Niveau 4 = pipes, &, $
 		- Niveau 3 = redirection ; > >> <
@@ -106,7 +105,9 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 	pos = 0;
 	while (list->first && list->first->next)
 	{
-		if (list->first->type == list->first->next->type)
+		if (list->first->type == list->first->next->type 
+			|| ( list->first->type == 5 && list->first->next->type == 13) 
+				|| ( list->first->type == 5 && list->first->next->type == 12))
 		{
 			while (list->first->type == list->first->next->type)
 			{
@@ -180,19 +181,25 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		//printf("%c --- %d\n", entry[i], token_type);
-		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]])
-			i++;
-		if (token_type != 1)
+		if (token_type == 13 || token_type == 12)
 		{
-			str = ft_substr(entry, j, (i - j));
-			pos++;
-			create_token_list(list, str, pos, token_type);
+
+			i++;
 		}
+		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]])
+		{
+			printf("entry i %c\n", entry[i]);
+			i++;
+		}
+		str = ft_substr(entry, j, (i - j));
+		pos++;
+		create_token_list(list, str, pos, token_type);
 		i++;
 		j = i;
 	}
-	gr_list = get_grps_tok(list, gr_list);
-	affiche(gr_list);
-	return (gr_list);
+	// gr_list = get_grps_tok(list, gr_list);
+	// affiche(gr_list);
+	// return (gr_list);
+	affiche(list);
+	return (list);
 }
