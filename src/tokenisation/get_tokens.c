@@ -199,6 +199,20 @@ t_dblist	*get_tokens(char *entry)
 					i++;
 				}
 			}
+			if (entry[i] == '\'')
+			{
+				is_quoted = 1;
+				i++;
+				while(is_quoted == 1)
+				{
+					if (entry[i] == '\'')
+					{
+						is_quoted = 0;
+						break ;
+					}
+					i++;
+				}
+			}
 			i++;
 		}
 		if (token_type != 1) // MODIF
@@ -206,13 +220,13 @@ t_dblist	*get_tokens(char *entry)
 			str = ft_substr(entry, j, (i - j));
 			pos++;
 			create_token_list(list, str, pos, token_type);
+			printf("%s\n", str);
 		}
-		if (is_quoted != 0)
+		if (is_quoted == 1)
 			i++;
 		else
 			is_quoted = 1;
 		j = i;
-		
 	}
 	gr_list = get_grps_tok(list, gr_list);
 	affiche(gr_list);

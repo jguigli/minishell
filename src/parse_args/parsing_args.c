@@ -96,8 +96,7 @@ void	init_rules(t_glob_infos *tok_info)
 {
 	tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
 
-	//printf("")
-	//tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = ;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_SQUOTE] = 1;
