@@ -256,6 +256,7 @@ typedef	struct s_glob_infos
 	t_chr_class	get_chr_c[255];
 	t_toktype	get_tok_type[255];
 	int		get_chr_rules[255][255];
+	int		sp;
 }	t_glob_infos;
 
 typedef	struct s_datas
@@ -265,6 +266,7 @@ typedef	struct s_datas
 	char			*t_token;
 	int				level;
 	int				pos;
+	int				space;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
 } t_datas;

@@ -38,7 +38,8 @@ int affiche(t_dblist *list)
 		printf("\t- Position token : %d\n", current->pos);
 		printf("\t- Type de token : %s\n", current->t_token);
 		printf("\t- Numero du token : %d\n", current->type);
-		printf("\t- Level : %d\n\n", current->level);
+		printf("\t- Level : %d\n", current->level);
+		printf("\t- SPACE : %d\n\n", current->space);
 		current = current->next;
 		i++;
 	}
@@ -72,6 +73,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		element->t_token = types[t];
 		element->level = levels[t];
 		element->next = NULL;
+		element->space = l->infos->sp;
 		element->previous = NULL;
 		l->last = element;
 		l->number++;
@@ -89,6 +91,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		element->level = levels[t];
 		element->pos = pos;
 		element->type = t;
+		element->space = l->infos->sp;
 		element->next = NULL;
 		element->previous = current;
 		l->last = element;
@@ -113,8 +116,10 @@ t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
 				|| ( list->first->type == 5 && list->first->next->type == 13) 
 					|| ( list->first->type == 5 && list->first->next->type == 12))
 			{
-				list->first->data = ft_strjoin(list->first->data, " ");
+				if (list->first->space == 1)
+					list->first->data = ft_strjoin(list->first->data, " ");
 				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+				list->first->space = list->first->next->space;
 				if (list->first->next->next)
 					list->first->next = list->first->next->next;
 				else
@@ -217,10 +222,13 @@ t_dblist	*get_tokens(char *entry)
 		}
 		if (token_type != 1) // MODIF
 		{
+			if (entry[i] == '\t' || entry[i] == ' ')
+				list->infos->sp = 1;
+			else 
+				list->infos->sp = 2;
 			str = ft_substr(entry, j, (i - j));
 			pos++;
 			create_token_list(list, str, pos, token_type);
-			printf("%s\n", str);
 		}
 		if (is_quoted == 1)
 			i++;
