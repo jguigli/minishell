@@ -9,8 +9,6 @@ t_dblist	*init_linked_list()
 	if (!liste)
 		exit(EXIT_FAILURE);
 	liste->number = 0;
-	liste->has_pipe = 0;
-	liste->has_redir = 0;
 	liste->first = NULL;
 	liste->last = NULL;
 	liste->infos = initst_infos();

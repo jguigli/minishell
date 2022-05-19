@@ -8,6 +8,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
+#include <signal.h>
 
 #define OP  "OPERATOR"
 #define CMD "COMMANDE"
@@ -26,7 +27,8 @@ t_dblist		*init_linked_list(void);
 t_treenode 		*bst(t_dblist *list);
 t_glob_infos	*initst_infos();
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
-int affiche(t_dblist *list);
+int manage_signal(void);
+int affiche(t_dblist *list); // A tej dans le futur
 
 
 

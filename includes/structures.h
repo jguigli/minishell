@@ -53,6 +53,8 @@ typedef enum		e_chr_class {
 	CHR_RPAREN,
 	CHR_LBRACE,
 	CHR_RBRACE,
+	CHR_LBRACKET,
+	CHR_RBRACKET,
 	CHR_WILDC,
 	CHR_DIEZ,
 	CHR_EQ,

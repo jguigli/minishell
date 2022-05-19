@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	get_prompt(void) // (void) => (char **env) anciennement
+void	get_prompt(char **env) // (void) => (char **env) anciennement
 {
 	char	*entry;
 	int		int_mode;
@@ -20,7 +20,7 @@ void	get_prompt(void) // (void) => (char **env) anciennement
 			}
 			// RAJOUTER CONDITION SI CA FOIRE
 	    	add_history(entry); //add it to the history
-			parse_args(entry);
+			parse_args(entry, env);
         }
 	}
 }

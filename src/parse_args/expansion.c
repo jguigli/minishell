@@ -2,15 +2,20 @@
 
 char	*search_in_env_var(char *str, char **env)
 {
-	while (ft_strncmp(str, *env, ft_strlen(str)))
-		env++;
-	return (*env + (ft_strlen(str) + 1));
+	int	i;
+
+	i = 0;
+	while (ft_strncmp(str, env[i], ft_strlen(str)) && env[i]) // SEGFAULT si la var n'est pas trouver >>>>> A FIXER
+		i++;
+	if (env[i] == NULL)
+		return (NULL);
+	else
+		return (env[i] + (ft_strlen(str) + 1));
 }
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 {
 	t_datas	*list;
-	// t_dblist *list;
 	int		i;
 	int		j;
 	char	*str;
@@ -18,7 +23,6 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 
 	i = 0;
 	list = gr_list->first;
-	printf("%s\n", list->data);
 	str = ft_strdup("");
 	while (list)
 	{
@@ -28,7 +32,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 			j = i;
 			while (list->data[i] != '$' && list->data[i] != 34 && list->data[i] != 39 && list->data[i])
 			{
-				printf("ici 1\n");
+				printf("ici 1 et char[%d] = %c\n", i, list->data[i]);
 				i++;
 			}
 			if (i != j)
@@ -36,7 +40,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 				printf("ici 2\n");
 				temp = ft_substr(list->data, j, i - j);
 				str = ft_strjoin(str, temp);
-				free(temp);
+				//free(temp);
 			}
 			if (list->data[i] == '$' && list->data[i + 1] != '{')
 			{
@@ -48,7 +52,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 				temp = ft_substr(list->data, j, i - j);
 				temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
 				str = ft_strjoin(str, temp);
-				free(temp);
+				//free(temp);
 			}
 			else if (list->data[i] == '$' && list->data[i + 1] == '{')
 			{
@@ -62,7 +66,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 				temp = ft_substr(list->data, j, i - j);
 				temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
 				str = ft_strjoin(str, temp);
-				free(temp);
+				//free(temp);
 			}
 			else if (list->data[i] == 34)
 			{
@@ -77,7 +81,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 					printf("ici 6\n");						
 						temp = ft_substr(list->data, j, i - j);
 						str = ft_strjoin(str, temp);
-						free(temp);
+						//free(temp);
 					}
 					if (list->data[i] == '\0')
 						break ;
@@ -92,7 +96,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 						temp = ft_substr(list->data, j, i - j);
 						temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
 						str = ft_strjoin(str, temp);
-						free(temp);
+						//free(temp);
 					}
 					else if (list->data[i] == '$' && list->data[i + 1] != '{')
 					{
@@ -103,7 +107,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 						temp = ft_substr(list->data, j, i - j);
 						temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
 						str = ft_strjoin(str, temp);
-						free(temp);
+						//free(temp);
 					}
 					if (list->data[i] == '\0')
 						break ;
@@ -129,5 +133,5 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 		list->data = ft_strdup(str);
 		list = list->next;
 	}
-	affiche(gr_list);
+	//affiche(gr_list);
 }

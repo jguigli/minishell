@@ -7,7 +7,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c[' '] = CHR_SP;
 	tok_info->get_chr_c['\t'] = CHR_SP;
 	tok_info->get_chr_c[';'] = CHR_SEMI;
-	tok_info->get_chr_c['$'] = CHR_DOL;
+	tok_info->get_chr_c['$'] = CHR_WORD;
 	tok_info->get_chr_c['#'] = CHR_DIEZ;
 	tok_info->get_chr_c['|'] = CHR_PIPE;
 	tok_info->get_chr_c['-'] = CHR_WORD;
@@ -20,6 +20,8 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['*'] = CHR_WILDC;
 	tok_info->get_chr_c['['] = CHR_LBRACE;
 	tok_info->get_chr_c[']'] = CHR_RBRACE;
+	tok_info->get_chr_c['{'] = CHR_WORD;
+	tok_info->get_chr_c['}'] = CHR_WORD;
 	tok_info->get_chr_c['!'] = CHR_BANG;
 	tok_info->get_chr_c['a'] = CHR_WORD;
 	tok_info->get_chr_c['b'] = CHR_WORD;
@@ -212,9 +214,11 @@ t_glob_infos	*initst_infos()
 }
 
 
-void	parse_args(char	*entry)
+void	parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
 
 	fin_li = get_tokens(entry);
+	shell_parameter_expansion(fin_li, env);
+
 }
