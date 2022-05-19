@@ -12,7 +12,6 @@ void	get_prompt(void) // (void) => (char **env) anciennement
 		int_mode = isatty(STDIN_FILENO);
 		if (int_mode == 1)
 		{
-			manage_signal();
 			entry = readline(my_prompt);
 			if (entry == NULL) // correspond a ctrl -d -> envoi EOF sur la stdin, readline renvoi NULL, quand il lis le EOF
 			{
@@ -20,8 +19,8 @@ void	get_prompt(void) // (void) => (char **env) anciennement
 				exit(0); // free le tout
 			}
 			// RAJOUTER CONDITION SI CA FOIRE
-	        add_history(entry); //add it to the history
-			parse_args(entry); 
+	    	add_history(entry); //add it to the history
+			parse_args(entry);
         }
 	}
 }

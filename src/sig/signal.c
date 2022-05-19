@@ -6,23 +6,23 @@ static void    handler(int sig)
     {
         // affiche un nouveau prompt (SIGINT = ctrl -c)
         //ft_putchar_fd('\n', 0);
+		rl_replace_line("", 0);
         write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
         //printf("la\n");
-		get_prompt();
+		//get_prompt();
     }
     else if (sig == SIGQUIT)
     {
-        // ne rien faire (SIGABRT = ctrl -\)
+        return ;
     }
 }
 
 int manage_signal(void)
 {
-    struct sigaction act;
-    struct sigaction oact;
-
-    act.sa_handler = handler;
-    sigaction(SIGINT, &act, &oact);
-    sigaction(SIGABRT, &act, &oact);
+	signal(SIGINT, handler);
+	signal(SIGQUIT, handler);
+	//signal()
     return (0);
 }

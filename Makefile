@@ -4,17 +4,18 @@ SRC = minishell.c \
 		./src/prompt/get_prompt.c \
 		./src/env/get_copy.c \
 		./src/parse_args/parsing_args.c \
+		./src/parse_args/expansion.c \
 		./src/inits/init_struct.c \
 		./src/exit_free/exit_free.c \
 		./src/check/check_quote.c \
 		./src/tokenisation/get_tokens.c \
-		./src/sig/signal.c \
+		./src/ast/building_ast.c \
 
 OBJ = $(SRC:.c=.o)
 
 CC = gcc
 
-FLAG = -Wall -Werror -Wextra
+FLAG = -Wall -Werror -Wextra -g3 -fsanitize=address 
 
 HEADER = ./includes/minishell.h
 

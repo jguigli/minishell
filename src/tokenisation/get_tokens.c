@@ -102,15 +102,17 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i]) // METTRE A JOUR LES CHR RULES (voir commentaires dans cette fonction)
 	{
 		j = i;
-		token_type = g_get_tok_type[g_get_chr_class[entry[i]]]; // TOKENIZER : indique si le caractere 
+		token_type = g_get_tok_type[g_get_chr_class[entry[i]]]; // TOKENIZER : indique si le caractere
+		printf("entry[4] %d\n", g_get_chr_class[entry[4]]);
 		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]) // LEXER : verifie si le token [i] est bon a etre enregistré
 		{
-			//printf("%c\n", entry[i]);
+			printf("%c\n", entry[i]);
 			//printf("token type = %d\n", token_type);
-			//printf("rules = %d\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]);
+			printf("rules = %d\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]);
 			i++;
 			// QUOTES CAS 1: est ce qu'on les gères ici avec le tokenizer ?
 		}
+		printf("rules = %d et i = %d et car = %c\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]], i, entry[i]);
 		if (i != j) // si i différent de j ca veut dire que gtoken chr rules à avancer dans la str, du coup on vient substr ce qu'il faut
 		{
 			if (token_type == preced && preced == TOKEN_WORD) // si le token précédent est un token word et que le token actuel est aussi un word alors on strjoin le tout
