@@ -1,4 +1,5 @@
 #include "../../includes/minishell.h"
+#include "../../libft/libft.h"
 
 int	iswhitespace(char c)
 {
@@ -36,7 +37,9 @@ int affiche(t_dblist *list)
 		printf("\t- Valeur token : %s\n", current->data);
 		printf("\t- Position token : %d\n", current->pos);
 		printf("\t- Type de token : %s\n", current->t_token);
-		printf("\t- Numero du token : %d\n\n", current->type);
+		printf("\t- Numero du token : %d\n", current->type);
+		printf("\t- Level : %d\n", current->level);
+		printf("\t- SPACE : %d\n\n", current->space);
 		current = current->next;
 		i++;
 	}
@@ -48,7 +51,15 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 {
 	t_datas *element;
 	t_datas *current;
-
+	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_FILE", "TOKEN_EQ", "TOKEN_EOF", "TOKEN_MAX"};
+	/* POur les niveaux :
+		- Niveau 4 = pipes, &, $
+		- Niveau 3 = redirection ; > >> <
+		- Niveau 2 = mots
+		- Niveau 1 = doubleQ / SingleQ / brackets / parenthesis
+		- Niveau 0 = file
+	*/
+	int levels[1024] = {0, 1, 0, 4, 4, 2, 2, 3, 2 ,2, 4, 4, 1, 1, 1, 1, 1, 2, 1, 1, 2, 0, 10};
 	element = malloc(sizeof(t_datas));
 	if (!element)
 		exit(EXIT_FAILURE);
@@ -59,7 +70,10 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		element->t_token = NULL;
 		element->pos = pos;
 		element->type = t;
+		element->t_token = types[t];
+		element->level = levels[t];
 		element->next = NULL;
+		element->space = l->infos->sp;
 		element->previous = NULL;
 		l->last = element;
 		l->number++;
@@ -73,9 +87,11 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		}
 		current->next = element;
 		element->data = s;
-		element->t_token = NULL;
+		element->t_token = types[t];
+		element->level = levels[t];
 		element->pos = pos;
 		element->type = t;
+		element->space = l->infos->sp;
 		element->next = NULL;
 		element->previous = current;
 		l->last = element;
@@ -83,74 +99,146 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	}
 }
 
+t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
+{
+	t_dblist	*list;
+	int	pos;
+
+	list = l;
+	pos = 0;
+	while (list->first && list->first->next)
+	{
+		if (list->first->type == list->first->next->type 
+			|| ( list->first->type == 5 && list->first->next->type == 13) 
+				|| ( list->first->type == 5 && list->first->next->type == 12))
+		{
+			while (list->first->type == list->first->next->type 
+				|| ( list->first->type == 5 && list->first->next->type == 13) 
+					|| ( list->first->type == 5 && list->first->next->type == 12))
+			{
+				if (list->first->space == 1)
+					list->first->data = ft_strjoin(list->first->data, " ");
+				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+				list->first->space = list->first->next->space;
+				if (list->first->next->next)
+					list->first->next = list->first->next->next;
+				else
+				{
+					pos++;
+					create_token_list(gr_list, list->first->data, pos, list->first->type);
+					return (gr_list);
+				}
+			}
+			pos++;
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
+			list->first = list->first->next;
+		}
+		else
+		{
+			if (list->first->type == 6)
+			{
+				pos++;
+				create_token_list(gr_list, list->first->data, pos, list->first->type);
+				list->first = list->first->next;
+				list->first->type = 21;
+			}
+			pos++;
+			create_token_list(gr_list, list->first->data, pos, list->first->type);
+			if (list->first->next && list->first->next->next)
+				list->first = list->first->next;
+			else if (list->first->next && !list->first->next->next)
+			{
+				list->first = list->first->next;
+				pos++;
+				create_token_list(gr_list, list->first->data, pos, list->first->type);
+				return (gr_list);
+			}
+			else
+				return (gr_list) ;
+		}
+	}
+	if (list->first && !list->first->next)
+	{
+		pos++;
+		create_token_list(gr_list, list->first->data, pos, list->first->type);
+		return (gr_list);
+	}
+	return (gr_list);
+}
+
 t_dblist	*get_tokens(char *entry)
 {
 	int	counter;
 	unsigned int token_type;
-	unsigned int preced;
+	unsigned int token_typess;
 	unsigned int i;
 	unsigned int j;
+	int			is_quoted;
 	t_dblist	*list;
+	t_dblist	*gr_list;
 	int pos;
 
 	i = 0;
 	pos = 0;
-	preced = 0;
-	list = init_linked_list(); // PRB RESOLU : j'ai renvoyé un pointeur sur t_dblist dans la fonction au lieu de le prendre en argument (avant -> init_linked_list(list))
+	is_quoted = 1;
+	j = 0;
+	list = init_linked_list();
+	gr_list = init_linked_list();
 	char *str;
-	char *temp;
-	while (entry[i]) // METTRE A JOUR LES CHR RULES (voir commentaires dans cette fonction)
-	{
-		j = i;
-		token_type = g_get_tok_type[g_get_chr_class[entry[i]]]; // TOKENIZER : indique si le caractere
-		printf("entry[4] %d\n", g_get_chr_class[entry[4]]);
-		while (g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]) // LEXER : verifie si le token [i] est bon a etre enregistré
-		{
-			printf("%c\n", entry[i]);
-			//printf("token type = %d\n", token_type);
-			printf("rules = %d\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]]);
-			i++;
-			// QUOTES CAS 1: est ce qu'on les gères ici avec le tokenizer ?
-		}
-		printf("rules = %d et i = %d et car = %c\n", g_token_chr_rules[token_type][g_get_chr_class[entry[i]]], i, entry[i]);
-		if (i != j) // si i différent de j ca veut dire que gtoken chr rules à avancer dans la str, du coup on vient substr ce qu'il faut
-		{
-			if (token_type == preced && preced == TOKEN_WORD) // si le token précédent est un token word et que le token actuel est aussi un word alors on strjoin le tout
-			{
 
-				temp = ft_substr(entry, j, i - j);
-				str = ft_strjoin(str, " ");
-				str = ft_strjoin(str, temp);
-				free(temp);
-				//
-				// QUOTES CAS 2 : check si la str a des quotes
-				//si oui, fonction pour trim les quotes comme il faut
-				//et si "$"", remplacer la variable $ par la bonne variable env
-				//verifier si la var env existe, sinon renvoyer "\n" sur la stdout
-				//
-				if (g_get_tok_type[g_get_chr_class[entry[i + 2]]] != TOKEN_WORD) // problème avec le i + 2, car si il y a un espace à la place ca fonctionnera pas la condition (modif les chr rules)
-				{
-					create_token_list(list, str, pos, token_type);
-					pos++;
-				}
-				preced = token_type;
-			}
-			else // la ou passe le premier token
+	while (entry[i])
+	{
+		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
+		{
+			if (entry[i] == '\"')
 			{
-				str = ft_substr(entry, j, i - j);
-				if (g_get_tok_type[g_get_chr_class[entry[i + 2]]] == TOKEN_WORD && token_type == TOKEN_WORD) //si c'est un token word et que le prochain est token word alors on créer pas une liste (la str sera str join dans le if au dessus)
-					; // problème avec le i + 2 ligne au dessus, car si il y a un espace à la place ca fonctionnera pas la condition (modif les chr rules)
-				else // création des autres tokens
+				i++;
+				while(is_quoted == 1)
 				{
-					create_token_list(list, str, pos, token_type);
-					pos++;
+					if (entry[i] == '\"')
+					{
+						is_quoted = 0;
+						break ;
+					}
+					i++;
 				}
-				preced = token_type;
 			}
-		}
+			if (entry[i] == '\'')
+			{
+				is_quoted = 1;
+				i++;
+				while(is_quoted == 1)
+				{
+					if (entry[i] == '\'')
+					{
+						is_quoted = 0;
+						break ;
+					}
+					i++;
+				}
+			}
 			i++;
+		}
+		if (token_type != 1) // MODIF
+		{
+			if (entry[i] == '\t' || entry[i] == ' ')
+				list->infos->sp = 1;
+			else 
+				list->infos->sp = 2;
+			str = ft_substr(entry, j, (i - j));
+			pos++;
+			create_token_list(list, str, pos, token_type);
+		}
+		if (is_quoted == 1)
+			i++;
+		else
+			is_quoted = 1;
+		j = i;
 	}
-	affiche(list);
-	return (list);
-	// Amina Version
+	gr_list = get_grps_tok(list, gr_list);
+	affiche(gr_list);
+	return (gr_list);
+	// affiche(list);
+	// return (list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jguigli <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aminaelk <aminaelk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 17:51:33 by jguigli           #+#    #+#             */
-/*   Updated: 2021/12/07 14:04:54 by jguigli          ###   ########.fr       */
+/*   Updated: 2022/05/12 12:06:43 by aminaelk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include "../includes/minishell.h"
 
 typedef struct s_list
 {
@@ -59,7 +60,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
-int		ft_lstsize(t_list *lst);
+int		ft_lstsize(t_dblist *lst);
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void*));
 t_list	*ft_lstlast(t_list *lst);

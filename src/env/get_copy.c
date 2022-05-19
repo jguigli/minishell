@@ -17,8 +17,3 @@ char	**get_copy(char **d_tab)
 	}
 	return (new_dtab);
 }
-
-// t_blocks	*fromtab_toll(char **args)
-// {
-// 	return (get_ll(args));
-// }
