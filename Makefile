@@ -10,10 +10,7 @@ SRC = minishell.c \
 		./src/check/check_quote.c \
 		./src/tokenisation/get_tokens.c \
 		./src/ast/building_ast.c \
-<<<<<<< HEAD
-=======
 		# ./src/process_launch/p_launch.c \
->>>>>>> Vamina
 
 OBJ = $(SRC:.c=.o)
 
