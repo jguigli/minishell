@@ -9,6 +9,7 @@ SRC = minishell.c \
 		./src/check/check_quote.c \
 		./src/tokenisation/get_tokens.c \
 		./src/ast/building_ast.c \
+		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)
 

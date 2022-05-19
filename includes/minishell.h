@@ -25,6 +25,8 @@ t_dblist		*get_tokens(char *entry);
 t_dblist		*init_linked_list(void);
 t_treenode 		*bst(t_dblist *list);
 t_glob_infos	*initst_infos();
+//void			freeing(char *paths[])
+
 
 
 
