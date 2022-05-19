@@ -26,6 +26,7 @@ typedef enum		e_toktype {
 	TOKEN_LBRACE,
 	TOKEN_RBRACE,
 	TOKEN_WILDC,
+	TOKEN_FILE,
 	TOKEN_EQ,
 	TOKEN_EOF,
 	TOKEN_MAX
