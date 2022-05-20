@@ -326,6 +326,7 @@ t_dblist	*get_tokens(char *entry)
 	i = 0;
 	pos = 0;
 	j = 0;
+	is_quoted = 1;
 	list = init_linked_list();
 	p_list = init_linked_list();
 	char *str;
@@ -333,6 +334,7 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+		printf("entry[i] --> %c\n", entry[i]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
 			if (entry[i] == '\"')
@@ -378,7 +380,8 @@ t_dblist	*get_tokens(char *entry)
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		if (is_quoted == 1)
+		printf("str = %s\n", str);
+		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22)
 			i++;
 		else
 			is_quoted = 1;
@@ -387,6 +390,7 @@ t_dblist	*get_tokens(char *entry)
 	// gr_list = get_grps_tok(list, gr_list);
 	// affiche(gr_list);
 	// return (gr_list);
+
 	affiche(list);
 	p_tok(list);
 	return (list);
