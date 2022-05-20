@@ -204,8 +204,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 1;
-	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_BS] = 1;	
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SLASH] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SQUOTE] = 1;

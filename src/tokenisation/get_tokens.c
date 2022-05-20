@@ -325,7 +325,6 @@ t_dblist	*get_tokens(char *entry)
 
 	i = 0;
 	pos = 0;
-	is_quoted = 1;
 	j = 0;
 	list = init_linked_list();
 	p_list = init_linked_list();
@@ -338,16 +337,15 @@ t_dblist	*get_tokens(char *entry)
 		{
 			if (entry[i] == '\"')
 			{
+				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
 				{
-					if (entry[i] == '\"')
+					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 22)
 					{
 						is_quoted = 0;
 						break ;
 					}
-					if (list->infos->get_chr_c[entry[i]] == 22)
-						break ;
 					i++;
 				}
 			}
@@ -357,16 +355,16 @@ t_dblist	*get_tokens(char *entry)
 				i++;
 				while(is_quoted == 1)
 				{
-					if (entry[i] == '\'')
+					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 22)
 					{
 						is_quoted = 0;
 						break ;
 					}
-					if (list->infos->get_chr_c[entry[i]] == 22)
-						break ;
 					i++;
 				}
 			}
+			if	(list->infos->get_chr_c[entry[i]] == 22)
+				break ;
 			i++;
 		}
 		if (token_type != 1) // MODIF
@@ -375,6 +373,7 @@ t_dblist	*get_tokens(char *entry)
 				list->infos->sp = 1;
 			else 
 				list->infos->sp = 2;
+			
 			str = ft_substr(entry, j, (i - j));
 			pos++;
 			create_token_list(list, str, pos, token_type);
