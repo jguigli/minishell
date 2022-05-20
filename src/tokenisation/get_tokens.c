@@ -218,6 +218,10 @@ t_dblist	*get_tokens(char *entry)
 					i++;
 				}
 			}
+			if (list->infos->get_chr_c[entry[i]] == 24)
+			{
+				break ;
+			}
 			i++;
 		}
 		if (token_type != 1) // MODIF
@@ -230,9 +234,9 @@ t_dblist	*get_tokens(char *entry)
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		if (is_quoted == 1)
+		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 24)
 			i++;
-		else
+		else 
 			is_quoted = 1;
 		j = i;
 	}
