@@ -3,17 +3,25 @@
 char	*search_in_env_var(char *str, char **env)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (ft_strncmp(str, env[i], ft_strlen(str)) && env[i]) // SEGFAULT si la var n'est pas trouver >>>>> A FIXER
-		i++;
-	if (env[i] == NULL)
+	j = 0;
+	if (!str || !*env)
 		return (NULL);
-	else
-		return (env[i] + (ft_strlen(str) + 1));
+	while (env[i])
+	{
+		j = 0;
+		while (env[i][j] != '=')
+			j++;
+		if (!ft_strncmp(str, env[i], j))
+			return (free(str), &env[i][j + 1]);
+		i++;
+	}
+	return (NULL);
 }
 
-void	shell_parameter_expansion(t_dblist *gr_list, char **env)
+void	shell_parameter_expansion(t_dblist *gr_list, char **env)  // $USER$USER marche quand y a plus le i++ de la boucle principale mais ec""ho -n "${USER}" fonctionne plus
 {
 	t_datas	*list;
 	int		i;
@@ -51,7 +59,8 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 					i++;
 				temp = ft_substr(list->data, j, i - j);
 				temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
-				str = ft_strjoin(str, temp);
+				if (temp)
+					str = ft_strjoin(str, temp);
 				//free(temp);
 			}
 			else if (list->data[i] == '$' && list->data[i + 1] == '{')
@@ -65,22 +74,27 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 					return ;
 				temp = ft_substr(list->data, j, i - j);
 				temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
-				str = ft_strjoin(str, temp);
+				if (temp)
+					str = ft_strjoin(str, temp);
+				i++;
 				//free(temp);
 			}
 			else if (list->data[i] == 34)
 			{
-				printf("ici 5\n");				
-				while (list->data[i] != 34 && list->data[i])
+				printf("ici 5\n");	
+				i++;			
+				if (list->data[i] != 34 && list->data[i])
 				{
 					j = i;
-					while (list->data[i] != '$' && list->data[i])
+					while (list->data[i] != '$' && list->data[i] != 34 && list->data[i])
 						i++;
 					if (i != j)
 					{
 					printf("ici 6\n");						
 						temp = ft_substr(list->data, j, i - j);
+						printf("temp = %s\n", temp);
 						str = ft_strjoin(str, temp);
+						printf("str = %s\n", str);
 						//free(temp);
 					}
 					if (list->data[i] == '\0')
@@ -94,8 +108,11 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 						if (list->data[i] != '}')
 							return ;
 						temp = ft_substr(list->data, j, i - j);
+						printf("%s\n", temp);
 						temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
-						str = ft_strjoin(str, temp);
+						if (temp)
+							str = ft_strjoin(str, temp);
+						i++;
 						//free(temp);
 					}
 					else if (list->data[i] == '$' && list->data[i + 1] != '{')
@@ -105,33 +122,35 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 						while (ft_isalnum(list->data[i]) && list->data[i]) // prb avec les othersymbols
 							i++;
 						temp = ft_substr(list->data, j, i - j);
+						printf("%s\n", temp);
 						temp = search_in_env_var(temp, env); //=> si trouver on return la var d'env sinon on renvoi rien et on strjoin rien
-						str = ft_strjoin(str, temp);
+						if (temp)
+							str = ft_strjoin(str, temp);
 						//free(temp);
 					}
-					if (list->data[i] == '\0')
-						break ;
-					else
-						i++;
+					// if (list->data[i] == '\0')
+					// 	break ;
 				}
-				i--;
+				//i--;
 			}
 			else if (list->data[i] == 39)
 			{
-				j = i;
 				i++;
-				while (list->data[i] != 39 && list->data[i])
-					i++;
-				temp = ft_substr(list->data, j, i - j);
-				str = ft_strjoin(str, temp);
-				//free(temp);
-				i--;
+				if (list->data[i] != 39 && list->data[i])
+				{
+					j = i;
+					while (list->data[i] != 39 && list->data[i])
+						i++;
+					temp = ft_substr(list->data, j, i - j);
+					str = ft_strjoin(str, temp);
+					//free(temp);
+				}
 			}
-			i++;
+			//i++;
 		}
 		free(list->data);
 		list->data = ft_strdup(str);
 		list = list->next;
 	}
-	//affiche(gr_list);
+	affiche(gr_list);
 }

@@ -12,19 +12,19 @@
 
 #include "libft.h"
 
-int ft_othersymbols(int c)
-{
-	char	car;
+// int ft_othersymbols(int c)
+// {
+// 	char	car;
 
-	car = (char)c;
-	if (car == '>' || car == '|' || car == '$' || car == '<' )
-		return (1);
-	return (0);
-}
+// 	car = (char)c;
+// 	if (car == '>' || car == '|' || car == '$' || car == '<' )
+// 		return (1);
+// 	return (0);
+// }
 
 int	ft_isalnum(int c)
 {
-	if (ft_isalpha(c) || ft_isdigit(c) || ft_othersymbols(c))
+	if (ft_isalpha(c) || ft_isdigit(c))
 		return (1);
 	return (0);
 }
