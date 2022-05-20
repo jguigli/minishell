@@ -233,13 +233,21 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 			&&  list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
 				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH)
 				 {
-					printf("interieur boucle %c -- %s\n", token->data[i], token->t_token );
 					pers_err_msges(ARG);
 				 }
 		i ++;
 	}
 	return (0);
 }
+
+// t_dblist	*get_blocks(t_dblist *list)
+// {
+// 	t_fdata	*node;
+// 	t_flist	*fin_l;
+
+// 	node = init_node();
+// 	fin_l = init_
+// }
 
 t_dblist	*token_tag(t_dblist *list)
 {
@@ -294,25 +302,26 @@ t_dblist	*token_tag(t_dblist *list)
 				if	(tag->next != NULL)
 					tag = tag->next;
 				else
-					break ;
+					return (list) ;
 			}
 			if	(tag->type == 6 || tag->type == 7)
 			{
 				if	(tag->next == NULL)
-					break ;
+					return (list) ;
 				tag = tag->next;
 				tag->t_token = "TOKEN_FILE";
 			}
 			if	(tag->next != NULL)
 				tag = tag->next;
 			else 
-				break ;
+				return (list) ;
 		}
 		if	(tag->next != NULL)
 			tag = tag->next;
 		else
 			return (list);
 	}
+	// get_blocks(list);
 }
 
 t_dblist *p_tok(t_dblist *list)

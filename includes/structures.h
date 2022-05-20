@@ -116,22 +116,19 @@ typedef struct s_dblist
 	t_glob_infos 	*infos;
 } t_dblist;
 
-//struct pour BST
-typedef	struct s_treenode
+typedef	struct s_fdata
 {
-	t_datas		  *info;
-	struct s_treenode *left;
-	struct s_treenode *right;
-} t_treenode;
+	char			*data;
+	char			*t_token;
+	int				length;
+	struct s_datas 	*next;
+} t_fdata;
 
-//
-typedef struct s_queue  
-{  
-    int 				front;
-	int					rear; 
-	int					size;  
-    struct s_treenode	**arr;  
-}	t_queue;
+typedef	struct s_flist
+{
+	t_fdata	*node;
+	struct s_datas 	*next;
+} t_flist;
 
 
 
