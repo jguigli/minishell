@@ -99,71 +99,216 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	}
 }
 
-t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
-{
-	t_dblist	*list;
-	int	pos;
+// t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
+// {
+// 	t_dblist	*list;
+// 	int	pos;
 
-	list = l;
-	pos = 0;
-	while (list->first && list->first->next)
+// 	list = l;
+// 	pos = 0;
+// 	while (list->first && list->first->next)
+// 	{
+// 		if (list->first->type == list->first->next->type 
+// 			|| ( list->first->type == 5 && list->first->next->type == 13) 
+// 				|| ( list->first->type == 5 && list->first->next->type == 12))
+// 		{
+// 			while (list->first->type == list->first->next->type 
+// 				|| ( list->first->type == 5 && list->first->next->type == 13) 
+// 					|| ( list->first->type == 5 && list->first->next->type == 12))
+// 			{
+// 				if (list->first->space == 1)
+// 					list->first->data = ft_strjoin(list->first->data, " ");
+// 				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
+// 				list->first->space = list->first->next->space;
+// 				if (list->first->next->next)
+// 					list->first->next = list->first->next->next;
+// 				else
+// 				{
+// 					pos++;
+// 					create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 					return (gr_list);
+// 				}
+// 			}
+// 			pos++;
+// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 			list->first = list->first->next;
+// 		}
+// 		else
+// 		{
+// 			if (list->first->type == 6)
+// 			{
+// 				pos++;
+// 				create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 				list->first = list->first->next;
+// 				list->first->type = 21;
+// 			}
+// 			pos++;
+// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 			if (list->first->next && list->first->next->next)
+// 				list->first = list->first->next;
+// 			else if (list->first->next && !list->first->next->next)
+// 			{
+// 				list->first = list->first->next;
+// 				pos++;
+// 				create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 				return (gr_list);
+// 			}
+// 			else
+// 				return (gr_list) ;
+// 		}
+// 	}
+// 	if (list->first && !list->first->next)
+// 	{
+// 		pos++;
+// 		create_token_list(gr_list, list->first->data, pos, list->first->type);
+// 		return (gr_list);
+// 	}
+// 	return (gr_list);
+// }
+
+int	check_dquotes_dol(t_datas *list)
+{
+	int	i;
+	int	dq;
+	int	dol;
+
+	i = 0;
+	dq = 0;
+	dol = 0;
+	while (list->data[i])
 	{
-		if (list->first->type == list->first->next->type 
-			|| ( list->first->type == 5 && list->first->next->type == 13) 
-				|| ( list->first->type == 5 && list->first->next->type == 12))
+		if (list->data[i] == 34)
+			dq++;
+		if (list->data[i] == '$')
+			dol++;
+		i++;
+	}
+	if (dq % 2 == 0 && dol == 1)
+		return (-1); // double quote pair et dol
+	else if (dq % 2 == 0 && dol == 0)
+		return (-2); // double quote et pas de dol
+	else if (dq % 2 == 0 && dol > 1)
+		return (dol);
+	else if (!(dq % 2))
+		pers_err_msges(ARG);
+}
+
+int	check_squotes_dol(t_datas *list)
+{
+	int	i;
+	int	sq;
+	int	dol;
+
+	i = 0;
+	sq = 0;
+	dol = 0;
+	while (list->data[i])
+	{
+		if (list->data[i] == 39)
+			sq++;
+		if (list->data[i] == '$')
+			dol++;
+		i++;
+	}
+	if (sq % 2 == 0 && dol == 1)
+		return (-1); // double quote pair et dol
+	else if (sq % 2 == 0 && dol == 0)
+		return (-2); // double quote et pas de dol
+	else if (sq % 2 == 0 && dol > 1)
+		return (dol);
+	else if (!(sq % 2))
+		pers_err_msges(ARG);
+}
+
+int	check_spec_char(t_datas *token, t_dblist *list)
+{
+	int	i;
+
+	i = 0;
+	while (token->data[i])
+	{
+		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD)
+			pers_err_msges(ARG);
+		i ++;
+	}
+	return (0);
+}
+
+t_dblist *p_tok(t_dblist *list)
+{
+	t_dblist	*p_list;
+
+	p_list = list;
+	while(p_list->first)
+	{
+		p_list->first->length = ft_strlen(p_list->first->data);
+		if	(p_list->first->type == 13)
 		{
-			while (list->first->type == list->first->next->type 
-				|| ( list->first->type == 5 && list->first->next->type == 13) 
-					|| ( list->first->type == 5 && list->first->next->type == 12))
+			if	(check_dquotes_dol(p_list->first) == -1)
 			{
-				if (list->first->space == 1)
-					list->first->data = ft_strjoin(list->first->data, " ");
-				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
-				list->first->space = list->first->next->space;
-				if (list->first->next->next)
-					list->first->next = list->first->next->next;
-				else
-				{
-					pos++;
-					create_token_list(gr_list, list->first->data, pos, list->first->type);
-					return (gr_list);
-				}
+				list->first->dq = 1;
+				list->first->dol = 1;
 			}
-			pos++;
-			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			list->first = list->first->next;
-		}
-		else
-		{
-			if (list->first->type == 6)
+			else if (check_dquotes_dol(p_list->first) == -2)
 			{
-				pos++;
-				create_token_list(gr_list, list->first->data, pos, list->first->type);
-				list->first = list->first->next;
-				list->first->type = 21;
+
+				list->first->dq = 1;
+				list->first->dol = 0;
 			}
-			pos++;
-			create_token_list(gr_list, list->first->data, pos, list->first->type);
-			if (list->first->next && list->first->next->next)
-				list->first = list->first->next;
-			else if (list->first->next && !list->first->next->next)
+			else if (check_dquotes_dol(p_list->first) > 1)
 			{
-				list->first = list->first->next;
-				pos++;
-				create_token_list(gr_list, list->first->data, pos, list->first->type);
-				return (gr_list);
+
+				list->first->dq = 1;
+				list->first->dol = check_dquotes_dol(p_list->first);
 			}
 			else
-				return (gr_list) ;
+				pers_err_msges(ARG);
+			
 		}
+		else if	(p_list->first->type == 12)
+		{
+			if	(check_squotes_dol(p_list->first) == -1)
+			{
+				list->first->dq = 1;
+				list->first->dol = 1;
+			}
+			else if (check_squotes_dol(p_list->first) == -2)
+			{
+
+				list->first->dq = 1;
+				list->first->dol = 0;
+			}
+			else if (check_squotes_dol(p_list->first) > 1)
+			{
+
+				list->first->dq = 1;
+				list->first->dol = check_squotes_dol(p_list->first);
+			}
+			else
+				pers_err_msges(ARG);
+		}
+		else if	(p_list->first->type == 5)
+			check_spec_char(p_list->first, p_list);
+		else if (p_list->first->type == 11)
+		{
+			if	(p_list->first->length != 1)
+				pers_err_msges(ARG);
+		}
+		else if (p_list->first->type == 6 || p_list->first->type == 7)
+		{
+			if (p_list->first->length == 1)
+				p_list->first->redir = 1;
+			else if (p_list->first->length == 2)
+			{
+				if (p_list->first->data[1] != p_list->first->data[0])
+					pers_err_msges(ARG);
+				p_list->first->redir = 2;
+			}
+			else
+				pers_err_msges(ARG);
+		}
+		p_list->first = p_list->first->next;
 	}
-	if (list->first && !list->first->next)
-	{
-		pos++;
-		create_token_list(gr_list, list->first->data, pos, list->first->type);
-		return (gr_list);
-	}
-	return (gr_list);
 }
 
 t_dblist	*get_tokens(char *entry)
@@ -175,7 +320,7 @@ t_dblist	*get_tokens(char *entry)
 	unsigned int j;
 	int			is_quoted;
 	t_dblist	*list;
-	t_dblist	*gr_list;
+	t_dblist	*p_list;
 	int pos;
 
 	i = 0;
@@ -183,7 +328,7 @@ t_dblist	*get_tokens(char *entry)
 	is_quoted = 1;
 	j = 0;
 	list = init_linked_list();
-	gr_list = init_linked_list();
+	p_list = init_linked_list();
 	char *str;
 
 	while (entry[i])
@@ -201,6 +346,8 @@ t_dblist	*get_tokens(char *entry)
 						is_quoted = 0;
 						break ;
 					}
+					if (list->infos->get_chr_c[entry[i]] == 22)
+						break ;
 					i++;
 				}
 			}
@@ -215,7 +362,7 @@ t_dblist	*get_tokens(char *entry)
 						is_quoted = 0;
 						break ;
 					}
-					if (list->infos->get_chr_c[entry[i]] == 22 )
+					if (list->infos->get_chr_c[entry[i]] == 22)
 						break ;
 					i++;
 				}
@@ -242,5 +389,6 @@ t_dblist	*get_tokens(char *entry)
 	// affiche(gr_list);
 	// return (gr_list);
 	affiche(list);
+	p_tok(list);
 	return (list);
 }

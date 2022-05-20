@@ -7,6 +7,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c[' '] = CHR_SP;
 	tok_info->get_chr_c['\t'] = CHR_SP;
 	tok_info->get_chr_c[';'] = CHR_SEMI;
+	tok_info->get_chr_c[','] = CHR_COMA;
 	tok_info->get_chr_c['$'] = CHR_DOL;
 	tok_info->get_chr_c['#'] = CHR_DIEZ;
 	tok_info->get_chr_c['|'] = CHR_PIPE;
@@ -86,9 +87,9 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['9'] = CHR_DIGIT;
 	tok_info->get_chr_c['='] = CHR_EQ;
 	tok_info->get_chr_c['\0'] = CHR_EOF;
-	tok_info->get_chr_c['\\'] = CHR_WORD;
-	tok_info->get_chr_c['/'] = CHR_WORD;
-	tok_info->get_chr_c['.'] = CHR_WORD;
+	tok_info->get_chr_c['\\'] = CHR_BS;
+	tok_info->get_chr_c['/'] = CHR_SLASH;
+	tok_info->get_chr_c['.'] = CHR_DOT;
 }
 
 void	init_tokens(t_glob_infos *tok_info)
@@ -117,6 +118,9 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_BQUOTE] = TOKEN_WORD;
 	tok_info->get_tok_type[CHR_EQ] = TOKEN_EQ;
 	tok_info->get_tok_type[CHR_EOF] = TOKEN_EOF;
+	tok_info->get_tok_type[CHR_SLASH] = TOKEN_SLASH;
+	tok_info->get_tok_type[CHR_DOT] = TOKEN_DOT;
+	tok_info->get_tok_type[CHR_COMA] = TOKEN_COMA;	
 }
 
 void	init_rules(t_glob_infos *tok_info)
@@ -133,30 +137,46 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DOL] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_SEMI] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_BANG] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_DOT] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_SLASH] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 0;
+	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_RRED] = 1;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_DIGIT] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_SQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_DQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_BQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_LPAREN] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_RPAREN] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_LBRACE] = 0;
-	tok_info->get_chr_rules[TOKEN_RRED][CHR_RBRACE] = 0;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_DIGIT] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_COMA] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_WORD] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_LRED] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_SQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_DQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_BQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_LPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_RPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_LBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_RRED][CHR_RBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_LRED][CHR_LRED] = 1;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_DIGIT] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_SQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_DQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_BQUOTE] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_LPAREN] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_RPAREN] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_LBRACE] = 0;
-	tok_info->get_chr_rules[TOKEN_LRED][CHR_RBRACE] = 0;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_DIGIT] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_WORD] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_COMA] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_RRED] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_SQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_DQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_BQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_LPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_RPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_LBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_LRED][CHR_RBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DIGIT] = 1;
@@ -169,6 +189,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_DOL][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DQUOTE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DIGIT] = 1;
@@ -179,10 +200,14 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_BS] = 1;	
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOT] = 1;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SLASH] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SQUOTE] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_WORD] = 1;
@@ -192,10 +217,14 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SP] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_BS] = 1;	
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DOT] = 1;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SLASH] = 1;
 }
 
 t_glob_infos	*initst_infos()
