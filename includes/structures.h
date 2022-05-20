@@ -36,6 +36,7 @@ typedef enum		e_toktype {
 	TOKEN_DOT,
 	TOKEN_COMA,
 	TOKEN_ESP,
+	TOKEN_DASH,	
 	TOKEN_MAX
 }					t_toktype;
 
@@ -69,6 +70,7 @@ typedef enum		e_chr_class {
 	CHR_DOT,
 	CHR_COMA,
 	CHR_ESP,
+	CHR_DASH,
 	CHR_MAX
 }					t_chr_class;
 

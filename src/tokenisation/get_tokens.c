@@ -227,18 +227,31 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 	i = 0;
 	while (token->data[i])
 	{
-		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD)
+		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD && list->infos->get_chr_c[token->data[i]] != CHR_DASH)
 			pers_err_msges(ARG);
 		i ++;
 	}
 	return (0);
 }
 
+// t_dblist	*token_tag(t_dblist *list)
+// {
+// 	t_dblist	*tag;
+
+// 	tag = list;
+// 	while (list->first)
+// 	{
+// 		if	
+// 	}
+// }
+
 t_dblist *p_tok(t_dblist *list)
 {
 	t_dblist	*p_list;
+	t_dblist	*gr_list;
 
 	p_list = list;
+	gr_list = list;
 	while(p_list->first)
 	{
 		p_list->first->length = ft_strlen(p_list->first->data);
@@ -288,7 +301,9 @@ t_dblist *p_tok(t_dblist *list)
 				pers_err_msges(ARG);
 		}
 		else if	(p_list->first->type == 5)
+		{
 			check_spec_char(p_list->first, p_list);
+		}
 		else if (p_list->first->type == 11)
 		{
 			if	(p_list->first->length != 1)
@@ -307,10 +322,18 @@ t_dblist *p_tok(t_dblist *list)
 			else
 				pers_err_msges(ARG);
 		}
-		else 
+		else
 			pers_err_msges(ARG);
 		p_list->first = p_list->first->next;
+		if	(p_list->first->next ==  NULL)
+		{
+			if	(p_list->first->type != 5)
+				pers_err_msges(ARG);
+		}
 	}
+	//printf("first %s\n", p_list->first->data);
+	//token_tag(gr_list);
+	return (p_list);
 }
 
 t_dblist	*get_tokens(char *entry)
@@ -381,17 +404,18 @@ t_dblist	*get_tokens(char *entry)
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		//printf("str = %s\n", str);
 		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22)
 			i++;
 		else
 			is_quoted = 1;
 		j = i;
 	}
+	//printf("str = %s\n", str);
 	// gr_list = get_grps_tok(list, gr_list);
 	// affiche(gr_list);
 	// return (gr_list);
 	affiche(list);
 	p_tok(list);
+	printf("test1\n");
 	return (list);
 }
