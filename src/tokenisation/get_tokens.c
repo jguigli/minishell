@@ -308,7 +308,36 @@ t_dblist	*token_tag(t_dblist *list)
 				break ;
 		}
 	}
-	// else if	(tag->type = ^)
+	else if	(tag->type == 7)
+	{
+		tag = tag->next;
+		tag->t_token = "TOKEN_FILE";
+		tag = tag->next;
+		tag->t_token = "TOKEN_CMD";
+		tag = tag->next;
+		while (tag && tag->type != 11)
+		{
+			while (tag->type != 6 && tag->type != 7)
+			{
+				tag->t_token = "TOKEN_OPT";
+				if	(tag->next != NULL)
+					tag = tag->next;
+				else
+					break ;
+			}
+			if	(tag->type == 6 || tag->type == 7)
+			{
+				if	(tag->next == NULL)
+					break ;
+				tag = tag->next;
+				tag->t_token = "TOKEN_FILE";
+			}
+			if	(tag->next != NULL)
+				tag = tag->next;
+			else 
+				break ;
+		}
+	}
 }
 
 t_dblist *p_tok(t_dblist *list)
