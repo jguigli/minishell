@@ -244,44 +244,11 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 t_dblist	*token_tag(t_dblist *list)
 {
 	t_datas	*tag;
+	t_datas	*head;
 
 	tag = list->first;
-	// while (tag)
-	// {
-	// 	while (tag->type != 11)
-	// 	{
-	// 		if	(tag->type == 5)
-	// 		{
-	// 			tag->t_token = "TOKEN_CMD";
-	// 			tag = tag->next;
-	// 			// while(tag)
-	// 			// {
-	// 			while (tag->type != 6 && tag->type != 7)
-	// 			{
-	// 				tag->t_token = "TOKEN_OPT";
-	// 				if	(tag->next != NULL)
-	// 					tag = tag->next;
-	// 				else
-	// 					break ;
-	// 			}
-	// 			if	(tag->type == 6 || tag->type == 7)
-	// 			{
-	// 				if	(tag->next == NULL)
-	// 					break ;
-	// 				tag->next->t_token = "TOKEN_FILE";
-	// 			}
-	// 			if	(tag->next != NULL)
-	// 				tag = tag->next;
-	// 			else 
-	// 				break ;
-	// 		}
-	// 		if	(tag->next != NULL)
-	// 			tag = tag->next;
-	// 		else 
-	// 			break ;
-	// 	}
-	// }
-	if	(tag->type == 5)
+	head = list->first;
+	while (head->type == 5)
 	{
 		tag->t_token = "TOKEN_CMD";
 		tag = tag->next;
@@ -293,7 +260,7 @@ t_dblist	*token_tag(t_dblist *list)
 				if	(tag->next != NULL)
 					tag = tag->next;
 				else
-					break ;
+					return (list) ;
 			}
 			if	(tag->type == 6 || tag->type == 7)
 			{
@@ -305,10 +272,14 @@ t_dblist	*token_tag(t_dblist *list)
 			if	(tag->next != NULL)
 				tag = tag->next;
 			else 
-				break ;
+				return (list);
 		}
+		if	(tag->next != NULL)
+				tag = tag->next;
+		else
+			return (list);
 	}
-	else if	(tag->type == 7)
+	while (head->type == 7)
 	{
 		tag = tag->next;
 		tag->t_token = "TOKEN_FILE";
@@ -337,6 +308,10 @@ t_dblist	*token_tag(t_dblist *list)
 			else 
 				break ;
 		}
+		if	(tag->next != NULL)
+			tag = tag->next;
+		else
+			return (list);
 	}
 }
 
