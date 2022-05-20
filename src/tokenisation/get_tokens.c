@@ -215,6 +215,8 @@ t_dblist	*get_tokens(char *entry)
 						is_quoted = 0;
 						break ;
 					}
+					if (list->infos->get_chr_c[entry[i]] == 22 )
+						break ;
 					i++;
 				}
 			}
@@ -236,9 +238,9 @@ t_dblist	*get_tokens(char *entry)
 			is_quoted = 1;
 		j = i;
 	}
-	gr_list = get_grps_tok(list, gr_list);
-	affiche(gr_list);
-	return (gr_list);
-	// affiche(list);
-	// return (list);
+	// gr_list = get_grps_tok(list, gr_list);
+	// affiche(gr_list);
+	// return (gr_list);
+	affiche(list);
+	return (list);
 }
