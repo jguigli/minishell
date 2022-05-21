@@ -231,7 +231,12 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 	{
 		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD 
 			&&  list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
-				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH)
+				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH
+				 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOL
+					 && list->infos->get_chr_c[token->data[i]] != CHR_SLASH
+					 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
+						 	&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
+					 )
 				 {
 					pers_err_msges(ARG);
 				 }
@@ -249,20 +254,117 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 // 	fin_l = init_
 // }
 
+// t_dblist	*token_tag(t_dblist *list)
+// {
+// 	t_datas	*tag;
+// 	t_datas	*head;
+// 	int		aft_p;
+
+// 	tag = list->first;
+// 	head = list->first;
+// 	aft_p = 1;
+// 	while (head->type == 5)
+// 	{
+// 		tag->t_token = "TOKEN_CMD";
+// 		tag = tag->next;
+// 		while (tag)
+// 		{
+// 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
+// 			{
+// 				tag->t_token = "TOKEN_OPT";
+// 				if	(tag->next != NULL)
+// 					tag = tag->next;
+// 				else
+// 					return (list) ;
+// 			}
+// 			if	(tag->type == 6 || tag->type == 7)
+// 			{
+// 				if	(tag->next == NULL)
+// 					break ;
+// 				tag = tag->next;
+// 				tag->t_token = "TOKEN_FILE";
+// 			}
+// 			else if (tag->type == 11)
+// 			{
+// 				if	(tag->next == NULL)
+// 					break ;
+// 				head = tag->next;
+// 				break ;
+// 			}
+// 			if	(tag->next != NULL)
+// 				tag = tag->next;
+// 			else 
+// 				return (list);
+// 		}
+// 		if	(tag->next != NULL)
+// 				tag = tag->next;
+// 		else
+// 			return (list);
+// 	}
+// 	while (head->type == 7)
+// 	{
+// 		tag = tag->next;
+// 		tag->t_token = "TOKEN_FILE";
+// 		tag = tag->next;
+// 		tag->t_token = "TOKEN_CMD";
+// 		tag = tag->next;
+// 		printf("ICI 1 \n");
+// 		while (tag)
+// 		{
+// 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
+// 			{
+// 				tag->t_token = "TOKEN_OPT";
+// 				if	(tag->next != NULL)
+// 					tag = tag->next;
+// 				else
+// 					return (list) ;
+// 			}
+// 			if	(tag->type == 6 || tag->type == 7)
+// 			{
+// 				if	(tag->next == NULL)
+// 					break ;
+// 				tag = tag->next;
+// 				tag->t_token = "TOKEN_FILE";
+// 			}
+// 			else if (tag->type == 11)
+// 			{
+// 				if	(tag->next == NULL)
+// 					break ;
+// 				head = tag->next;
+// 				aft_p = 0;
+// 				break ;
+// 			}
+// 			if	(tag->next != NULL)
+// 				tag = tag->next;
+// 			else 
+// 				return (list);
+// 		}
+// 		if	(tag->next != NULL)
+// 			tag = tag->next;
+// 		printf("tag data a analyser %s\n", tag->data);
+// 	}
+// 	return (list);
+// 	// get_blocks(list);
+// }
+
 t_dblist	*token_tag(t_dblist *list)
 {
 	t_datas	*tag;
 	t_datas	*head;
+	int		aft_p;
 
 	tag = list->first;
 	head = list->first;
-	while (head->type == 5)
+	aft_p = 1;
+	while(tag)
 	{
-		tag->t_token = "TOKEN_CMD";
-		tag = tag->next;
-		while (tag && tag->type != 11)
+		// printf("A ANALYSER %s\n", tag->data);
+		if (tag->type == 5)
 		{
-			while (tag->type != 6 && tag->type != 7)
+			aft_p = 1;
+			tag->t_token = "TOKEN_CMD";
+			tag = tag->next;
+			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 			{
 				tag->t_token = "TOKEN_OPT";
 				if	(tag->next != NULL)
@@ -275,28 +377,29 @@ t_dblist	*token_tag(t_dblist *list)
 				if	(tag->next == NULL)
 					break ;
 				tag = tag->next;
+				aft_p = 0;
 				tag->t_token = "TOKEN_FILE";
 			}
-			if	(tag->next != NULL)
-				tag = tag->next;
-			else 
-				return (list);
+			else if (tag->type == 11)
+			{
+				if	(tag->next == NULL)
+					break ;
+				aft_p = 0;
+				// tag = tag->next;
+			}
 		}
-		if	(tag->next != NULL)
-				tag = tag->next;
-		else
-			return (list);
-	}
-	while (head->type == 7)
-	{
-		tag = tag->next;
-		tag->t_token = "TOKEN_FILE";
-		tag = tag->next;
-		tag->t_token = "TOKEN_CMD";
-		tag = tag->next;
-		while (tag && tag->type != 11)
+		else if (tag->type == 7)
 		{
-			while (tag->type != 6 && tag->type != 7)
+			aft_p = 1;
+			tag = tag->next;
+			tag->t_token = "TOKEN_FILE";
+			printf("token and type %s -- %d\n", tag->data, tag->type);
+			tag = tag->next;
+			tag->t_token = "TOKEN_CMD";
+			printf("token and type %s -- %d\n", tag->data, tag->type);
+			tag = tag->next;
+			printf("token and type %s -- %d\n", tag->data, tag->type);
+			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 			{
 				tag->t_token = "TOKEN_OPT";
 				if	(tag->next != NULL)
@@ -304,24 +407,28 @@ t_dblist	*token_tag(t_dblist *list)
 				else
 					return (list) ;
 			}
+			//printf("%s\n", tag->data);
 			if	(tag->type == 6 || tag->type == 7)
 			{
 				if	(tag->next == NULL)
-					return (list) ;
+					break ;
+				aft_p = 0;
 				tag = tag->next;
 				tag->t_token = "TOKEN_FILE";
 			}
-			if	(tag->next != NULL)
-				tag = tag->next;
-			else 
-				return (list) ;
+			else if (tag->type == 11)
+			{
+				if	(tag->next == NULL)
+					break ;
+				aft_p = 0;
+				// tag = tag->next;
+			}
 		}
+		printf("dataaa herev--> %s\n", tag->next->data);
 		if	(tag->next != NULL)
-			tag = tag->next;
-		else
-			return (list);
+				tag = tag->next;
 	}
-	// get_blocks(list);
+	return (list);
 }
 
 t_dblist *p_tok(t_dblist *list)
@@ -329,14 +436,15 @@ t_dblist *p_tok(t_dblist *list)
 	t_datas	*p_list;
 
 	p_list = list->first;
-	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7 && p_list->type != 1)
+	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28)
 		pers_err_msges(ARG);
 	while(p_list)
 	{
+		// printf("token a analyser ---> %s \n", p_list->data);
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			//printf("ici 1 \n");
+			// printf("ici 1 \n");
 			if	(check_dquotes_dol(p_list) == -1)
 			{
 				list->first->dq = 1;
@@ -344,59 +452,59 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else if (check_dquotes_dol(p_list) == -2)
 			{
-				//printf("ici 2 \n");
+				// printf("ici 2 \n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_dquotes_dol(p_list) > 1)
 			{
-				//printf("ici 3 \n");
+				// printf("ici 3 \n");
 				list->first->dq = 1;
 				list->first->dol = check_dquotes_dol(p_list);
 			}
 			else
 			{
-				//printf("ici 4\n");
+				// printf("ici 4\n");
 				pers_err_msges(ARG);
 			}
-			
 		}
 		else if	(p_list->type == 12)
 		{
 			if	(check_squotes_dol(p_list) == -1)
 			{
-				//printf("ici 5\n");
+				// printf("ici 5\n");
 				list->first->dq = 1;
 				list->first->dol = 1;
 			}
 			else if (check_squotes_dol(p_list) == -2)
 			{
-				//printf("ici 6\n");
+				// printf("ici 6\n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_squotes_dol(p_list) > 1)
 			{
-				//printf("ici 7\n");
+				// printf("ici 7\n");
 				list->first->dq = 1;
 				list->first->dol = check_squotes_dol(p_list);
 			}
 			else
 			{
-				//printf("ici 8\n");
+				// printf("ici 8\n");
 				pers_err_msges(ARG);
 			}
 		}
-		else if	(p_list->type == 5)
+		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
+		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			//printf("ici 9 --> %s\n", list->first->data);
+			// printf("ici 9 --> %s\n", list->first->data);
 			check_spec_char(p_list, list);
 		}
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length != 1)
 			{
-				//printf("ici 10\n");
+				// printf("ici 10\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -408,14 +516,14 @@ t_dblist *p_tok(t_dblist *list)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					//printf("ici 11\n");
+					// printf("ici 11\n");
 					pers_err_msges(ARG);
 				}
 				p_list->redir = 2;
 			}
 			else
 			{
-				printf("ici 12\n");
+				// printf("ici 12\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -424,28 +532,31 @@ t_dblist *p_tok(t_dblist *list)
 			if (list->first->length == 1)
 				pers_err_msges(ARG);
 		}
+		else if	(p_list->type == 10)
+		{
+			
+		}
 		else
 		{
-			//printf("ici 13 -- %s\n", list->first->data);
 			pers_err_msges(ARG);
 		}
 		if	(p_list->next != NULL)
 		 	p_list = p_list->next;
 		else 
 			break ;
-		//printf("token = %s -- %s\n", p_list->data, p_list->t_token);
+		// printf("token = %s -- %s\n", p_list->data, p_list->t_token);
 		if	(p_list->next ==  NULL)
 		{
-			if	(p_list->type != 5)
+			if	(p_list->type == 11 || p_list->type == 6 || p_list->type == 7)
 			{
-				//printf("ici 14\n");
+				// printf("ici 14\n");
 				pers_err_msges(ARG);
 			}
 		}
 	}
-	//printf("dataaa == %s\n", list->first->data);
+	// printf("dataaa == %s\n", list->first->data);
 	token_tag(list);
-	affiche(list);
+	//affiche(list);
 	return (list);
 }
 

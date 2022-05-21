@@ -24,7 +24,6 @@ void			*get_ll(char **args);
 int	       		 check_quote(char *str);
 t_dblist		*get_tokens(char *entry);
 t_dblist		*init_linked_list(void);
-t_treenode 		*bst(t_dblist *list);
 t_glob_infos	*initst_infos();
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 int manage_signal(void);
