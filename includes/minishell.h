@@ -10,11 +10,11 @@
 #include "../libft/libft.h"
 #include <signal.h>
 
-#define OP  "OPERATOR"
-#define CMD "COMMANDE"
-#define OPT "OPTIONS"
-#define ARG "ARGUMENTS"
-#define PI  "PIPE"
+#define OP  "ERROR OPERATOR"
+#define CMD "ERROR COMMANDE"
+#define OPT "ERROR OPTIONS"
+#define ARG "ERROR ARGUMENTS"
+#define PI  "ERROR PIPE"
 
 //Main functions
 void			get_prompt(char **env);
@@ -29,6 +29,11 @@ t_glob_infos	*initst_infos();
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 int manage_signal(void);
 int affiche(t_dblist *list); // A tej dans le futur
+int				pers_err_msges(char *error);
+
+
+//void			freeing(char *paths[])
+
 
 
 

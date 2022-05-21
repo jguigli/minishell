@@ -11,6 +11,7 @@ SRC = minishell.c \
 		./src/tokenisation/get_tokens.c \
 		./src/ast/building_ast.c \
 		./src/sig/signal.c \
+		./src/err_msgs/err_messages.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)
