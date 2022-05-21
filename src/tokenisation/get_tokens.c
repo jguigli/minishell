@@ -391,14 +391,33 @@ t_dblist	*token_tag(t_dblist *list)
 		else if (tag->type == 7)
 		{
 			aft_p = 1;
-			tag = tag->next;
-			tag->t_token = "TOKEN_FILE";
-			printf("token and type %s -- %d\n", tag->data, tag->type);
-			tag = tag->next;
-			tag->t_token = "TOKEN_CMD";
-			printf("token and type %s -- %d\n", tag->data, tag->type);
-			tag = tag->next;
-			printf("token and type %s -- %d\n", tag->data, tag->type);
+			if (tag->length == 2)
+			{
+				tag->t_token = "TOKEN_HEREDOC";
+				aft_p = 0;
+				tag = tag->next;
+				tag->t_token = "TOKEN_HEREDOC";
+				if	(tag->next != NULL)
+					tag = tag->next;
+				else
+					break ;
+			}
+			else
+			{
+				if (tag->next != NULL)
+				{
+					tag = tag->next;
+					tag->t_token = "TOKEN_FILE";
+				}
+				if (tag->next != NULL && tag->next->next != NULL)
+				{
+					tag = tag->next;
+					tag->t_token = "TOKEN_CMD";
+					tag = tag->next;
+				}
+				else
+					break ;
+			}
 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 			{
 				tag->t_token = "TOKEN_OPT";
@@ -410,11 +429,21 @@ t_dblist	*token_tag(t_dblist *list)
 			//printf("%s\n", tag->data);
 			if	(tag->type == 6 || tag->type == 7)
 			{
-				if	(tag->next == NULL)
+				if (tag->type == 7 && tag->length == 2)
+				{
+					tag->t_token = "TOKEN_HEREDOC";
+					aft_p = 0;
+					tag = tag->next;
+					tag->t_token = "TOKEN_HEREDOC";
+				}
+				else if	(tag->next == NULL)
 					break ;
-				aft_p = 0;
-				tag = tag->next;
-				tag->t_token = "TOKEN_FILE";
+				else
+				{
+					aft_p = 0;
+					tag = tag->next;
+					tag->t_token = "TOKEN_FILE";
+				}
 			}
 			else if (tag->type == 11)
 			{
