@@ -671,5 +671,5 @@ t_dblist	*get_tokens(char *entry)
 	//affiche(list);
 	p_tok(list);
 	//affiche(gr_list);
-	return (list);
+	return (list); // problème avec echo $USER$USER
 }
