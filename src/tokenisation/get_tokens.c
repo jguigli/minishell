@@ -29,7 +29,7 @@ int affiche(t_dblist *list)
 	static int count = 0;
 
 	current = list->first;
-	//printf("DATA =  %s\n", current->data);
+	// printf("DATA =  %s\n", current->data);
 	i = 0;
 	printf("\nListe de tokens :\n");
 	while (i < list->number)
@@ -100,73 +100,6 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 		l->number++;
 	}
 }
-
-// t_dblist	*get_grps_tok(t_dblist *l, t_dblist *gr_list)
-// {
-// 	t_dblist	*list;
-// 	int	pos;
-
-// 	list = l;
-// 	pos = 0;
-// 	while (list->first && list->first->next)
-// 	{
-// 		if (list->first->type == list->first->next->type 
-// 			|| ( list->first->type == 5 && list->first->next->type == 13) 
-// 				|| ( list->first->type == 5 && list->first->next->type == 12))
-// 		{
-// 			while (list->first->type == list->first->next->type 
-// 				|| ( list->first->type == 5 && list->first->next->type == 13) 
-// 					|| ( list->first->type == 5 && list->first->next->type == 12))
-// 			{
-// 				if (list->first->space == 1)
-// 					list->first->data = ft_strjoin(list->first->data, " ");
-// 				list->first->data = ft_strjoin(list->first->data, list->first->next->data);
-// 				list->first->space = list->first->next->space;
-// 				if (list->first->next->next)
-// 					list->first->next = list->first->next->next;
-// 				else
-// 				{
-// 					pos++;
-// 					create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 					return (gr_list);
-// 				}
-// 			}
-// 			pos++;
-// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 			list->first = list->first->next;
-// 		}
-// 		else
-// 		{
-// 			if (list->first->type == 6)
-// 			{
-// 				pos++;
-// 				create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 				list->first = list->first->next;
-// 				list->first->type = 21;
-// 			}
-// 			pos++;
-// 			create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 			if (list->first->next && list->first->next->next)
-// 				list->first = list->first->next;
-// 			else if (list->first->next && !list->first->next->next)
-// 			{
-// 				list->first = list->first->next;
-// 				pos++;
-// 				create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 				return (gr_list);
-// 			}
-// 			else
-// 				return (gr_list) ;
-// 		}
-// 	}
-// 	if (list->first && !list->first->next)
-// 	{
-// 		pos++;
-// 		create_token_list(gr_list, list->first->data, pos, list->first->type);
-// 		return (gr_list);
-// 	}
-// 	return (gr_list);
-// }
 
 int	check_dquotes_dol(t_datas *list)
 {
@@ -245,108 +178,6 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 	return (0);
 }
 
-// t_dblist	*get_blocks(t_dblist *list)
-// {
-// 	t_fdata	*node;
-// 	t_flist	*fin_l;
-
-// 	node = init_node();
-// 	fin_l = init_
-// }
-
-// t_dblist	*token_tag(t_dblist *list)
-// {
-// 	t_datas	*tag;
-// 	t_datas	*head;
-// 	int		aft_p;
-
-// 	tag = list->first;
-// 	head = list->first;
-// 	aft_p = 1;
-// 	while (head->type == 5)
-// 	{
-// 		tag->t_token = "TOKEN_CMD";
-// 		tag = tag->next;
-// 		while (tag)
-// 		{
-// 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
-// 			{
-// 				tag->t_token = "TOKEN_OPT";
-// 				if	(tag->next != NULL)
-// 					tag = tag->next;
-// 				else
-// 					return (list) ;
-// 			}
-// 			if	(tag->type == 6 || tag->type == 7)
-// 			{
-// 				if	(tag->next == NULL)
-// 					break ;
-// 				tag = tag->next;
-// 				tag->t_token = "TOKEN_FILE";
-// 			}
-// 			else if (tag->type == 11)
-// 			{
-// 				if	(tag->next == NULL)
-// 					break ;
-// 				head = tag->next;
-// 				break ;
-// 			}
-// 			if	(tag->next != NULL)
-// 				tag = tag->next;
-// 			else 
-// 				return (list);
-// 		}
-// 		if	(tag->next != NULL)
-// 				tag = tag->next;
-// 		else
-// 			return (list);
-// 	}
-// 	while (head->type == 7)
-// 	{
-// 		tag = tag->next;
-// 		tag->t_token = "TOKEN_FILE";
-// 		tag = tag->next;
-// 		tag->t_token = "TOKEN_CMD";
-// 		tag = tag->next;
-// 		printf("ICI 1 \n");
-// 		while (tag)
-// 		{
-// 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
-// 			{
-// 				tag->t_token = "TOKEN_OPT";
-// 				if	(tag->next != NULL)
-// 					tag = tag->next;
-// 				else
-// 					return (list) ;
-// 			}
-// 			if	(tag->type == 6 || tag->type == 7)
-// 			{
-// 				if	(tag->next == NULL)
-// 					break ;
-// 				tag = tag->next;
-// 				tag->t_token = "TOKEN_FILE";
-// 			}
-// 			else if (tag->type == 11)
-// 			{
-// 				if	(tag->next == NULL)
-// 					break ;
-// 				head = tag->next;
-// 				aft_p = 0;
-// 				break ;
-// 			}
-// 			if	(tag->next != NULL)
-// 				tag = tag->next;
-// 			else 
-// 				return (list);
-// 		}
-// 		if	(tag->next != NULL)
-// 			tag = tag->next;
-// 		printf("tag data a analyser %s\n", tag->data);
-// 	}
-// 	return (list);
-// 	// get_blocks(list);
-// }
-
 t_dblist	*token_tag(t_dblist *list)
 {
 	t_datas	*tag;
@@ -367,7 +198,7 @@ t_dblist	*token_tag(t_dblist *list)
 			{
 
 				tag = tag->next;
-				printf("ICI 1  %s --- %s\n", tag->data, tag->t_token);
+				//printf("ICI 1  %s --- %s\n", tag->data, tag->t_token);
 				while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 				{
 					tag->t_token = "TOKEN_OPT";
@@ -378,7 +209,7 @@ t_dblist	*token_tag(t_dblist *list)
 				}
 				if	(tag->type == 6 || tag->type == 7)
 				{
-					printf("ICI 2  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
+					//printf("ICI 2  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 					if (tag->type == 6)
 					{
 						if (tag->length == 2)
@@ -386,36 +217,37 @@ t_dblist	*token_tag(t_dblist *list)
 					}
 					if (tag->type == 7)
 					{
-						printf("ICI 3  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
+						//printf("ICI 3  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 						if (tag->length == 2)
 							tag->t_token = "TOKEN_HEREDOC";
 						if (tag->length == 3)
 							tag->t_token = "TOKEN_HEREDOC_DASH";						
 					}
-					printf("ici 1 \n");
+					//printf("ici 1 \n");
 					if	(tag->next == NULL)
 						break ;
 					tag = tag->next;
-					printf("ici 2 %s -- %s\n", tag->data, tag->previous->data);
-					if (tag->next == NULL)
+					//printf("ici 2 %s -- %s\n", tag->data, tag->previous->data);
+					// if (tag->next == NULL)
+					// {
+					if (tag->previous->t_token != "TOKEN_HEREDOC" && tag->previous->t_token != "TOKEN_HEREDOC_DASH")
+						tag->t_token = "TOKEN_FILE";
+					else
 					{
-						if (tag->previous->t_token != "TOKEN_HEREDOC" && tag->previous->t_token != "TOKEN_HEREDOC_DASH")
-							tag->t_token = "TOKEN_FILE";
-						else
-						{
-							printf("ici 888888 %s -- %s\n", tag->data, tag->t_token);
-							if (tag->t_token = "TOKEN_WORD")
-								tag->t_token = "SIMPLE_DELIM";
-							else if (tag->t_token = "TOKEN_DQUOTE")
-								tag->t_token = "DQUOTED_DELIM";
-							else if (tag->t_token = "TOKEN_SQUOTE")
-								tag->t_token = "SQUOTED_DELIM";
-						}
-						printf("ici 3 %s\n", tag->t_token);			
-						break ;
+						printf("ici 888888 %s -- %s\n", tag->data, tag->t_token);
+						if (tag->t_token == "TOKEN_WORD")
+							tag->t_token = "SIMPLE_DELIM";
+						else if (tag->t_token == "TOKEN_DQUOTE")
+							tag->t_token == "DQUOTED_DELIM";
+						else if (tag->t_token == "TOKEN_SQUOTE")
+							tag->t_token = "SQUOTED_DELIM";
 					}
+					//printf("ici 3 %s\n", tag->t_token);
+					if (!tag->next)
+						break ;	
+					// }
 					aft_p = 0;
-					//printf("%s ---> %s\n", tag->data, tag->t_token);
+					// printf("%s ---> %s\n", tag->data, tag->t_token);
 				}
 				else if (tag->type == 11)
 				{
@@ -425,7 +257,7 @@ t_dblist	*token_tag(t_dblist *list)
 					// tag = tag->next;
 				}
 			}
-			}
+		}
 		else if (tag->type == 7)
 		{
 			aft_p = 1;
@@ -442,11 +274,11 @@ t_dblist	*token_tag(t_dblist *list)
 				{
 					tag = tag->next;
 					if (tag->next->t_token == "TOKEN_WORD")
-						tag->next->t_token == "SIMPLE_DELIM";
+						tag->next->t_token = "SIMPLE_DELIM";
 					if (tag->next->t_token == "TOKEN_DQUOTE")
-						tag->next->t_token == "DQUOTED_DELIM";
+						tag->next->t_token = "DQUOTED_DELIM";
 					if (tag->next->t_token == "TOKEN_SQUOTE")
-						tag->next->t_token == "SQUOTED_DELIM";
+						tag->next->t_token = "SQUOTED_DELIM";
 				}
 				else
 					break ;
@@ -476,7 +308,7 @@ t_dblist	*token_tag(t_dblist *list)
 				else
 					return (list) ;
 			}
-			//printf("%s\n", tag->data);
+			// printf("%s\n", tag->data);
 			if	(tag->type == 6 || tag->type == 7)
 			{
 				if	(tag->next == NULL)
@@ -488,11 +320,11 @@ t_dblist	*token_tag(t_dblist *list)
 					tag = tag->next;
 					tag->t_token = "TOKEN_HEREDOC";
 					if (tag->next->t_token == "TOKEN_WORD")
-						tag->next->t_token == "SIMPLE_DELIM";
+						tag->next->t_token = "SIMPLE_DELIM";
 					if (tag->next->t_token == "TOKEN_DQUOTE")
-						tag->next->t_token == "DQUOTED_DELIM";
+						tag->next->t_token = "DQUOTED_DELIM";
 					if (tag->next->t_token == "TOKEN_SQUOTE")
-						tag->next->t_token == "SQUOTED_DELIM";		
+						tag->next->t_token = "SQUOTED_DELIM";		
 				}
 				else
 				{
@@ -509,10 +341,10 @@ t_dblist	*token_tag(t_dblist *list)
 				// tag = tag->next;
 			}
 		}
-		//printf("dataaa herev--> %s\n", tag->next->data);
+		// printf("dataaa herev--> %s\n", tag->next->data);
 		if	(tag->next != NULL)
 		{
-			printf("ici 4 \n");
+			//printf("ici 4 \n");
 			tag = tag->next;
 		}
 		else
@@ -671,10 +503,10 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		//printf("%d ---- %c\n", token_type, entry[i]);
+		// printf("%d ---- %c\n", token_type, entry[i]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
-			printf(" ICI 1 == %d ---- %c\n", token_type, entry[i]);
+			//printf(" ICI 1 == %d ---- %c\n", token_type, entry[i]);
 			if (entry[i] == '\"')
 			{
 				is_quoted = 1;
@@ -707,14 +539,14 @@ t_dblist	*get_tokens(char *entry)
 				break ;
 			i++;
 		}
-		//printf(" ICI 2 == %d ---- %c --- %d\n", token_type, entry[i], i);
+		// printf(" ICI 2 == %d ---- %c --- %d\n", token_type, entry[i], i);
 		if (token_type != 1) // MODIF
 		{	
 			str = ft_substr(entry, j, (i - j));
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		//printf(" str == %s \n", str);
+		// printf(" str == %s \n", str);
 		if (entry[i] == '\0')
 			break ;
 		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22)
@@ -722,9 +554,9 @@ t_dblist	*get_tokens(char *entry)
 		else 
 			is_quoted = 1;
 		j = i;
-		//printf("entry [i] fin de boucle--- == %c \n", entry[i]);
+		// printf("entry [i] fin de boucle--- == %c \n", entry[i]);
 	}
-	//printf("str = %s\n", str);
+	// printf("str = %s\n", str);
 	// gr_list = get_grps_tok(list, gr_list);
 	// affiche(gr_list);
 	// return (gr_list);
