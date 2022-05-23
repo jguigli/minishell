@@ -189,7 +189,7 @@ t_dblist	*token_tag(t_dblist *list)
 	aft_p = 1;
 	while(tag)
 	{
-		// printf("A ANALYSER %s\n", tag->data);
+		printf("A ANALYSER %s\n", tag->data);
 		if (tag->type == 5)
 		{
 			aft_p = 1;
@@ -272,26 +272,29 @@ t_dblist	*token_tag(t_dblist *list)
 			aft_p = 1;
 			if (tag->length == 2 || tag->length == 3)
 			{
+				printf(" 6666 ---> %s -- %d\n", tag->data, tag->type);
 				if (tag->length == 2)
+				{
+					printf(" 7777 ---> %s -- %d\n", tag->data, tag->type);
 					tag->t_token = "TOKEN_HEREDOC";
+				}
 				if (tag->length == 3)
 					tag->t_token = "TOKEN_HEREDOC_DASH";
 				aft_p = 0;
 				tag = tag->next;
+				printf(" 888888 ---> %s -- %d\n", tag->data, tag->type);
 				//tag->t_token = "TOKEN_HEREDOC_DELIM";
-				if	(tag->next != NULL)
-				{
+					//tag = tag->next;
+				if (tag->type == 5)
+					tag->t_token = "SIMPLE_DELIM";
+				else if (tag->type == 13)
+					tag->t_token = "DQUOTED_DELIM";
+				else if (tag->type == 12)
+					tag->t_token = "SQUOTED_DELIM";
+				if (tag->next != NULL)
 					tag = tag->next;
-					if (tag->next->t_token == "TOKEN_WORD")
-						tag->next->t_token = "SIMPLE_DELIM";
-					if (tag->next->t_token == "TOKEN_DQUOTE")
-						tag->next->t_token = "DQUOTED_DELIM";
-					if (tag->next->t_token == "TOKEN_SQUOTE")
-						tag->next->t_token = "SQUOTED_DELIM";
-				}
 				else
 					break ;
-
 			}
 			else
 			{
@@ -453,6 +456,15 @@ t_dblist *p_tok(t_dblist *list)
 				}
 				p_list->redir = 2;
 			}
+			else if (p_list->length > 2)
+			{
+				if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
+				{
+					// printf("ici 11\n");
+					pers_err_msges(ARG);
+				}
+				p_list->redir = 2;
+			}
 			else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
 			{
 				// printf("ici 12\n");
@@ -560,7 +572,7 @@ t_dblist	*get_tokens(char *entry)
 		// printf(" str == %s \n", str);
 		if (entry[i] == '\0')
 			break ;
-		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22)
+		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22 && token_type != 6 && token_type != 7)
 			i++;
 		else 
 			is_quoted = 1;
