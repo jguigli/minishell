@@ -12,10 +12,11 @@
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **alst, t_list *new)
+void	ft_lstadd_back(t_flist **alst, t_flist *new)
 {
-	t_list	*lstnew;
+	t_flist	*lstnew;
 
+	printf("%s \n", (*alst)->process->first->data);
 	if (*alst && alst)
 	{
 		lstnew = *alst;

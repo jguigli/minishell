@@ -437,9 +437,13 @@ t_glob_infos	*initst_infos()
 void	parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
+	t_flist			*gr_list;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
 	shell_parameter_expansion(fin_li, env);
+	gr_list = get_processes(fin_li);
+	printf("data here: %s\n", gr_list->process->first->data);
+	
 }

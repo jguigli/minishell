@@ -48,6 +48,41 @@ int affiche(t_dblist *list)
 	return(count);
 }
 
+void	create_grtoken(t_dblist *l, char *data, char *tokt)
+{
+	t_datas *element;
+	t_datas *current;
+
+	element = malloc(sizeof(t_datas));
+	if (!element)
+		exit(EXIT_FAILURE);
+	if (!l->number)
+	{
+		l->first = element;
+		element->data = data;
+		element->t_token = tokt;
+		element->next = NULL;
+		element->previous = NULL;
+		l->last = element;
+		l->number++;
+	}
+	else
+	{
+		current = l->first;
+		while (current->next)
+		{
+			current = current->next;
+		}
+		current->next = element;
+		element->data = data;
+		element->t_token = tokt;
+		element->next = NULL;
+		element->previous = current;
+		l->last = element;
+		l->number++;
+	}
+}
+
 void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 {
 	t_datas *element;
@@ -366,6 +401,66 @@ t_dblist	*token_tag(t_dblist *list)
 	return (list);
 }
 
+t_flist	*my_lstlast(t_flist *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
+void	my_lstadd_back(t_flist **alst, t_flist *new)
+{
+	t_flist	*last;
+
+	if (*alst == NULL)
+	{
+		*alst = new;
+		return ;
+	}
+	last = my_lstlast(*alst);
+	last -> next = new;
+	new->previous = last;
+	new->next = NULL;
+}
+
+t_flist *get_processes(t_dblist *list)
+{
+	t_flist		*finli;
+	t_flist		*finli_cur;
+	t_flist		*head;
+
+	//affiche(list);
+	finli = init_struct_flist();
+	while (list->first)
+	{
+		//printf("phrase --> %s\n", list->first->data);
+		while(list->first->type != 11)
+		{
+			//finli->process = list;
+			create_grtoken((finli)->process, list->first->data, list->first->t_token);
+			if	(list->first->next != NULL)
+				list->first = list->first->next;
+			else
+				break ;
+		}
+		//my_lstadd_back(head, (finli));
+		if	(list->first->next != NULL)
+		{
+			list->first = list->first->next;
+			finli_cur = init_struct_flist();
+			my_lstadd_back(&finli, finli_cur);
+			//printf("phrase --> %d\n", finli->next->number);
+			finli = finli_cur;
+		}
+		else 
+			break ;
+	}
+	//return (finli);
+	return (head);
+}
+
 t_dblist *p_tok(t_dblist *list)
 {
 	t_datas	*p_list;
@@ -497,6 +592,7 @@ t_dblist *p_tok(t_dblist *list)
 	// printf("dataaa == %s\n", list->first->data);
 	//affiche(list);
 	token_tag(list);
+	//get_processes(list);
 	return (list);
 }
 
