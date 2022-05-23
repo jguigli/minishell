@@ -439,5 +439,7 @@ void	parse_args(char	*entry, char **env)
 	t_dblist		*fin_li;
 
 	fin_li = get_tokens(entry);
+	if	(!fin_li)
+		return ;
 	shell_parameter_expansion(fin_li, env);
 }

@@ -234,13 +234,22 @@ t_dblist	*token_tag(t_dblist *list)
 						tag->t_token = "TOKEN_FILE";
 					else
 					{
-						printf("ici 888888 %s -- %s\n", tag->data, tag->t_token);
-						if (tag->t_token == "TOKEN_WORD")
+						printf("ici 888888 %s -- %d\n", tag->data, tag->type);
+						if (tag->type == 5)
+						{
+							printf("test 1\n");
 							tag->t_token = "SIMPLE_DELIM";
-						else if (tag->t_token == "TOKEN_DQUOTE")
-							tag->t_token == "DQUOTED_DELIM";
-						else if (tag->t_token == "TOKEN_SQUOTE")
+						}
+						else if (tag->type == 13)
+						{
+							printf("test 2\n");
+							tag->t_token = "DQUOTED_DELIM";
+						}
+						else if (tag->type == 12)
+						{
+							printf("test 3\n");
 							tag->t_token = "SQUOTED_DELIM";
+						}
 					}
 					//printf("ici 3 %s\n", tag->t_token);
 					if (!tag->next)
@@ -367,7 +376,7 @@ t_dblist *p_tok(t_dblist *list)
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			// printf("ici 1 \n");
+			// printf("ici 1 \n");./
 			if	(check_dquotes_dol(p_list) == -1)
 			{
 				list->first->dq = 1;
@@ -500,6 +509,8 @@ t_dblist	*get_tokens(char *entry)
 	p_list = init_linked_list();
 	char *str;
 
+	if (entry[0] == '\0')
+			return (NULL);
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];

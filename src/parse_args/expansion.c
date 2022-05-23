@@ -41,6 +41,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)  // $USER$USER mar
 	char	*temp;
 
 	list = gr_list->first;
+	//printf("Ici \n");
 	// str = ft_strdup("");
 	while (list)
 	{
