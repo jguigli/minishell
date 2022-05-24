@@ -676,12 +676,6 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 		// printf("entry [i] fin de boucle--- == %c \n", entry[i]);
 	}
-	// printf("str = %s\n", str);
-	// gr_list = get_grps_tok(list, gr_list);
-	// affiche(gr_list);
-	// return (gr_list);
-	//affiche(list);
 	p_tok(list);
-	//affiche(gr_list);
-	return (list); // problème avec echo $USER$USER
+	return (list);
 }
