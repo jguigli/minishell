@@ -9,6 +9,9 @@
 #include <readline/history.h>
 #include "../libft/libft.h"
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define OP  "ERROR OPERATOR"
 #define CMD "ERROR COMMANDE"

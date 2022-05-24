@@ -206,6 +206,8 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 						 		&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
 							 		&& list->infos->get_chr_c[token->data[i]] != CHR_DQUOTE
 								 		&& list->infos->get_chr_c[token->data[i]] != CHR_SQUOTE
+										 		&& list->infos->get_chr_c[token->data[i]] != CHR_RRED
+								 					&& list->infos->get_chr_c[token->data[i]] != CHR_LRED
 					 )
 				 {
 					pers_err_msges(ARG);

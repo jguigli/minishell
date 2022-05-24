@@ -27,16 +27,22 @@ HEADER = ./includes/minishell.h
 LIBFT_PATH		=	./libft
 LIBFT			=	$(LIBFT_PATH)/libft.a
 
+GNL_PATH		=	./gnl
+GNL				=	$(GNL_PATH)/gnl.a
+
 all : $(NAME)
 
 %.o : %.c
 	$(CC) -c $< -o $@
 
-$(NAME) : $(OBJ) $(LIBFT) $(HEADER)
-	$(CC) $(FLAG) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+$(NAME) : $(OBJ) $(LIBFT) $(GNL) $(HEADER)
+	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_PATH)
+
+$(GNL):
+	$(MAKE) -C $(GNL_PATH)
 
 clean :
 	$(MAKE) -C $(LIBFT_PATH) clean

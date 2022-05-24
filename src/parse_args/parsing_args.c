@@ -158,6 +158,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DASH] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;
@@ -444,7 +446,7 @@ void	parse_args(char	*entry, char **env)
 		return ;
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
-	//manage_redir(gr_list);
+	// manage_redir(gr_list);
 	// while(gr_list)
 	// {
 	// 	printf("data here: %s\n", gr_list->process->first->data);
