@@ -192,20 +192,20 @@ int	check_squotes_dol(t_datas *list)
 
 int	check_spec_char(t_datas *token, t_dblist *list)
 {
-	int	i;
+	int	i;                                                                                                                                                      
 
 	i = 0;
 	while (token->data[i])
 	{
 		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD 
-			&&  list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
+			&& list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
 				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH
 				 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOL
-					 && list->infos->get_chr_c[token->data[i]] != CHR_SLASH
-					 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
-						 	&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
-							 	&& list->infos->get_chr_c[token->data[i]] != CHR_DQUOTE
-								 	&& list->infos->get_chr_c[token->data[i]] != CHR_SQUOTE
+					 	&& list->infos->get_chr_c[token->data[i]] != CHR_SLASH
+					 		&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
+						 		&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
+							 		&& list->infos->get_chr_c[token->data[i]] != CHR_DQUOTE
+								 		&& list->infos->get_chr_c[token->data[i]] != CHR_SQUOTE
 					 )
 				 {
 					pers_err_msges(ARG);
@@ -629,7 +629,7 @@ t_dblist	*get_tokens(char *entry)
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
 			//printf(" ICI 1 == %d ---- %c\n", token_type, entry[i]);
-			if (entry[i] == '\"')
+			if (entry[i] == '\"' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
 				is_quoted = 1;
 				i++;
@@ -643,7 +643,7 @@ t_dblist	*get_tokens(char *entry)
 					i++;
 				}
 			}
-			if (entry[i] == '\'')
+			if (entry[i] == '\'' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
 				is_quoted = 1;
 				i++;
@@ -678,7 +678,7 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 		printf("entry [i] fin de boucle--- == %c ---- j = %d, i == %d\n", entry[i], j, i);
 	}
-	affiche(list);
+	//affiche(list);
 	p_tok(list);
 	return (list);
 }
