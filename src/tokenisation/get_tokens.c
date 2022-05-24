@@ -433,6 +433,7 @@ t_flist *get_processes(t_dblist *list)
 
 	//affiche(list);
 	finli = init_struct_flist();
+	head = finli;
 	while (list->first)
 	{
 		//printf("phrase --> %s\n", list->first->data);
