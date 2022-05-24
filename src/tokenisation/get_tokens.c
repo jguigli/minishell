@@ -524,12 +524,6 @@ t_dblist	*get_tokens(char *entry)
 			is_quoted = 1;
 		j = i;
 	}
-	//printf("str = %s\n", str);
-	// gr_list = get_grps_tok(list, gr_list);
-	// affiche(gr_list);
-	// return (gr_list);
-	//affiche(list);
 	p_tok(list);
-	//affiche(gr_list);
 	return (list);
 }
