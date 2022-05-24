@@ -32,108 +32,143 @@ char	*search_in_env_var(char *str, char **env)
 	return (free(str), NULL);
 }
 
-void	shell_parameter_expansion(t_dblist *gr_list, char **env)  // $USER$USER marche quand y a plus le i++ de la boucle principale mais ec""ho -n "${USER}" fonctionne plus
+// void	shell_parameter_expansion(t_dblist *gr_list, char **env)  // $USER$USER marche quand y a plus le i++ de la boucle principale mais ec""ho -n "${USER}" fonctionne plus
+// {
+// 	t_datas	*list;
+// 	int		i;
+// 	int		j;
+// 	char	*str;
+// 	char	*temp;
+
+// 	list = gr_list->first;
+// 	// str = ft_strdup("");
+// 	while (list)
+// 	{
+// 		i = 0;
+// 		str = ft_strdup("");
+// 		while (list->data[i])
+// 		{
+// 			j = i;
+// 			while (list->data[i] != '$' && list->data[i] != 34 && list->data[i] != 39 && list->data[i])
+// 				i++;
+// 			if (i != j)
+// 			{
+// 				temp = ft_substr(list->data, j, i - j);
+// 				str = ft_strjoin(str, temp);
+// 			}
+// 			if (list->data[i] == '$' && list->data[i + 1] != '{')
+// 			{
+// 				i++;
+// 				j = i;
+// 				while (ft_isalnum(list->data[i]) && list->data[i]) // prb avec les othersymbols
+// 					i++;
+// 				temp = ft_substr(list->data, j, i - j);
+// 				//printf("hello =%s\n", temp);
+// 				temp = search_in_env_var(temp, env);
+// 				//printf("%s\n", temp);
+// 				if (temp)
+// 					str = ft_strjoin(str, temp);
+// 				i--;
+// 			}
+// 			else if (list->data[i] == '$' && list->data[i + 1] == '{')
+// 			{
+// 				i += 2;
+// 				j = i;
+// 				while (list->data[i] != '}' && list->data[i])
+// 					i++;
+// 				temp = ft_substr(list->data, j, i - j);
+// 				temp = search_in_env_var(temp, env);
+// 				if (temp)
+// 					str = ft_strjoin(str, temp);
+// 			}
+// 			else if (list->data[i] == 34)
+// 			{	
+// 				i++;			
+// 				while (list->data[i] != 34 && list->data[i])
+// 				{
+// 					j = i;
+// 					while (list->data[i] != '$' && list->data[i] != 34 && list->data[i])
+// 						i++;
+// 					if (i != j)
+// 					{					
+// 						temp = ft_substr(list->data, j, i - j);
+// 						str = ft_strjoin(str, temp);
+// 					}
+// 					if (list->data[i] == '\0')
+// 						break ;
+// 					if (list->data[i] == '$' && list->data[i + 1] == '{')
+// 					{
+// 						i += 2;
+// 						j = i;
+// 						while (list->data[i] != '}' && list->data[i])
+// 							i++;
+// 						temp = ft_substr(list->data, j, i - j);
+// 						temp = search_in_env_var(temp, env);
+// 						if (temp)
+// 							str = ft_strjoin(str, temp);
+// 						i++;
+// 					}
+// 					else if (list->data[i] == '$' && list->data[i + 1] != '{')
+// 					{
+// 						i++;
+// 						j = i;
+// 						while (ft_isalnum(list->data[i]) && list->data[i]) // prb avec les othersymbols
+// 							i++;
+// 						temp = ft_substr(list->data, j, i - j);
+// 						temp = search_in_env_var(temp, env);
+// 						if (temp)
+// 							str = ft_strjoin(str, temp);
+// 					}
+// 				}
+// 			}
+// 			else if (list->data[i] == 39)
+// 			{
+// 				i++;
+// 				if (list->data[i] != 39 && list->data[i])
+// 				{
+// 					j = i;
+// 					while (list->data[i] != 39 && list->data[i])
+// 						i++;
+// 					temp = ft_substr(list->data, j, i - j);
+// 					str = ft_strjoin(str, temp);
+// 				}
+// 			}
+// 			i++;
+// 		}
+// 		free(list->data);
+// 		list->data = ft_strdup(str);
+// 		free(str);
+// 		list = list->next;
+// 	}
+// 	affiche(gr_list);
+// }
+
+void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 {
-	t_datas	*list;
+	t_datas	*list; // pb arg =>>> echo ''$USER'' | $USER$USER | ec""ho "$USER"
 	int		i;
-	int		j;
 	char	*str;
-	char	*temp;
 
 	list = gr_list->first;
-	// str = ft_strdup("");
 	while (list)
 	{
 		i = 0;
 		str = ft_strdup("");
 		while (list->data[i])
 		{
-			j = i;
-			while (list->data[i] != '$' && list->data[i] != 34 && list->data[i] != 39 && list->data[i])
-				i++;
-			if (i != j)
-			{
-				temp = ft_substr(list->data, j, i - j);
-				str = ft_strjoin(str, temp);
-			}
+			str = case_no$_noquote(list->data, &i, str);
 			if (list->data[i] == '$' && list->data[i + 1] != '{')
-			{
-				i++;
-				j = i;
-				while (ft_isalnum(list->data[i]) && list->data[i]) // prb avec les othersymbols
-					i++;
-				temp = ft_substr(list->data, j, i - j);
-				//printf("hello =%s\n", temp);
-				temp = search_in_env_var(temp, env);
-				//printf("%s\n", temp);
-				if (temp)
-					str = ft_strjoin(str, temp);
-				i--;
-			}
+				str = case_$_noquote(list->data, env, &i, str);
 			else if (list->data[i] == '$' && list->data[i + 1] == '{')
-			{
-				i += 2;
-				j = i;
-				while (list->data[i] != '}' && list->data[i])
-					i++;
-				temp = ft_substr(list->data, j, i - j);
-				temp = search_in_env_var(temp, env);
-				if (temp)
-					str = ft_strjoin(str, temp);
-			}
+				str = case_$bracket_noquote(list->data, env, &i, str);
 			else if (list->data[i] == 34)
-			{	
-				i++;			
-				while (list->data[i] != 34 && list->data[i])
-				{
-					j = i;
-					while (list->data[i] != '$' && list->data[i] != 34 && list->data[i])
-						i++;
-					if (i != j)
-					{					
-						temp = ft_substr(list->data, j, i - j);
-						str = ft_strjoin(str, temp);
-					}
-					if (list->data[i] == '\0')
-						break ;
-					if (list->data[i] == '$' && list->data[i + 1] == '{')
-					{
-						i += 2;
-						j = i;
-						while (list->data[i] != '}' && list->data[i])
-							i++;
-						temp = ft_substr(list->data, j, i - j);
-						temp = search_in_env_var(temp, env);
-						if (temp)
-							str = ft_strjoin(str, temp);
-						i++;
-					}
-					else if (list->data[i] == '$' && list->data[i + 1] != '{')
-					{
-						i++;
-						j = i;
-						while (ft_isalnum(list->data[i]) && list->data[i]) // prb avec les othersymbols
-							i++;
-						temp = ft_substr(list->data, j, i - j);
-						temp = search_in_env_var(temp, env);
-						if (temp)
-							str = ft_strjoin(str, temp);
-					}
-				}
-			}
+				str = manage_dquote(list->data, env, &i, str);
 			else if (list->data[i] == 39)
-			{
+				str = case_single_quote(list->data, &i, str);	
+			if (list->data[i] == '\0')
+				break ;
+			else
 				i++;
-				if (list->data[i] != 39 && list->data[i])
-				{
-					j = i;
-					while (list->data[i] != 39 && list->data[i])
-						i++;
-					temp = ft_substr(list->data, j, i - j);
-					str = ft_strjoin(str, temp);
-				}
-			}
-			i++;
 		}
 		free(list->data);
 		list->data = ft_strdup(str);

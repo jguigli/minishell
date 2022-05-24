@@ -5,6 +5,7 @@ SRC = minishell.c \
 		./src/env/get_copy.c \
 		./src/parse_args/parsing_args.c \
 		./src/parse_args/expansion.c \
+		./src/parse_args/expansion2.c \
 		./src/inits/init_struct.c \
 		./src/exit_free/exit_free.c \
 		./src/check/check_quote.c \
