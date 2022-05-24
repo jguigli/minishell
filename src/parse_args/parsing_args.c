@@ -444,9 +444,10 @@ void	parse_args(char	*entry, char **env)
 		return ;
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
-	while(gr_list)
-	{
-		printf("data here: %s\n", gr_list->process->first->data);
-		gr_list = gr_list->next;
-	}
+	//manage_redir(gr_list);
+	// while(gr_list)
+	// {
+	// 	printf("data here: %s\n", gr_list->process->first->data);
+	// 	gr_list = gr_list->next;
+	// }
 }
