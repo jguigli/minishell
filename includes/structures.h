@@ -130,8 +130,10 @@ typedef	struct s_fdata
 
 typedef	struct s_flist
 {
-	t_fdata	*node;
-	struct s_datas 	*next;
+	int			number;
+	t_dblist	*process;
+	struct s_flist 	*next;
+	struct s_flist 	*previous;
 } t_flist;
 
 

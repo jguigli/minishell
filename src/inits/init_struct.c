@@ -14,3 +14,18 @@ t_dblist	*init_linked_list()
 	liste->infos = initst_infos();
 	return (liste);
 }
+
+t_flist	*init_struct_flist()
+{
+	t_flist	*finli;
+
+	//liste = ft_calloc(1, sizeof(t_dblist));
+	finli = malloc(sizeof(t_flist));
+	if (!finli)
+		exit(EXIT_FAILURE);
+	finli->process = init_linked_list();
+	finli->next= NULL;
+	finli->previous = NULL;
+	finli->number = 0;
+	return (finli);
+}

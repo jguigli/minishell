@@ -28,6 +28,12 @@ t_glob_infos	*initst_infos();
 int manage_signal(void);
 int affiche(t_dblist *list); // A tej dans le futur
 int				pers_err_msges(char *error);
+t_flist 		*get_processes(t_dblist *list);
+t_flist			*init_struct_flist();
+void			create_grtoken(t_dblist *l, char *data, char *tokt);
+void			my_lstadd_back(t_flist **alst, t_flist *new);
+
+
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	*search_in_env_var(char *str, char **env);
