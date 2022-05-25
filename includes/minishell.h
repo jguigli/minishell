@@ -28,13 +28,15 @@ int	       		 check_quote(char *str);
 t_dblist		*get_tokens(char *entry);
 t_dblist		*init_linked_list(void);
 t_glob_infos	*initst_infos();
-int manage_signal(void);
-int affiche(t_dblist *list); // A tej dans le futur
+int 			manage_signal(void);
+int		affiche(t_dblist *list); // A tej dans le futur
 int				pers_err_msges(char *error);
 t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();
 void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
+int				manage_redir(t_dblist *list);
+
 
 
 

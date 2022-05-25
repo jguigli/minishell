@@ -435,12 +435,12 @@ t_glob_infos	*initst_infos()
 	return (tok_info);
 }
 
-int	my_lstsize(t_flist *lst)
+int	my_lstsize(t_flist **lst)
 {
 	int		i;
 	t_flist	*lstnext;
 
-	lstnext = lst;
+	lstnext = *lst;
 	i = 0;
 	while (lstnext)
 	{
@@ -450,7 +450,7 @@ int	my_lstsize(t_flist *lst)
 	return (i);
 }
 
-void	counting(t_flist *gr_list)
+t_flist	*counting(t_flist *gr_list)
 {
 	t_flist	*list;
 	int	pos;
@@ -475,13 +475,8 @@ void	counting(t_flist *gr_list)
 			if	(list->process->first->type == 33)
 			{
 				list->nb_heredoc++;
-				printf("POSITION %d \n", pos);
+				//printf("POSITION %d \n", pos);
 				list->pos_heredoc = pos;
-			}
-			if	(list->process->first->type == 34)
-			{
-				list->nb_heredoc_dash++;
-				list->pos_heredoc_dash = pos;
 			}
 			if	(list->process->first->type == 38)
 			{
@@ -499,26 +494,40 @@ void	counting(t_flist *gr_list)
 		pos = 0;
 		list = list->next;
 	}
+	return (gr_list);
 } 
 
-void	simple_block_p(t_flist *gr_list)
+void	simple_block_p(t_datas *test)
 {
-	t_flist	*list;
+	// t_flist	*list;
+	int		i;
 
-	list = gr_list;
-	if (list->nb_heredoc >= 1 || list->nb_heredoc_dash >= 1)
-	{
-		if	(list->nb_heredoc >= 1)
-			printf("%d \n", list->pos_heredoc);
-		if	(list->nb_heredoc_dash >= 1)
-			printf("%d \n", list->pos_heredoc_dash);
-	}
+	// list = *gr_list;
+	i = 0; 
+	//printf("data = %s\n", list->process->first->data);
+	//printf("HEREEEE	%s \n", test->data);
+	// if	(list->nb_heredoc = 1)
+	// {
+	// 	while (i < list->pos_heredoc && list->process->first)
+	// 	{
+	// 		printf("index = %d -- %d\n", i, list->pos_heredoc);
+	// 	//	list->process->first = list->process->first->next;
+	// 		i++;
+
+	// 	}
+	// 	//printf("here doc trouve %s \n", list->process->first->data);
+	// 	//manage_redir()
+	// }
+	// else
+	// 	printf("LOL");
+	// 	// if	(list->nb_heredoc_dash >= 1)
 }
 
 void	parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
 	t_flist			*gr_list;
+	t_flist			*copy;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
@@ -527,21 +536,18 @@ void	parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	//printf("%d\n", my_lstsize(gr_list));
 	// printf("%s\n",);
+	printf("LOL =%s\n", gr_list->process->first->data);
 	counting(gr_list);
 	// while(gr_list)
 	// {
-	// 	printf("%d -- %d -- %d -- %d -- %d -- %d\n", gr_list->nb_rred, gr_list->nb_rred_app, gr_list->nb_lred, gr_list->nb_heredoc, gr_list->nb_heredoc_dash, gr_list->nb_options);
+	// 	printf("data here: %s\n", (*gr_list).process->first->data);
 	// 	gr_list = gr_list->next;
 	// }
-	if (my_lstsize(gr_list) == 1)
-		simple_block_p(gr_list);
+	//printf("size linked list = %d\n", my_lstsize(&gr_list));
+	// if (my_lstsize(&gr_list) == 1)
+	// 	simple_block_p(gr_list->process->first);
 	// else
 	// 	multiple_block_p(gr_list);
 	
 	// manage_redir(gr_list);
-	// while(gr_list)
-	// {
-	// 	printf("data here: %s\n", gr_list->process->first->data);
-	// 	gr_list = gr_list->next;
-	// }
 }

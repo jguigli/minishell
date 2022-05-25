@@ -270,11 +270,6 @@ t_dblist	*token_tag(t_dblist *list)
 							tag->type = 33;
 							tag->t_token = "TOKEN_HEREDOC";
 						}
-						if (tag->length == 3)
-						{
-							tag->type = 34;
-							tag->t_token = "TOKEN_HEREDOC_DASH";						
-						}
 					}
 					//printf("ici 1 \n");
 					if	(tag->next == NULL)
@@ -283,7 +278,7 @@ t_dblist	*token_tag(t_dblist *list)
 					//printf("ici 2 %s -- %s\n", tag->data, tag->previous->data);
 					// if (tag->next == NULL)
 					// {
-					if (tag->previous->t_token != "TOKEN_HEREDOC" && tag->previous->t_token != "TOKEN_HEREDOC_DASH")
+					if (tag->previous->t_token != "TOKEN_HEREDOC")
 					{
 						tag->type = 21;
 						tag->t_token = "TOKEN_FILE";
@@ -334,11 +329,6 @@ t_dblist	*token_tag(t_dblist *list)
 					//printf(" 7777 ---> %s -- %d\n", tag->data, tag->type);
 					tag->t_token = "TOKEN_HEREDOC";
 					tag->type = 33;
-				}
-				if (tag->length == 3)
-				{
-					tag->type = 34;
-					tag->t_token = "TOKEN_HEREDOC_DASH";
 				}
 				aft_p = 0;
 				tag = tag->next;
@@ -477,7 +467,7 @@ t_flist *get_processes(t_dblist *list)
 		while(list->first->type != 11)
 		{
 			//finli->process = list;
-			printf("data --> %s -- t_token = %s\n", list->first->data, list->first->t_token);
+			//printf("data --> %s -- t_token = %s\n", list->first->data, list->first->t_token);
 			create_grtoken((finli)->process, list->first->data, list->first->t_token, list->first->type);
 			if	(list->first->next != NULL)
 				list->first = list->first->next;
@@ -579,31 +569,30 @@ t_dblist *p_tok(t_dblist *list)
 		}
 		else if (p_list->type == 6 || p_list->type == 7)
 		{
-			if (p_list->length == 1)
-				p_list->redir = 1;
-			else if (p_list->length == 2)
+			if (p_list->length == 2)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
 					 //printf("ici 11\n");
 					pers_err_msges(ARG);
 				}
-				p_list->redir = 2;
 			}
-			else if (p_list->length > 2)
-			{
-				if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
-				{
-					 //printf("ici 11\n");
-					pers_err_msges(ARG);
-				}
-				p_list->redir = 2;
-			}
-			else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
-			{
-				 //printf("ici 12\n");
+			// else if (p_list->length > 2)
+			// {
+			// 	if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
+			// 	{
+			// 		 //printf("ici 11\n");
+			// 		pers_err_msges(ARG);
+			// 	}
+			// 	p_list->redir = 2;
+			// }
+			// else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
+			// {
+			// 	 //printf("ici 12\n");
+			// 	pers_err_msges(ARG);
+			// }
+			else
 				pers_err_msges(ARG);
-			}
 		}
 		else if	(p_list->type == 31)
 		{

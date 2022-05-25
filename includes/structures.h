@@ -148,8 +148,6 @@ typedef	struct s_flist
 	int			pos_lred;	
 	int			nb_heredoc;
 	int			pos_heredoc;	
-	int			nb_heredoc_dash;
-	int			pos_heredoc_dash;	
 	int			nb_options;
 	int			pos_options;	
 	struct s_flist 	*next;
