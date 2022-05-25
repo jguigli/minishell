@@ -450,6 +450,34 @@ int	my_lstsize(t_flist *lst)
 	return (i);
 }
 
+void	counting(t_flist *gr_list)
+{
+	t_flist	*list;
+
+	list = gr_list;
+	while(list)
+	{
+		while(list->process->first)
+		{
+			//printf("%s --- %d\n", list->process->first->data, list->process->first->type);
+			if	(list->process->first->type == 6)
+				list->nb_rred++;
+			if	(list->process->first->type == 7)
+				list->nb_lred++;
+			if	(list->process->first->type == 33)
+				list->nb_heredoc++;
+			if	(list->process->first->type == 34)
+				list->nb_heredoc_dash++;
+			if	(list->process->first->type == 38)
+				list->nb_rred_app++;
+			if	(list->process->first->type == 25)
+				list->nb_options++;
+			list->process->first = 	list->process->first->next;	
+		}
+		list = list->next;
+	}
+}
+
 void	parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
@@ -461,6 +489,13 @@ void	parse_args(char	*entry, char **env)
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	//printf("%d\n", my_lstsize(gr_list));
+	// printf("%s\n",);
+	counting(gr_list);
+	// while(gr_list)
+	// {
+	// 	printf("%d -- %d -- %d -- %d -- %d -- %d\n", gr_list->nb_rred, gr_list->nb_rred_app, gr_list->nb_lred, gr_list->nb_heredoc, gr_list->nb_heredoc_dash, gr_list->nb_options);
+	// 	gr_list = gr_list->next;
+	// }
 	if (my_lstsize(gr_list) == 1)
 		simple_block_p();
 	else

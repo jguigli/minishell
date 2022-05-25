@@ -140,6 +140,12 @@ typedef	struct s_flist
 {
 	int			number;
 	t_dblist	*process;
+	int			nb_rred;
+	int			nb_rred_app;
+	int			nb_lred;
+	int			nb_heredoc;
+	int			nb_heredoc_dash;
+	int			nb_options;
 	struct s_flist 	*next;
 	struct s_flist 	*previous;
 } t_flist;

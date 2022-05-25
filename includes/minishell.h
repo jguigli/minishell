@@ -33,7 +33,7 @@ int affiche(t_dblist *list); // A tej dans le futur
 int				pers_err_msges(char *error);
 t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();
-void			create_grtoken(t_dblist *l, char *data, char *tokt);
+void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
 
 

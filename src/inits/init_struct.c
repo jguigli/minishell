@@ -20,12 +20,16 @@ t_flist	*init_struct_flist()
 	t_flist	*finli;
 
 	//liste = ft_calloc(1, sizeof(t_dblist));
-	finli = malloc(sizeof(t_flist));
+	finli = ft_calloc(1, sizeof(t_flist));
 	if (!finli)
 		exit(EXIT_FAILURE);
 	finli->process = init_linked_list();
-	finli->next= NULL;
-	finli->previous = NULL;
-	finli->number = 0;
+	// finli->next= NULL;
+	// finli->previous = NULL;
+	// finli->nb_rred = 0;
+	// finli->nb_rred_app = 0;
+	// finli->nb_lred = 0;
+	// finli->nb_heredoc = 0;
+	// finli->nb_options = 0;
 	return (finli);
 }
