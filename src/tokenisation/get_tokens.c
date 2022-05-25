@@ -429,6 +429,8 @@ void	my_lstadd_back(t_flist **alst, t_flist *new)
 	new->next = NULL;
 }
 
+
+
 t_flist *get_processes(t_dblist *list)
 {
 	t_flist		*finli;

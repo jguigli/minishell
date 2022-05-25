@@ -435,6 +435,20 @@ t_glob_infos	*initst_infos()
 	return (tok_info);
 }
 
+int	my_lstsize(t_flist *lst)
+{
+	int		i;
+	t_flist	*lstnext;
+
+	lstnext = lst;
+	i = 0;
+	while (lstnext)
+	{
+		lstnext = lstnext->next;
+		i++;
+	}
+	return (i);
+}
 
 void	parse_args(char	*entry, char **env)
 {
@@ -446,6 +460,12 @@ void	parse_args(char	*entry, char **env)
 		return ;
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
+	//printf("%d\n", my_lstsize(gr_list));
+	if (my_lstsize(gr_list) == 1)
+		simple_block_p();
+	else
+		multiple_block_p();
+	
 	// manage_redir(gr_list);
 	// while(gr_list)
 	// {
