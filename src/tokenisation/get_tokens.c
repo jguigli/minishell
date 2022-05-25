@@ -62,6 +62,7 @@ void	create_grtoken(t_dblist *l, char *data, char *tokt, int type)
 		element->data = data;
 		element->t_token = tokt;
 		element->type = type;
+		element->pos = 0;
 		element->next = NULL;
 		element->previous = NULL;
 		l->last = element;
@@ -77,6 +78,7 @@ void	create_grtoken(t_dblist *l, char *data, char *tokt, int type)
 		current->next = element;
 		element->data = data;
 		element->t_token = tokt;
+		element->pos = 0;
 		element->type = type;
 		element->next = NULL;
 		element->previous = current;
@@ -460,8 +462,6 @@ void	my_lstadd_back(t_flist **alst, t_flist *new)
 	new->previous = last;
 	new->next = NULL;
 }
-
-
 
 t_flist *get_processes(t_dblist *list)
 {

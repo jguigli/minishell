@@ -453,28 +453,65 @@ int	my_lstsize(t_flist *lst)
 void	counting(t_flist *gr_list)
 {
 	t_flist	*list;
+	int	pos;
 
 	list = gr_list;
+	pos = 1;
 	while(list)
 	{
 		while(list->process->first)
 		{
 			//printf("%s --- %d\n", list->process->first->data, list->process->first->type);
 			if	(list->process->first->type == 6)
+			{
 				list->nb_rred++;
+				list->pos_rred = pos;
+			}
 			if	(list->process->first->type == 7)
-				list->nb_lred++;
+			{
+				list->nb_lred++ ;
+				list->pos_lred = pos;
+			}
 			if	(list->process->first->type == 33)
+			{
 				list->nb_heredoc++;
+				printf("POSITION %d \n", pos);
+				list->pos_heredoc = pos;
+			}
 			if	(list->process->first->type == 34)
+			{
 				list->nb_heredoc_dash++;
+				list->pos_heredoc_dash = pos;
+			}
 			if	(list->process->first->type == 38)
+			{
+				list->pos_rred_app = pos;
 				list->nb_rred_app++;
+			}
 			if	(list->process->first->type == 25)
+			{
 				list->nb_options++;
+				list->pos_options = pos;
+			}
+			pos++;
 			list->process->first = 	list->process->first->next;	
 		}
+		pos = 0;
 		list = list->next;
+	}
+} 
+
+void	simple_block_p(t_flist *gr_list)
+{
+	t_flist	*list;
+
+	list = gr_list;
+	if (list->nb_heredoc >= 1 || list->nb_heredoc_dash >= 1)
+	{
+		if	(list->nb_heredoc >= 1)
+			printf("%d \n", list->pos_heredoc);
+		if	(list->nb_heredoc_dash >= 1)
+			printf("%d \n", list->pos_heredoc_dash);
 	}
 }
 
@@ -497,9 +534,9 @@ void	parse_args(char	*entry, char **env)
 	// 	gr_list = gr_list->next;
 	// }
 	if (my_lstsize(gr_list) == 1)
-		simple_block_p();
-	else
-		multiple_block_p();
+		simple_block_p(gr_list);
+	// else
+	// 	multiple_block_p(gr_list);
 	
 	// manage_redir(gr_list);
 	// while(gr_list)
