@@ -591,7 +591,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 	}
 	// printf("dataaa == %s\n", list->first->data);
-	//affiche(list);
+	affiche(list);
 	token_tag(list);
 	//get_processes(list);
 	return (list);

@@ -51,5 +51,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	cat = ft_strcat(cat, s1);
 	cat = ft_strcat(cat, s2);
 	cat[length] = '\0';
+	free(s1);
 	return (cat);
 }

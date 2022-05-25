@@ -6,6 +6,7 @@ SRC = minishell.c \
 		./src/parse_args/parsing_args.c \
 		./src/parse_args/expansion.c \
 		./src/parse_args/expansion2.c \
+		./src/parse_args/expansion3.c \
 		./src/inits/init_struct.c \
 		./src/exit_free/exit_free.c \
 		./src/check/check_quote.c \
@@ -13,6 +14,7 @@ SRC = minishell.c \
 		./src/ast/building_ast.c \
 		./src/sig/signal.c \
 		./src/err_msgs/err_messages.c \
+		./src/env/get_var_env.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)
