@@ -228,6 +228,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_ESP] = 1;	
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_DOL][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DQUOTE] = 1;
@@ -282,7 +283,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_SLASH][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_SLASH][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_DOT] = 1;
@@ -302,7 +303,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_BS][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_BS][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_BS][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_BS][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_BS][CHR_DOT] = 1;
@@ -362,7 +363,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_COMA][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_COMA][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_DOT] = 1;
@@ -450,77 +451,86 @@ int	my_lstsize(t_flist **lst)
 	return (i);
 }
 
-t_flist	*counting(t_flist *gr_list)
+void counting(t_flist **gr_list)
 {
-	t_flist	*list;
+	t_datas	*list;
+	t_flist	*head;
 	int	pos;
 
-	list = gr_list;
+	list = (*gr_list)->process->first;
+	head = *gr_list;
 	pos = 1;
-	while(list)
+	//printf("data == %s \n", list->next->process->first->data);
+	while(head)
 	{
-		while(list->process->first)
+		while(list)
 		{
-			//printf("%s --- %d\n", list->process->first->data, list->process->first->type);
-			if	(list->process->first->type == 6)
+			//printf("%s --- %d\n", list->data, list->type);
+			if	(list->type == 6)
 			{
-				list->nb_rred++;
-				list->pos_rred = pos;
+				head->nb_rred++;
+				head->pos_rred = pos;
 			}
-			if	(list->process->first->type == 7)
+			if	(list->type == 7)
 			{
-				list->nb_lred++ ;
-				list->pos_lred = pos;
+				head->nb_lred++ ;
+				head->pos_lred = pos;
 			}
-			if	(list->process->first->type == 33)
+			if	(list->type == 33)
 			{
-				list->nb_heredoc++;
+				head->nb_heredoc++;
 				//printf("POSITION %d \n", pos);
-				list->pos_heredoc = pos;
+				head->pos_heredoc = pos;
 			}
-			if	(list->process->first->type == 38)
+			if	(list->type == 38)
 			{
-				list->pos_rred_app = pos;
-				list->nb_rred_app++;
+				head->pos_rred_app = pos;
+				head->nb_rred_app++;
 			}
-			if	(list->process->first->type == 25)
+			if	(list->type == 25)
 			{
-				list->nb_options++;
-				list->pos_options = pos;
+				head->nb_options++;
+				head->pos_options = pos;
 			}
 			pos++;
-			list->process->first = 	list->process->first->next;	
+			if (list->next)
+				list = 	list->next;
+			else 
+				break ;
 		}
 		pos = 0;
-		list = list->next;
+		if (head->next)
+			head = head->next;
+		else
+			break ;
 	}
-	return (gr_list);
 } 
 
-void	simple_block_p(t_datas *test)
+void	simple_block_p(t_flist **gr_list)
 {
-	// t_flist	*list;
-	int		i;
+	t_datas	*list;
+	t_flist	*head;
 
-	// list = *gr_list;
-	i = 0; 
-	//printf("data = %s\n", list->process->first->data);
+	list = (*gr_list)->process->first;
+	head = *gr_list;
+	printf("list = %s\n", list->data);
+	printf("data = %d\n", (*gr_list)->nb_heredoc);
 	//printf("HEREEEE	%s \n", test->data);
-	// if	(list->nb_heredoc = 1)
-	// {
-	// 	while (i < list->pos_heredoc && list->process->first)
-	// 	{
-	// 		printf("index = %d -- %d\n", i, list->pos_heredoc);
-	// 	//	list->process->first = list->process->first->next;
-	// 		i++;
-
-	// 	}
-	// 	//printf("here doc trouve %s \n", list->process->first->data);
-	// 	//manage_redir()
-	// }
+	if	(head->nb_heredoc == 1)
+	{
+		while (list && list->type != 33)
+		{
+			if (list->next)	
+				list = list->next;
+			else 
+				break ;
+		}
+		printf("here doc trouve %s \n", list->data);
+		//manage_redir()
+	}
 	// else
-	// 	printf("LOL");
-	// 	// if	(list->nb_heredoc_dash >= 1)
+	// 	printf("here = %d\n", (*gr_list)->nb_heredoc);
+		// if	(list->nb_heredoc_dash >= 1)
 }
 
 void	parse_args(char	*entry, char **env)
@@ -534,18 +544,18 @@ void	parse_args(char	*entry, char **env)
 		return ;
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
+	//printf("data here: %s\n", gr_list->process->first->next->next->data);
 	//printf("%d\n", my_lstsize(gr_list));
 	// printf("%s\n",);
-	printf("LOL =%s\n", gr_list->process->first->data);
-	counting(gr_list);
+	counting(&gr_list);
 	// while(gr_list)
 	// {
-	// 	printf("data here: %s\n", (*gr_list).process->first->data);
+	// 	printf("LOL =%s\n", gr_list->process->first->data);
 	// 	gr_list = gr_list->next;
 	// }
 	//printf("size linked list = %d\n", my_lstsize(&gr_list));
-	// if (my_lstsize(&gr_list) == 1)
-	// 	simple_block_p(gr_list->process->first);
+	if (my_lstsize(&gr_list) == 1)
+		simple_block_p(&gr_list);
 	// else
 	// 	multiple_block_p(gr_list);
 	
