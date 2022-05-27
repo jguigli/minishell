@@ -499,11 +499,11 @@ t_dblist *p_tok(t_dblist *list)
 		pers_err_msges(ARG);
 	while(p_list)
 	{
-		 //printf("token a analyser ---> %s \n", p_list->data);
+		printf("token a analyser ---> %s \n", p_list->data);
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			 //printf("ici 1 \n");
+			printf("ici 1 \n");
 			if	(check_dquotes_dol(p_list) == -1)
 			{
 				list->first->dq = 1;
@@ -511,19 +511,19 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else if (check_dquotes_dol(p_list) == -2)
 			{
-				// printf("ici 2 \n");
+				printf("ici 2 \n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_dquotes_dol(p_list) > 1)
 			{
-				 //printf("ici 3 \n");
+				printf("ici 3 \n");
 				list->first->dq = 1;
 				list->first->dol = check_dquotes_dol(p_list);
 			}
 			else
 			{
-				 //printf("ici 4\n");
+				printf("ici 4\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -531,39 +531,39 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(check_squotes_dol(p_list) == -1)
 			{
-				 //printf("ici 5\n");
+				printf("ici 5\n");
 				list->first->dq = 1;
 				list->first->dol = 1;
 			}
 			else if (check_squotes_dol(p_list) == -2)
 			{
-				 //printf("ici 6\n");
+				printf("ici 6\n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_squotes_dol(p_list) > 1)
 			{
-				 //printf("ici 7\n");
+				printf("ici 7\n");
 				list->first->dq = 1;
 				list->first->dol = check_squotes_dol(p_list);
 			}
 			else
 			{
-				 //printf("ici 8\n");
+				printf("ici 8\n");
 				pers_err_msges(ARG);
 			}
 		}
 		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			//printf("ici 9 --> %s\n", list->first->data);
+			printf("ici 9 --> %s\n", p_list->data);
 			check_spec_char(p_list, list);
 		}
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length != 1)
 			{
-				// printf("ici 10\n");
+				printf("ici 10\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -573,7 +573,7 @@ t_dblist *p_tok(t_dblist *list)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					 //printf("ici 11\n");
+					 printf("ici 11\n");
 					pers_err_msges(ARG);
 				}
 			}
@@ -591,7 +591,7 @@ t_dblist *p_tok(t_dblist *list)
 			// 	 //printf("ici 12\n");
 			// 	pers_err_msges(ARG);
 			// }
-			else
+			else if (p_list->length >= 2)
 				pers_err_msges(ARG);
 		}
 		else if	(p_list->type == 31)
