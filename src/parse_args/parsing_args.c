@@ -510,9 +510,11 @@ void	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
 	t_flist	*head;
+	int		i;
 
 	list = (*gr_list)->process->first;
 	head = *gr_list;
+	i = 0;
 	printf("list = %s\n", list->data);
 	printf("data = %d\n", (*gr_list)->nb_heredoc);
 	//printf("HEREEEE	%s \n", test->data);
@@ -525,10 +527,24 @@ void	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		printf("here doc trouve %s \n", list->next->data);
 		manage_one_redir(list->next);
 	}
-	// else
+	else if (head->nb_heredoc >= 2)
+	{		
+		//printf("nb heredoc %d \n", head->pos_heredoc);
+		while (list && (list->type != 35 && list->type != 36 && list->type != 37))
+		{
+			if (list->next)
+				list = list->next;
+			else 
+				break ;
+		}
+		printf("multiple heredoc %d --- %s\n", list->type, list->data);
+		manage_multiple_redir(list, gr_list);
+
+
+	}
+	
 	// 	printf("here = %d\n", (*gr_list)->nb_heredoc);
 		// if	(list->nb_heredoc_dash >= 1)
 }

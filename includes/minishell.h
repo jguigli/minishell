@@ -36,6 +36,8 @@ t_flist			*init_struct_flist();
 void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
 int				manage_one_redir(t_datas *delimiter);
+int				manage_multiple_redir(t_datas *delimiter, t_flist **gen_list);
+
 
 
 
