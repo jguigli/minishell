@@ -1,31 +1,31 @@
 #include "../../includes/minishell.h"
 #include "../../libft/libft.h"
 
-int	manage_redir(t_dblist *list)
+int	manage_one_redir(t_datas *delimiter)
 {
-	t_dblist	*head;
+	t_datas	*copy;
 	int		file;
 	char	*buf;
 
-	head = list;
+	copy = delimiter;
 	file = open("file", O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	while (1)
     {
-        write(1, '>', 1);
+        write(1, ">", 2);
 		buf = get_next_line(0);
         if (buf == NULL)
             exit(1);
-		while(head->first)
+		while(copy)
 		{
 
-			if (head->first->type == 33 || head->first->type == 34)
+			if (copy->type == 33 || copy->type == 34)
 			{
-				head->first = head->first->next;
+				copy = copy->next;
 				break ;
 			}
-			head = head->first->next;
+			copy = copy->next;
 		}
-        if (!ft_strncmp(head->first->data, buf, ft_strlen(head->first->data) + 1))
+        if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data) + 1))
             break ;
         write(file, buf, ft_strlen(buf));
         write(file, "\n", 1);

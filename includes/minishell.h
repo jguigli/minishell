@@ -35,7 +35,7 @@ t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();
 void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
-int				manage_redir(t_dblist *list);
+int				manage_one_redir(t_datas *delimiter);
 
 
 

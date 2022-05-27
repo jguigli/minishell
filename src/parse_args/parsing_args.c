@@ -525,8 +525,8 @@ void	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		printf("here doc trouve %s \n", list->data);
-		//manage_redir()
+		printf("here doc trouve %s \n", list->next->data);
+		manage_one_redir(list->next);
 	}
 	// else
 	// 	printf("here = %d\n", (*gr_list)->nb_heredoc);
