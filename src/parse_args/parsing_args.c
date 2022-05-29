@@ -504,7 +504,23 @@ void counting(t_flist **gr_list)
 		else
 			break ;
 	}
-} 
+}
+
+void	output_redir(t_flist *head, t_datas *file)
+{
+	int	fd;
+	int	old_fd;
+	int	new_fd;
+	if (file->type == 6)
+		fd = open(file->data, O_RDWR | O_CREAT, O_APPEND,  00644);
+	else if (file->type == 38)
+		fd = open(file->data, O_RDWR | O_CREAT, 00644);
+	old_fd = dup(1);
+	dup2(fd, STDOUT_FILENO);
+	dup2(old_fd, STDOUT_FILENO);
+	close(fd);
+	close(old_fd);
+}
 
 void	simple_block_p(t_flist **gr_list)
 {
@@ -539,9 +555,29 @@ void	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		printf("multiple heredoc %d --- %s\n", list->type, list->data);
+//		printf("multiple heredoc %d --- %s\n", list->type, list->data);
 		manage_multiple_redir(list, gr_list);
-
+	}
+	if (head->nb_rred >= 1 || head->nb_lred >= 1 || head->nb_rred_app >= 1 )
+	{
+		if (head->nb_rred == 1 && head->nb_lred == 0 && head->nb_rred_app == 0)
+		{
+			while (list && list->type != 6)
+				list = list->next;
+			if (list->next && list->next->type == 21)
+				list = list->next;
+			printf("data here %s\n", list->data);
+			output_redir(head, list);
+		}
+		else if (head->nb_rred == 0 && head->nb_lred == 0 && head->nb_rred_app == 1)
+		{
+			while (list && list->type != 38)
+				list = list->next;
+			if (list->next && list->next->type == 38)
+				list = list->next;
+			printf("data here %s\n", list->data);
+			output_redir(head, list);
+		}
 
 	}
 	

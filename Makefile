@@ -18,7 +18,7 @@ SRC = minishell.c \
 
 OBJ = $(SRC:.c=.o)
 
-CC = gcc
+CC = cc
 
 FLAG = -Wall -Werror -Wextra -g3 -fsanitize=address 
 
