@@ -23,7 +23,7 @@ int	manage_one_redir(t_datas *delimiter)
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
             break ;
         write(file, buf, ft_strlen(buf));
-        write(file, "\n", 2);
+        //write(file, "\n", 2);
         free(buf);
 	}
 	return (0);
@@ -69,7 +69,7 @@ int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)
         write(file, buf, ft_strlen(buf));
 		//test = get_next_line(file);
 		//printf("%s \n", test);
-        write(file, "\n", 2);
+        //write(file, "\n", 2);
         free(buf);
 	}
 }
