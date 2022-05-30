@@ -26,6 +26,7 @@ int	manage_one_redir(t_datas *delimiter)
         write(file, "\n", 2);
         free(buf);
 	}
+	return (0);
 }
 
 int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)

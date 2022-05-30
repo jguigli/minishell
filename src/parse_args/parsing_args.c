@@ -511,13 +511,35 @@ void	output_redir(t_flist *head, t_datas *file)
 	int	fd;
 	int	old_fd;
 	int	new_fd;
-	if (file->type == 6)
-		fd = open(file->data, O_RDWR | O_CREAT, O_APPEND,  00644);
-	else if (file->type == 38)
-		fd = open(file->data, O_RDWR | O_CREAT, 00644);
-	old_fd = dup(1);
-	dup2(fd, STDOUT_FILENO);
-	dup2(old_fd, STDOUT_FILENO);
+	int	i;
+	
+	i = 0;
+	// if (file->previous->type == 38)
+	// 	fd = open(file->data, O_RDWR | O_CREAT | O_APPEND,  00644);
+	// else if (file->previous->type == 6)
+	// 	fd = open(file->data, O_CREAT | O_RDWR, 0000644);
+	while(i < head->nb_rred)
+	{
+		printf("file = %s\n", file->data);
+		if (file->previous->type == 38)
+			fd = open(file->data, O_RDWR | O_CREAT | O_APPEND,  0000644);
+		else if (file->previous->type == 6)
+		{
+			printf("file data = %s\n", file->data);
+			fd = open(file->data, O_CREAT | O_RDWR, 0000644);
+		}
+		old_fd = dup(1);
+		dup2(fd, STDOUT_FILENO);
+		dup2(old_fd, STDOUT_FILENO);
+		if (file->next && file->next->next && file->next->type == 6)
+			file = file->next->next;
+		else
+			break ;
+		i++;
+	}
+	// old_fd = dup(1);
+	// dup2(fd, STDOUT_FILENO);
+	// dup2(old_fd, STDOUT_FILENO);
 	close(fd);
 	close(old_fd);
 }
@@ -531,8 +553,8 @@ void	simple_block_p(t_flist **gr_list)
 	list = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	printf("list = %s\n", list->data);
-	printf("data = %d\n", (*gr_list)->nb_heredoc);
+	// printf("list = %s\n", list->data);
+	// printf("data = %d\n", (*gr_list)->nb_heredoc);
 	//printf("HEREEEE	%s \n", test->data);
 	if	(head->nb_heredoc == 1)
 	{
@@ -558,24 +580,33 @@ void	simple_block_p(t_flist **gr_list)
 //		printf("multiple heredoc %d --- %s\n", list->type, list->data);
 		manage_multiple_redir(list, gr_list);
 	}
-	if (head->nb_rred >= 1 || head->nb_lred >= 1 || head->nb_rred_app >= 1 )
+	else if (head->nb_rred >= 1 || head->nb_lred >= 1 || head->nb_rred_app >= 1 )
 	{
-		if (head->nb_rred == 1 && head->nb_lred == 0 && head->nb_rred_app == 0)
+		if (head->nb_rred >= 1 && head->nb_lred == 0 && head->nb_rred_app == 0)
 		{
 			while (list && list->type != 6)
 				list = list->next;
 			if (list->next && list->next->type == 21)
 				list = list->next;
-			printf("data here %s\n", list->data);
+			printf("data here %s -- type = %d\n", list->data, list->type);
 			output_redir(head, list);
 		}
-		else if (head->nb_rred == 0 && head->nb_lred == 0 && head->nb_rred_app == 1)
+		else if (head->nb_rred == 0 && head->nb_lred == 0 && head->nb_rred_app >= 1)
 		{
 			while (list && list->type != 38)
 				list = list->next;
-			if (list->next && list->next->type == 38)
+			if (list->next && list->next->type == 21)
 				list = list->next;
-			printf("data here %s\n", list->data);
+			//printf("data here %s\n", list->data);
+			output_redir(head, list);
+		}
+		else if (head->nb_rred == 0 && head->nb_lred >= 1 && head->nb_rred_app == 0)
+		{
+			while (list && list->type != 38)
+				list = list->next;
+			if (list->next && list->next->type == 21)
+				list = list->next;
+			//printf("data here %s\n", list->data);
 			output_redir(head, list);
 		}
 
