@@ -9,7 +9,7 @@ static void    handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
     }
-    else if (sig == SIGQUIT)
+    else if (sig == SIGQUIT) // en mode prompt quitter core dumped
     {
         return ;
     }

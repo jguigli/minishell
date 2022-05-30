@@ -37,6 +37,7 @@ void			my_lstadd_back(t_flist **alst, t_flist *new);
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	*search_in_env_var(char *str, char **env);
+void	set_var_in_env(char *var, char *path, char **env);
 char	*case_no$_noquote(char *data, int *i, char *str);
 char	*case_$_noquote(char *data, char **env, int *i, char *str);
 char	*case_$bracket_noquote(char *data, char **env, int *i, char *str);

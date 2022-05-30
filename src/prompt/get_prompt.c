@@ -85,6 +85,7 @@ void	get_prompt(char **env)
 				exit(0);
 			}
 			// RAJOUTER CONDITION SI CA FOIRE
+			printf("GETENV = %s\n", getenv("HOME"));
 	    	add_history(entry);
 			parse_args(entry, env);
         }

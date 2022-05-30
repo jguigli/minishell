@@ -2,6 +2,9 @@
 
 void    ft_echo(char **arg)
 {
+	int	i;
+
+	i = 1;
 	if (!arg[1])
 	{
 		ft_putchar_fd('\n', 1);

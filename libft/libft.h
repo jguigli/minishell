@@ -54,6 +54,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_strcpy(char	*dest, char	*src);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 int		ft_strncmp(const char *first, const char *second, size_t length);
+int		ft_strcmp(const char *first, const char *second);
 char	*ft_strnstr(const char *str, const char *to_find, size_t len);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strtrim(char const *s1, char const *set);
