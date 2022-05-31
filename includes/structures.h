@@ -128,14 +128,6 @@ typedef struct s_dblist
 	t_glob_infos 	*infos;
 } t_dblist;
 
-typedef	struct s_fdata
-{
-	char			*data;
-	char			*t_token;
-	int				length;
-	struct s_datas 	*next;
-} t_fdata;
-
 typedef	struct s_flist
 {
 	int			number;
@@ -153,11 +145,6 @@ typedef	struct s_flist
 	struct s_flist 	*next;
 	struct s_flist 	*previous;
 } t_flist;
-
-
-
-
-
 
 
 #endif
