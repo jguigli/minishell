@@ -14,8 +14,8 @@ SRC = minishell.c \
 		./src/ast/building_ast.c \
 		./src/sig/signal.c \
 		./src/err_msgs/err_messages.c \
-		./src/env/get_var_env.c \
 		./src/redir/manage_heredoc.c \
+		./src/env/get_var_env.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)

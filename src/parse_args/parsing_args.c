@@ -506,42 +506,6 @@ void counting(t_flist **gr_list)
 	}
 }
 
-void	output_redir(t_datas *file)
-{
-	int	fd;
-	int	old_fd;
-	int	new_fd;
-
-	if (file->type == 38)
-		fd = open(file->data, O_RDWR | O_CREAT | O_APPEND,  0000644);
-	else if (file->type == 6)
-	{
-		printf("file data = %s\n", file->data);
-		fd = open(file->data, O_CREAT | O_RDWR, 0000644);
-	}
-	old_fd = dup(1);
-	dup2(fd, STDOUT_FILENO);
-	dup2(old_fd, STDOUT_FILENO);
-	close(fd);
-	close(old_fd);
-}
-
-void	input_redir(t_datas *file)
-{
-	int	fd;
-	int	old_fd;
-	int	new_fd;
-	int	i;
-	
-	i = 0;
-	fd = open(file->data, O_RDONLY);
-	old_fd = dup(0);
-	dup2(fd, STDIN_FILENO);
-	dup2(old_fd, STDIN_FILENO);
-	close(fd);
-	close(old_fd);
-}
-
 void	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
@@ -553,7 +517,7 @@ void	simple_block_p(t_flist **gr_list)
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	if	(head->nb_heredoc == 1)
+	if	(head->nb_heredoc == 1 && head->nb_lred == 0)
 	{
 		while (list && list->type != 33)
 		{
@@ -564,7 +528,7 @@ void	simple_block_p(t_flist **gr_list)
 		}
 		manage_one_redir(list->next);
 	}
-	else if (head->nb_heredoc >= 2)
+	else if (head->nb_heredoc > 1)
 	{		
 		while (list && (list->type != 35 && list->type != 36 && list->type != 37))
 		{
@@ -575,18 +539,7 @@ void	simple_block_p(t_flist **gr_list)
 		}
 		manage_multiple_redir(list, gr_list);
 	}
-	while( list2)
-	{
-		//printf("list2 -- > %s\n", list2->data);
-		if (list2->type == 6 || list2->type == 38)
-			output_redir(list2);
-		if (list2->type == 7)
-			intput_redir(list2);
-		if (list2->next)
-			list2 = list2->next;
-		else
-			break ;
-	}
+
 }
 
 void	parse_args(char	*entry, char **env)
@@ -598,7 +551,7 @@ void	parse_args(char	*entry, char **env)
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
-	shell_parameter_expansion(fin_li, env);
+	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)

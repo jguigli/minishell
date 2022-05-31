@@ -34,7 +34,7 @@ void	set_var_in_env(char *var, char *path, char **env)
 	i = 0;
 	j = 0;
 	if (!var || !*env || !path)
-		return (NULL);
+		return ;
 	while (env[i])
 	{
 		j = 0;
@@ -48,5 +48,6 @@ void	set_var_in_env(char *var, char *path, char **env)
 		}
 		i++;
 	}
-	return (free(var), NULL);
+	free(var);
+	return ;
 }
