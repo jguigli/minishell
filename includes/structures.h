@@ -137,7 +137,7 @@ typedef	struct s_flist
 	int			nb_rred_app;
 	int			pos_rred_app;
 	int			nb_lred;
-	int			pos_lred;	
+	int			pos_lred;
 	int			nb_heredoc;
 	int			pos_heredoc;	
 	int			nb_options;
@@ -146,5 +146,19 @@ typedef	struct s_flist
 	struct s_flist 	*previous;
 } t_flist;
 
+typedef struct s_exec
+{
+	pid_t	*pid;
+	int		*pipe;
+	int		file1;
+	int		file2;
+	char	*path;
+	char	**cmd_path;
+	char	**cmd_arg;
+	char	*cmd;
+	int		pipe_number;
+	int		cmd_number;
+	int		pid_number;
+}	t_exec;
 
 #endif

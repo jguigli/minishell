@@ -598,7 +598,7 @@ void	parse_args(char	*entry, char **env)
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
-	shell_parameter_expansion(fin_li, env);
+	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
