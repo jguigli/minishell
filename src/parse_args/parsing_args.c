@@ -158,6 +158,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DASH] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;
@@ -226,6 +228,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_ESP] = 1;	
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_DOL][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DQUOTE] = 1;
@@ -280,7 +283,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_SLASH][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_SLASH][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_SLASH][CHR_DOT] = 1;
@@ -300,7 +303,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_BS][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_BS][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_BS][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_BS][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_BS][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_BS][CHR_DOT] = 1;
@@ -360,7 +363,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_COMA][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_COMA][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_DOT] = 1;
@@ -433,20 +436,174 @@ t_glob_infos	*initst_infos()
 	return (tok_info);
 }
 
+int	my_lstsize(t_flist **lst)
+{
+	int		i;
+	t_flist	*lstnext;
+
+	lstnext = *lst;
+	i = 0;
+	while (lstnext)
+	{
+		lstnext = lstnext->next;
+		i++;
+	}
+	return (i);
+}
+
+void counting(t_flist **gr_list)
+{
+	t_datas	*list;
+	t_flist	*head;
+	int	pos;
+
+	list = (*gr_list)->process->first;
+	head = *gr_list;
+	pos = 1;
+	//printf("data == %s \n", list->next->process->first->data);
+	while(head)
+	{
+		while(list)
+		{
+			//printf("%s --- %d\n", list->data, list->type);
+			if	(list->type == 6)
+			{
+				head->nb_rred++;
+				head->pos_rred = pos;
+			}
+			if	(list->type == 7)
+			{
+				head->nb_lred++ ;
+				head->pos_lred = pos;
+			}
+			if	(list->type == 33)
+			{
+				head->nb_heredoc++;
+				//printf("POSITION %d \n", pos);
+				head->pos_heredoc = pos;
+			}
+			if	(list->type == 38)
+			{
+				head->pos_rred_app = pos;
+				head->nb_rred_app++;
+			}
+			if	(list->type == 25)
+			{
+				head->nb_options++;
+				head->pos_options = pos;
+			}
+			pos++;
+			if (list->next)
+				list = 	list->next;
+			else 
+				break ;
+		}
+		pos = 0;
+		if (head->next)
+			head = head->next;
+		else
+			break ;
+	}
+}
+
+void	output_redir(t_datas *file)
+{
+	int	fd;
+	int	old_fd;
+	int	new_fd;
+
+	if (file->type == 38)
+		fd = open(file->data, O_RDWR | O_CREAT | O_APPEND,  0000644);
+	else if (file->type == 6)
+	{
+		printf("file data = %s\n", file->data);
+		fd = open(file->data, O_CREAT | O_RDWR, 0000644);
+	}
+	old_fd = dup(1);
+	dup2(fd, STDOUT_FILENO);
+	dup2(old_fd, STDOUT_FILENO);
+	close(fd);
+	close(old_fd);
+}
+
+void	input_redir(t_datas *file)
+{
+	int	fd;
+	int	old_fd;
+	int	new_fd;
+	int	i;
+	
+	i = 0;
+	fd = open(file->data, O_RDONLY);
+	old_fd = dup(0);
+	dup2(fd, STDIN_FILENO);
+	dup2(old_fd, STDIN_FILENO);
+	close(fd);
+	close(old_fd);
+}
+
+void	simple_block_p(t_flist **gr_list)
+{
+	t_datas	*list;
+	t_datas	*list2;
+	t_flist	*head;
+	int		i;
+
+	list = (*gr_list)->process->first;
+	list2 = (*gr_list)->process->first;
+	head = *gr_list;
+	i = 0;
+	if	(head->nb_heredoc == 1)
+	{
+		while (list && list->type != 33)
+		{
+			if (list->next)	
+				list = list->next;
+			else 
+				break ;
+		}
+		manage_one_redir(list->next);
+	}
+	else if (head->nb_heredoc >= 2)
+	{		
+		while (list && (list->type != 35 && list->type != 36 && list->type != 37))
+		{
+			if (list->next)
+				list = list->next;
+			else 
+				break ;
+		}
+		manage_multiple_redir(list, gr_list);
+	}
+	while( list2)
+	{
+		//printf("list2 -- > %s\n", list2->data);
+		if (list2->type == 6 || list2->type == 38)
+			output_redir(list2);
+		if (list2->type == 7)
+			intput_redir(list2);
+		if (list2->next)
+			list2 = list2->next;
+		else
+			break ;
+	}
+}
 
 void	parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
 	t_flist			*gr_list;
+	t_flist			*copy;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
 	shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
-	while(gr_list)
-	{
-		printf("data here: %s\n", gr_list->process->first->data);
-		gr_list = gr_list->next;
-	}
+	counting(&gr_list);
+	if (my_lstsize(&gr_list) == 1)
+		simple_block_p(&gr_list);
+	// else
+	// 	multiple_block_p(gr_list);
+	
 }

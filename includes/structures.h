@@ -37,7 +37,15 @@ typedef enum		e_toktype {
 	TOKEN_COMA, //29
 	TOKEN_ESP, //30
 	TOKEN_DASH, //31
-	TOKEN_UNDS, //31	
+	TOKEN_UNDS, //32
+	TOKEN_HEREDOC, //33
+	TOKEN_HEREDOC_DASH, //34
+	SIMPLE_DELIM, //35
+	DQUOTED_DELIM,//36
+	SQUOTED_DELIM,//37
+	TOKEN_RRED_APPEND,//38
+
+
 	TOKEN_MAX
 }					t_toktype;
 
@@ -120,26 +128,23 @@ typedef struct s_dblist
 	t_glob_infos 	*infos;
 } t_dblist;
 
-typedef	struct s_fdata
-{
-	char			*data;
-	char			*t_token;
-	int				length;
-	struct s_datas 	*next;
-} t_fdata;
-
 typedef	struct s_flist
 {
 	int			number;
 	t_dblist	*process;
+	int			nb_rred;
+	int			pos_rred;
+	int			nb_rred_app;
+	int			pos_rred_app;
+	int			nb_lred;
+	int			pos_lred;	
+	int			nb_heredoc;
+	int			pos_heredoc;	
+	int			nb_options;
+	int			pos_options;	
 	struct s_flist 	*next;
 	struct s_flist 	*previous;
 } t_flist;
-
-
-
-
-
 
 
 #endif

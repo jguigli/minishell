@@ -15,29 +15,36 @@ SRC = minishell.c \
 		./src/sig/signal.c \
 		./src/err_msgs/err_messages.c \
 		./src/env/get_var_env.c \
+		./src/redir/manage_heredoc.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)
 
-CC = gcc
+CC = cc
 
-FLAG = -Wall -Werror -Wextra -g3 -fsanitize=address 
+FLAG = -Wall -Werror -Wextra #-g3 -fsanitize=address 
 
 HEADER = ./includes/minishell.h
 
 LIBFT_PATH		=	./libft
 LIBFT			=	$(LIBFT_PATH)/libft.a
 
+GNL_PATH		=	./gnl
+GNL				=	$(GNL_PATH)/gnl.a
+
 all : $(NAME)
 
 %.o : %.c
 	$(CC) -c $< -o $@
 
-$(NAME) : $(OBJ) $(LIBFT) $(HEADER)
-	$(CC) $(FLAG) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+$(NAME) : $(OBJ) $(LIBFT) $(GNL) $(HEADER)
+	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_PATH)
+
+$(GNL):
+	$(MAKE) -C $(GNL_PATH)
 
 clean :
 	$(MAKE) -C $(LIBFT_PATH) clean

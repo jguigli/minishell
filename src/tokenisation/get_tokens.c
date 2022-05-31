@@ -48,7 +48,7 @@ int affiche(t_dblist *list)
 	return(count);
 }
 
-void	create_grtoken(t_dblist *l, char *data, char *tokt)
+void	create_grtoken(t_dblist *l, char *data, char *tokt, int type)
 {
 	t_datas *element;
 	t_datas *current;
@@ -61,6 +61,8 @@ void	create_grtoken(t_dblist *l, char *data, char *tokt)
 		l->first = element;
 		element->data = data;
 		element->t_token = tokt;
+		element->type = type;
+		element->pos = 0;
 		element->next = NULL;
 		element->previous = NULL;
 		l->last = element;
@@ -76,6 +78,8 @@ void	create_grtoken(t_dblist *l, char *data, char *tokt)
 		current->next = element;
 		element->data = data;
 		element->t_token = tokt;
+		element->pos = 0;
+		element->type = type;
 		element->next = NULL;
 		element->previous = current;
 		l->last = element;
@@ -192,18 +196,22 @@ int	check_squotes_dol(t_datas *list)
 
 int	check_spec_char(t_datas *token, t_dblist *list)
 {
-	int	i;
+	int	i;                                                                                                                                                      
 
 	i = 0;
 	while (token->data[i])
 	{
 		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD 
-			&&  list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
+			&& list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
 				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH
 				 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOL
-					 && list->infos->get_chr_c[token->data[i]] != CHR_SLASH
-					 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
-						 	&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
+					 	&& list->infos->get_chr_c[token->data[i]] != CHR_SLASH
+					 		&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
+						 		&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
+							 		&& list->infos->get_chr_c[token->data[i]] != CHR_DQUOTE
+								 		&& list->infos->get_chr_c[token->data[i]] != CHR_SQUOTE
+										 		&& list->infos->get_chr_c[token->data[i]] != CHR_RRED
+								 					&& list->infos->get_chr_c[token->data[i]] != CHR_LRED
 					 )
 				 {
 					pers_err_msges(ARG);
@@ -236,65 +244,82 @@ t_dblist	*token_tag(t_dblist *list)
 				//printf("ICI 1  %s --- %s\n", tag->data, tag->t_token);
 				while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 				{
+					printf("test 73\n");
 					tag->t_token = "TOKEN_OPT";
+					tag->type = 25;
 					if	(tag->next != NULL)
 						tag = tag->next;
 					else
 						return (list) ;
 				}
+				// printf("data ===> %s --- %d\n", tag->data, tag->type);
 				if	(tag->type == 6 || tag->type == 7)
 				{
 					//printf("ICI 2  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 					if (tag->type == 6)
 					{
 						if (tag->length == 2)
+						{
+							printf("test 74\n");
 							tag->t_token = "TOKEN_RRED_APPEND";
+							tag->type = 38;
+						}
 					}
 					if (tag->type == 7)
 					{
-						//printf("ICI 3  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
+						printf("75 %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 						if (tag->length == 2)
+						{
+							tag->type = 33;
 							tag->t_token = "TOKEN_HEREDOC";
-						if (tag->length == 3)
-							tag->t_token = "TOKEN_HEREDOC_DASH";						
+						}
 					}
 					//printf("ici 1 \n");
 					if	(tag->next == NULL)
 						break ;
+					printf("test 76\n");
 					tag = tag->next;
 					//printf("ici 2 %s -- %s\n", tag->data, tag->previous->data);
 					// if (tag->next == NULL)
 					// {
-					if (tag->previous->t_token != "TOKEN_HEREDOC" && tag->previous->t_token != "TOKEN_HEREDOC_DASH")
+					if (tag->previous->t_token != "TOKEN_HEREDOC")
+					{
+						printf("test 77\n");
+						tag->type = 21;
 						tag->t_token = "TOKEN_FILE";
+					}
 					else
 					{
-						printf("ici 888888 %s -- %d\n", tag->data, tag->type);
+						printf("ici 78%s -- %d\n", tag->data, tag->type);
 						if (tag->type == 5)
 						{
-							printf("test 1\n");
+							printf("test 79\n");
+							tag->type = 35;
 							tag->t_token = "SIMPLE_DELIM";
 						}
 						else if (tag->type == 13)
 						{
-							printf("test 2\n");
+							printf("test 80\n");
+							tag->type = 36;
 							tag->t_token = "DQUOTED_DELIM";
 						}
 						else if (tag->type == 12)
 						{
-							printf("test 3\n");
+							printf("test 81\n");
+							tag->type = 37;
 							tag->t_token = "SQUOTED_DELIM";
 						}
 					}
-					//printf("ici 3 %s\n", tag->t_token);
+					printf("82%s\n", tag->t_token);
 					if (!tag->next)
 						break ;	
 					// }
 					aft_p = 0;
-					// printf("%s ---> %s\n", tag->data, tag->t_token);
+					printf("83 %s ---> %s\n", tag->data, tag->t_token);
 				}
 				else if (tag->type == 11)
 				{
+					printf("ici 84\n");
 					if	(tag->next == NULL)
 						break ;
 					aft_p = 0;
@@ -304,42 +329,61 @@ t_dblist	*token_tag(t_dblist *list)
 		}
 		else if (tag->type == 7)
 		{
+			//printf("iciiiiii ==> %s \n", tag->next->data);
 			aft_p = 1;
 			if (tag->length == 2 || tag->length == 3)
 			{
-				printf(" 6666 ---> %s -- %d\n", tag->data, tag->type);
+				printf("ici 85\n");
+				//printf(" 6666 ---> %s -- %d\n", tag->data, tag->type);
 				if (tag->length == 2)
 				{
-					printf(" 7777 ---> %s -- %d\n", tag->data, tag->type);
+					//printf(" 7777 ---> %s -- %d\n", tag->data, tag->type);
+					printf("ici 86\n");
 					tag->t_token = "TOKEN_HEREDOC";
+					tag->type = 33;
 				}
-				if (tag->length == 3)
-					tag->t_token = "TOKEN_HEREDOC_DASH";
 				aft_p = 0;
+				printf("ici 87\n");
 				tag = tag->next;
-				printf(" 888888 ---> %s -- %d\n", tag->data, tag->type);
+				//printf(" 888888 ---> %s -- %d\n", tag->data, tag->type);
 				//tag->t_token = "TOKEN_HEREDOC_DELIM";
 					//tag = tag->next;
 				if (tag->type == 5)
+				{
+					printf("ici 88\n");
+					tag->type = 35;
 					tag->t_token = "SIMPLE_DELIM";
+				}
 				else if (tag->type == 13)
+				{
+					printf("ici 89\n");
+					tag->type = 36;
 					tag->t_token = "DQUOTED_DELIM";
+				}
 				else if (tag->type == 12)
+				{
+					printf("ici 90\n");
+					tag->type = 37;
 					tag->t_token = "SQUOTED_DELIM";
+				}
 				if (tag->next != NULL)
 					tag = tag->next;
 				else
 					break ;
+				printf("hereuuuh %s ---- %d\n", tag->data, tag->type);
 			}
 			else
 			{
 				if (tag->next != NULL)
 				{
+					printf("ici 91\n");
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
+					tag->type = 21;
 				}
 				if (tag->next != NULL && tag->next->next != NULL)
 				{
+					printf("ici 92\n");
 					tag = tag->next;
 					tag->t_token = "TOKEN_CMD";
 					tag = tag->next;
@@ -350,8 +394,12 @@ t_dblist	*token_tag(t_dblist *list)
 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 			{
 				tag->t_token = "TOKEN_OPT";
+				tag->type = 25;
 				if	(tag->next != NULL)
+				{
+					printf("ici 93\n");
 					tag = tag->next;
+				}
 				else
 					return (list) ;
 			}
@@ -363,18 +411,37 @@ t_dblist	*token_tag(t_dblist *list)
 				else if (tag->type == 7 && tag->length == 2)
 				{
 					tag->t_token = "TOKEN_HEREDOC";
+					tag->type = 33;
 					aft_p = 0;
-					tag = tag->next;
-					tag->t_token = "TOKEN_HEREDOC";
-					if (tag->next->t_token == "TOKEN_WORD")
-						tag->next->t_token = "SIMPLE_DELIM";
-					if (tag->next->t_token == "TOKEN_DQUOTE")
-						tag->next->t_token = "DQUOTED_DELIM";
-					if (tag->next->t_token == "TOKEN_SQUOTE")
-						tag->next->t_token = "SQUOTED_DELIM";		
+					printf("ici 93\n");
+					if (tag->next)
+						tag = tag->next;
+					else
+						break ;
+					// tag->t_token = "TOKEN_HEREDOC";
+					// tag->type = 33;
+					if (tag->type == 5)
+					{
+						printf("ici 94\n");
+						tag->type = 35;
+						tag->t_token = "SIMPLE_DELIM";
+					}
+					if (tag->type == 13)
+					{
+						printf("ici 95\n");
+						tag->type = 36;
+						tag->t_token = "DQUOTED_DELIM";
+					}
+					if (tag->type == 12)
+					{
+						printf("ici 96\n");
+						tag->type = 37;
+						tag->t_token = "SQUOTED_DELIM";		
+					}
 				}
 				else
 				{
+					printf("ici 97\n");
 					aft_p = 0;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
@@ -382,22 +449,26 @@ t_dblist	*token_tag(t_dblist *list)
 			}
 			else if (tag->type == 11)
 			{
+				printf("ici 97\n");
 				if	(tag->next == NULL)
 					break ;
 				aft_p = 0;
 				// tag = tag->next;
 			}
 		}
-		// printf("dataaa herev--> %s\n", tag->next->data);
+		// printf("dataaa herev--> %s\n", tag->data);
 		if	(tag->next != NULL)
 		{
-			//printf("ici 4 \n");
+			printf("ici 98\n");
 			tag = tag->next;
 		}
 		else
+		{
+			printf("ici 99\n");
 			break ;
+		}
 	}
-	printf("ici 5 \n");
+	printf("ici 100\n");
 	return (list);
 }
 
@@ -436,11 +507,11 @@ t_flist *get_processes(t_dblist *list)
 	head = finli;
 	while (list->first)
 	{
-		//printf("phrase --> %s\n", list->first->data);
 		while(list->first->type != 11)
 		{
 			//finli->process = list;
-			create_grtoken((finli)->process, list->first->data, list->first->t_token);
+			//printf("data --> %s -- t_token = %s\n", list->first->data, list->first->t_token);
+			create_grtoken((finli)->process, list->first->data, list->first->t_token, list->first->type);
 			if	(list->first->next != NULL)
 				list->first = list->first->next;
 			else
@@ -471,11 +542,11 @@ t_dblist *p_tok(t_dblist *list)
 		pers_err_msges(ARG);
 	while(p_list)
 	{
-		// printf("token a analyser ---> %s \n", p_list->data);
+		//printf("token a analyser ---> %s \n", p_list->data);
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			// printf("ici 1 \n");./
+			//printf("ici 1 \n");
 			if	(check_dquotes_dol(p_list) == -1)
 			{
 				list->first->dq = 1;
@@ -483,19 +554,19 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else if (check_dquotes_dol(p_list) == -2)
 			{
-				// printf("ici 2 \n");
+				//printf("ici 2 \n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_dquotes_dol(p_list) > 1)
 			{
-				// printf("ici 3 \n");
+				//printf("ici 3 \n");
 				list->first->dq = 1;
 				list->first->dol = check_dquotes_dol(p_list);
 			}
 			else
 			{
-				// printf("ici 4\n");
+				//printf("ici 4\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -503,69 +574,68 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(check_squotes_dol(p_list) == -1)
 			{
-				// printf("ici 5\n");
+				//printf("ici 5\n");
 				list->first->dq = 1;
 				list->first->dol = 1;
 			}
 			else if (check_squotes_dol(p_list) == -2)
 			{
-				// printf("ici 6\n");
+				//printf("ici 6\n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_squotes_dol(p_list) > 1)
 			{
-				// printf("ici 7\n");
+				//printf("ici 7\n");
 				list->first->dq = 1;
 				list->first->dol = check_squotes_dol(p_list);
 			}
 			else
 			{
-				// printf("ici 8\n");
+				//printf("ici 8\n");
 				pers_err_msges(ARG);
 			}
 		}
 		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			// printf("ici 9 --> %s\n", list->first->data);
+			//printf("ici 9 --> %s\n", p_list->data);
 			check_spec_char(p_list, list);
 		}
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length != 1)
 			{
-				// printf("ici 10\n");
+				//printf("ici 10\n");
 				pers_err_msges(ARG);
 			}
 		}
 		else if (p_list->type == 6 || p_list->type == 7)
 		{
-			if (p_list->length == 1)
-				p_list->redir = 1;
-			else if (p_list->length == 2)
+			if (p_list->length == 2)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					// printf("ici 11\n");
+					//printf("ici 11\n");
 					pers_err_msges(ARG);
 				}
-				p_list->redir = 2;
 			}
-			else if (p_list->length > 2)
-			{
-				if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
-				{
-					// printf("ici 11\n");
-					pers_err_msges(ARG);
-				}
-				p_list->redir = 2;
-			}
-			else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
-			{
-				// printf("ici 12\n");
+			// else if (p_list->length > 2)
+			// {
+			// 	if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
+			// 	{
+			// 		 //printf("ici 11\n");
+			// 		pers_err_msges(ARG);
+			// 	}
+			// 	p_list->redir = 2;
+			// }
+			// else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
+			// {
+			// 	 //printf("ici 12\n");
+			// 	pers_err_msges(ARG);
+			// }
+			else if (p_list->length >= 2)
 				pers_err_msges(ARG);
-			}
 		}
 		else if	(p_list->type == 31)
 		{
@@ -585,7 +655,7 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(p_list->type == 11 || p_list->type == 6 || p_list->type == 7)
 			{
-				// printf("ici 14\n");
+				 //printf("ici 14\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -623,11 +693,11 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		// printf("%d ---- %c\n", token_type, entry[i]);
+		//printf("%d ---- %c\n", token_type, entry[i]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
 			//printf(" ICI 1 == %d ---- %c\n", token_type, entry[i]);
-			if (entry[i] == '\"')
+			if (entry[i] == '\"' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
 				is_quoted = 1;
 				i++;
@@ -641,7 +711,7 @@ t_dblist	*get_tokens(char *entry)
 					i++;
 				}
 			}
-			if (entry[i] == '\'')
+			if (entry[i] == '\'' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
 				is_quoted = 1;
 				i++;
@@ -659,7 +729,7 @@ t_dblist	*get_tokens(char *entry)
 				break ;
 			i++;
 		}
-		// printf(" ICI 2 == %d ---- %c --- %d\n", token_type, entry[i], i);
+		//printf(" ICI 2 == %d ---- %c --- %d\n", token_type, entry[i], i);
 		if (token_type != 1) // MODIF
 		{	
 			str = ft_substr(entry, j, (i - j));
@@ -674,8 +744,9 @@ t_dblist	*get_tokens(char *entry)
 		else 
 			is_quoted = 1;
 		j = i;
-		// printf("entry [i] fin de boucle--- == %c \n", entry[i]);
+		//printf("entry [i] fin de boucle--- == %c ---- j = %d, i == %d\n", entry[i], j, i);
 	}
+	//affiche(list);
 	p_tok(list);
 	return (list);
 }
