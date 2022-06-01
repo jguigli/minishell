@@ -20,12 +20,16 @@ char	*read_get_nls(int fd, char *tmp)
 	v_ret = 1;
 	buf = malloc(sizeof(char) * (1 + 1));
 	if (!buf)
+	{
+		printf("ici 1");
 		return (NULL);
+	}
 	while (v_ret != 0 && !my_strchr(tmp, '\n'))
 	{
 		v_ret = read(fd, buf, 1);
 		if (v_ret == -1)
 		{
+			printf("ici 2");
 			free(buf);
 			return (NULL);
 		}				
@@ -51,7 +55,10 @@ char	*get_string_nl(char		*result)
 	else
 		tmp = malloc(sizeof(char) * (i + 1));
 	if (!tmp)
+	{
+		printf("ici 3");
 		return (NULL);
+	}
 	while (result[j] && j < i)
 	{
 		tmp[j] = result[j];
@@ -74,12 +81,16 @@ char	*next_sent(char *final)
 		i++;
 	if (!final[i])
 	{
+		printf("ici 4");
 		free(final);
 		return (NULL);
 	}
 	memory = malloc(sizeof(char) * (my_strlen(final) - i) + 1);
 	if (!memory)
+	{
+		printf("ici 5");
 		return (NULL);
+	}
 	i++;
 	j = 0;
 	while (final[i + j])
@@ -104,6 +115,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (!next_sentence[0])
 	{
+		//printf("ici 6");
 		free(next_sentence);
 		next_sentence = NULL;
 		return (NULL);

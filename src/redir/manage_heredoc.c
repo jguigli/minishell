@@ -2,37 +2,48 @@
 #include "../../gnl/get_next_line.h"
 #include "../../libft/libft.h"
 
-int	manage_one_redir(t_datas *delimiter)
+char	*manage_one_redir(t_datas *delimiter)
 {
 	t_datas	*copy;
 	int		file;
 	char	*buf;
-	char	*test;
+	char	*str_to_get;
+	char	*tmp;
 	int	old_fd;
 
 
 	copy = delimiter;
+	str_to_get = NULL;
+	tmp = NULL;
 	file = open("infile", O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	while (1)
     {
         write(1, "> ", 3);
 		buf = get_next_line(0);
-		//printf("length copy->data : %ld --- length : buf == %ld\n", ft_strlen(copy->data), ft_strlen(buf));
         if (buf == NULL)
             exit(1);
-		//printf("comparaison %d \n", ft_strncmp(copy->data, buf, ft_strlen(copy->data)));
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
             break ;
         write(file, buf, ft_strlen(buf));
         //write(file, "\n", 2);
         free(buf);
 	}
-	old_fd = dup(0);
-	dup2(file, STDIN_FILENO);
-	dup2(old_fd, STDIN_FILENO);
 	close(file);
-	close(old_fd);
-	return (0);
+	file = open("infile", O_RDONLY);
+	//printf("fd file ==> %d\n", file);
+	tmp = get_next_line(file);
+	//printf("tmp ==> %s\n", tmp);
+	while (tmp != NULL)
+	{
+		//printf("tmp ==> %s\n", tmp);
+		str_to_get = ft_strjoin(str_to_get, tmp);
+		//printf("str to get ==> %s\n", str_to_get);
+		free(tmp);
+		tmp = get_next_line(file);	
+	}
+	close(file);
+	//printf("str_to_get %s\n", str_to_get);
+	return (str_to_get);
 }
 
 int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)
@@ -43,56 +54,83 @@ int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)
 	t_datas	*head2;
 	int		file;
 	char	*buf;
-	char	*test;
+	char	*tmp;
+	char	*str_to_get;
+	int		fi;
 	int		i;
 	int		j;
+	int		wstatus;
 
 	j = 0;
-	//copy2 = delimiter;
 	copy = delimiter;
 	head = *gen_list;
 	head2 = (*gen_list)->process->first;
-	// while (head2)
-	// {
-	// 	if (head2->type == 35 || head2->type == 36 || head2->type == 37)
-	// 		j++;
-	// 	if (j == head->nb_heredoc)
-	// }
+	str_to_get = NULL;
+	tmp = NULL;
 	i = 0;
-	file = open("infile2", O_CREAT | O_RDWR, 0000644);
-	while (1)
-    {
-        write(1, "> ", 3);
-		buf = get_next_line(0);
-		//printf("length copy->data : %ld --- length : buf == %ld\n", ft_strlen(copy->data), ft_strlen(buf));
-        if (buf == NULL)
-            exit(1);
-		//printf("comparaison %d \n", ft_strncmp(copy->data, buf, ft_strlen(copy->data)));
-        if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
+	while(i < head->nb_heredoc)
+	{
+		//printf("copy->data here == %s\n", copy->data);
+		file = open("infile2", O_TRUNC | O_CREAT | O_RDWR, 0000644);
+		fi =  fork();
+		//printf("%d\n", fi);
+		if (fi < 0)
+			error_msgs();
+		if (fi == 0)
 		{
-			printf("%s\n", copy->data);
-			if (copy->next)
+			while (1)
 			{
-				copy = copy->next;
-				printf("Ici = %s\n", copy->data);
-			}
-			else 
-				return (0);
-			while (copy && (copy->type != 35 && copy->type != 36 && copy->type != 37))
-			{
-				if (copy->next)
-					copy = copy->next;
-				else 
+				write(1, "> ", 3);
+				buf = get_next_line(0);
+				//printf("BUF == %s\n", buf);
+				if (buf == NULL)
+					exit(1);
+				if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
+				{
+					j++;
+					//printf("copy->data = %s\n", copy->data);
+					close(file);
+					file = open("infile2", O_RDONLY);
+					//printf("fd file ==> %d\n", file);
+					tmp = get_next_line(file);
+					//printf("tmp ==> %s\n", tmp);
+					while (tmp != NULL)
+					{
+						//printf("tmp ==> %s\n", tmp);
+						str_to_get = ft_strjoin(str_to_get, tmp);
+						free(tmp);
+						tmp = get_next_line(file);	
+					}
+					//printf("str to get ==> %s\n", str_to_get);
+					close(file);
+					insert_node(str_to_get, gen_list);
+					str_to_get = NULL;
+					free(str_to_get);
+					free(tmp);
+					//affiche((*gen_list)->process);
+					if (j == head->nb_heredoc)
+						exit(1);
 					break ;
+				}
+				write(file, buf, ft_strlen(buf));
+				free(buf);
 			}
-            //printf(" function multiple redir %s \n", copy->data);
 		}
-
-		
-        write(file, buf, ft_strlen(buf));
-		//test = get_next_line(file);
-		//printf("%s \n", test);
-        //write(file, "\n", 2);
-        free(buf);
+		//printf("wait pid %d \n", waitpid(fi, &wstatus, 0));
+		waitpid(fi, &wstatus, 0);
+		if (WIFEXITED (wstatus))
+			return (WEXITSTATUS(wstatus));
+		copy = copy->next;
+		while (copy && (copy->type != 35 && copy->type != 36 && copy->type != 37))
+		{
+			if (copy->next)
+				copy = copy->next;
+			else
+				break ;
+		}
+		//printf("copy avant boucle  %s -- %d\n", copy->data, copy->type);	
+		i++;
 	}
+	close(file);
+	return (0);
 }

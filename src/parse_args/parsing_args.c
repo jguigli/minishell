@@ -506,18 +506,74 @@ void counting(t_flist **gr_list)
 	}
 }
 
-void	simple_block_p(t_flist **gr_list)
+t_datas	*my_lstnew(char *data)
+{
+	t_datas	*newlist;
+
+	newlist = ft_calloc(1, sizeof(t_datas));
+	if (!newlist)
+		return (NULL);
+	newlist->data = data;
+	return (newlist);
+}
+
+void	insert_node(char *node_toadd, t_flist **head)
+{
+	t_datas	*tmp_tonext;
+	t_datas	*current;
+	t_datas	*new;
+
+	current = (*head)->process->first;
+	while (current && (current->type != 35 &&  current->type != 36 && current->type != 37))
+	{
+		if (current->next)
+			current = current->next;
+		else
+			break ;
+	}
+	if (current->next)
+	{
+		tmp_tonext = current->next;
+		new = my_lstnew(node_toadd);
+		new->previous = current;
+		current->next = new;
+		new->pos = current->pos++;
+		new->next = tmp_tonext;
+		(*head)->process->number ++;
+		new->type = 39;
+		new->t_token = "TOKEN_HEREDOC_STRING";
+	}
+	else
+	{
+		new = my_lstnew(node_toadd);
+		new->previous = current;
+		current->next = new;
+		new->next = NULL;
+		(*head)->process->last = new;
+		(*head)->process->number++;
+		new->type = 39;
+		new->pos = current->pos++;
+		new->t_token = "TOKEN_HEREDOC_STRING";	
+	}
+	//printf("current --> %s\n", current->next->data);
+}
+
+int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
 	t_datas	*list2;
 	t_flist	*head;
 	int		i;
+	int		fi;
+	int		wstatus;
+	char	*node_toadd;
 
 	list = (*gr_list)->process->first;
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	if	(head->nb_heredoc == 1 && head->nb_lred == 0)
+	
+	if	(head->nb_heredoc == 1)
 	{
 		while (list && list->type != 33)
 		{
@@ -526,20 +582,45 @@ void	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		manage_one_redir(list->next);
+		fi = fork();
+		if	(fi < 0)
+			error_msgs();
+		if (fi == 0)
+		{
+			node_toadd = manage_one_redir(list->next);
+			insert_node(node_toadd, gr_list);
+			//printf("%s\n", node_toadd);
+		}
+		waitpid(fi, &wstatus, 0);
+		if (WIFEXITED (wstatus))
+			return (WEXITSTATUS(wstatus));
 	}
 	else if (head->nb_heredoc > 1)
 	{		
-		while (list && (list->type != 35 && list->type != 36 && list->type != 37))
+
+		while (list->type != 35 && list->type != 36 && list->type != 37)
 		{
 			if (list->next)
 				list = list->next;
-			else 
-				break ;
+			else
+				break;
 		}
+			// fi = fork();
+			// if	(fi < 0)
+			// 	error_msgs();
+			// if (fi == 0)
+			// {
+			// 	node_toadd = manage_one_redir(list);
+			// 	insert_node(node_toadd, gr_list);
+			// 	//printf("%s\n", node_toadd);
+			// }
+			// waitpid(fi, &wstatus, 0);
+			// if (WIFEXITED (wstatus))
+			// 	return (WEXITSTATUS(wstatus));
+			// i++;
 		manage_multiple_redir(list, gr_list);
 	}
-
+	return (0);
 }
 
 void	parse_args(char	*entry, char **env)
@@ -547,6 +628,7 @@ void	parse_args(char	*entry, char **env)
 	t_dblist		*fin_li;
 	t_flist			*gr_list;
 	t_flist			*copy;
+	t_dblist			*test;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
@@ -555,7 +637,11 @@ void	parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
+	{
 		simple_block_p(&gr_list);
+		// test = gr_list->process;
+		// affiche(test);
+	}
 	// else
 	// 	multiple_block_p(gr_list);
 	

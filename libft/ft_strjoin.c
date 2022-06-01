@@ -43,6 +43,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*cat;
 	int		length;
 
+	if (!s1)
+		s1 = ft_strdup("");
 	length = ft_length_total(s1, s2);
 	cat = (char *)malloc(sizeof(char) * length + 1);
 	if (!cat)

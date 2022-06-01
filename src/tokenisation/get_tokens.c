@@ -623,20 +623,6 @@ t_dblist *p_tok(t_dblist *list)
 					pers_err_msges(ARG);
 				}
 			}
-			// else if (p_list->length > 2)
-			// {
-			// 	if ((p_list->data[1] != p_list->data[0]) && (p_list->data[2] != CHR_WORD && p_list->data[2] != CHR_DIGIT && p_list->data[2] != CHR_DASH))
-			// 	{
-			// 		 //printf("ici 11\n");
-			// 		pers_err_msges(ARG);
-			// 	}
-			// 	p_list->redir = 2;
-			// }
-			// else if (p_list->data[1] != p_list->data[0] && p_list->data[2] != CHR_DASH)
-			// {
-			// 	 //printf("ici 12\n");
-			// 	pers_err_msges(ARG);
-			// }
 			else if (p_list->length >= 2)
 				pers_err_msges(ARG);
 		}
@@ -664,7 +650,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 	}
 	// printf("dataaa == %s\n", list->first->data);
-	affiche(list);
+	//affiche(list);
 	token_tag(list);
 	//get_processes(list);
 	return (list);
