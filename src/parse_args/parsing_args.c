@@ -458,12 +458,10 @@ void counting(t_flist **gr_list)
 	list = (*gr_list)->process->first;
 	head = *gr_list;
 	pos = 1;
-	//printf("data == %s \n", list->next->process->first->data);
 	while(head)
 	{
 		while(list)
 		{
-			//printf("%s --- %d\n", list->data, list->type);
 			if	(list->type == 6)
 			{
 				head->nb_rred++;
@@ -477,7 +475,6 @@ void counting(t_flist **gr_list)
 			if	(list->type == 33)
 			{
 				head->nb_heredoc++;
-				//printf("POSITION %d \n", pos);
 				head->pos_heredoc = pos;
 			}
 			if	(list->type == 38)
@@ -553,7 +550,6 @@ void	insert_node(t_datas *repere, char *node_toadd, t_flist **head)
 		new->pos = current->pos++;
 		new->t_token = "TOKEN_HEREDOC_STRING";	
 	}
-	//printf("current --> %s\n", current->next->data);
 }
 
 int	simple_block_p(t_flist **gr_list)
@@ -587,7 +583,6 @@ int	simple_block_p(t_flist **gr_list)
 		{
 			node_toadd = manage_one_redir(list->next);
 			insert_node(list->next, node_toadd, gr_list);
-			//printf("%s\n", node_toadd);
 		}
 		waitpid(fi, &wstatus, 0);
 		if (WIFEXITED (wstatus))
@@ -622,11 +617,7 @@ void	parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
-	{
 		simple_block_p(&gr_list);
-		test = gr_list->process;
-		affiche(test);
-	}
 	// else
 	// 	multiple_block_p(gr_list);	
 }
