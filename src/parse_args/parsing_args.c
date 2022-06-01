@@ -451,6 +451,21 @@ int	my_lstsize(t_flist **lst)
 	return (i);
 }
 
+int	my_lstsize_dblist(t_dblist *lst)
+{
+	int		i;
+	t_datas	*lstnext;
+
+	lstnext = lst->first;
+	i = 0;
+	while (lstnext)
+	{
+		lstnext = lstnext->next;
+		i++;
+	}
+	return (i);
+}
+
 void counting(t_flist **gr_list)
 {
 	t_datas	*list;
@@ -581,7 +596,7 @@ void	simple_block_p(t_flist **gr_list)
 		if (list2->type == 6 || list2->type == 38)
 			output_redir(list2);
 		if (list2->type == 7)
-			intput_redir(list2);
+			input_redir(list2);
 		if (list2->next)
 			list2 = list2->next;
 		else
@@ -598,12 +613,11 @@ void	parse_args(char	*entry, char **env)
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
-	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
 		simple_block_p(&gr_list);
 	// else
 	// 	multiple_block_p(gr_list);
-	
+	exec_launcher(gr_list, env);
 }

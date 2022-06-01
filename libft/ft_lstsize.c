@@ -15,13 +15,13 @@
 int	ft_lstsize(t_dblist *lst)
 {
 	int		i;
-	t_dblist	*lstnext;
+	t_datas	*lstnext;
 
-	lstnext = lst;
+	lstnext = lst->first;
 	i = 1;
 	while (lstnext)
 	{
-		lstnext = lstnext->first->next;
+		lstnext = lstnext->next;
 		i++;
 	}
 	return (i);

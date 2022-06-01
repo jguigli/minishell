@@ -17,11 +17,11 @@ char	*search_in_env_var(char *var, char **env)
 		if (j == ft_strlen(var))
 		{
 			if (!ft_strncmp(var, env[i], j))
-				return (free(var), &env[i][j + 1]);
+				return (&env[i][j + 1]);
 		}
 		i++;
 	}
-	return (free(var), NULL);
+	return (NULL);
 }
 
 void	set_var_in_env(char *var, char *path, char **env)

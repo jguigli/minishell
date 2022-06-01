@@ -146,12 +146,10 @@ typedef	struct s_flist
 	struct s_flist 	*previous;
 } t_flist;
 
-typedef struct s_exec
+typedef struct s_exec_c
 {
 	pid_t	*pid;
 	int		*pipe;
-	int		file1;
-	int		file2;
 	char	*path;
 	char	**cmd_path;
 	char	**cmd_arg;
@@ -159,6 +157,17 @@ typedef struct s_exec
 	int		pipe_number;
 	int		cmd_number;
 	int		pid_number;
-}	t_exec;
+}	t_exec_c;
+
+typedef struct s_exec_s
+{
+	pid_t	pid;
+	char	*path;
+	char	**cmd_path;
+	char	**cmd_arg;
+	char	*cmd;
+	int		pipe_number;
+	int		cmd_number;
+}	t_exec_s;
 
 #endif

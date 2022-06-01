@@ -25,12 +25,12 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 		{
 			while (aprems)
 			{
-				ft_lstclear(&aprems, del);
+				ft_lstclear(aprems, del);
 			}
 			lst = NULL;
 			return (NULL);
 		}
-		ft_lstadd_back(&aprems, anouv);
+		ft_lstadd_back(aprems, anouv);
 		lst = lst->next;
 	}
 	return (aprems);
