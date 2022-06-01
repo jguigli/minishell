@@ -166,7 +166,6 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_COMA] = 1;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SQUOTE] = 1;
@@ -176,7 +175,6 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_RBRACE] = 1;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_RRED] = 1;
@@ -475,12 +473,10 @@ void counting(t_flist **gr_list)
 	list = (*gr_list)->process->first;
 	head = *gr_list;
 	pos = 1;
-	//printf("data == %s \n", list->next->process->first->data);
 	while(head)
 	{
 		while(list)
 		{
-			//printf("%s --- %d\n", list->data, list->type);
 			if	(list->type == 6)
 			{
 				head->nb_rred++;
@@ -494,7 +490,6 @@ void counting(t_flist **gr_list)
 			if	(list->type == 33)
 			{
 				head->nb_heredoc++;
-				//printf("POSITION %d \n", pos);
 				head->pos_heredoc = pos;
 			}
 			if	(list->type == 38)
@@ -521,53 +516,72 @@ void counting(t_flist **gr_list)
 	}
 }
 
-void	output_redir(t_datas *file)
+t_datas	*my_lstnew(char *data)
 {
-	int	fd;
-	int	old_fd;
-	int	new_fd;
+	t_datas	*newlist;
 
-	if (file->type == 38)
-		fd = open(file->data, O_RDWR | O_CREAT | O_APPEND,  0000644);
-	else if (file->type == 6)
+	newlist = ft_calloc(1, sizeof(t_datas));
+	if (!newlist)
+		return (NULL);
+	newlist->data = data;
+	return (newlist);
+}
+
+void	insert_node(t_datas *repere, char *node_toadd, t_flist **head)
+{
+	t_datas	*tmp_tonext;
+	t_datas	*current;
+	t_datas	*new;
+
+	current = (*head)->process->first;
+	while (current && current->data != repere->data)
 	{
-		printf("file data = %s\n", file->data);
-		fd = open(file->data, O_CREAT | O_RDWR, 0000644);
+		if (current->next)
+			current = current->next;
+		else
+			break ;
 	}
-	old_fd = dup(1);
-	dup2(fd, STDOUT_FILENO);
-	dup2(old_fd, STDOUT_FILENO);
-	close(fd);
-	close(old_fd);
+	if (current->next)
+	{
+		tmp_tonext = current->next;
+		new = my_lstnew(node_toadd);
+		new->previous = current;
+		current->next = new;
+		new->pos = current->pos++;
+		new->next = tmp_tonext;
+		(*head)->process->number ++;
+		new->type = 39;
+		new->t_token = "TOKEN_HEREDOC_STRING";
+	}
+	else
+	{
+		new = my_lstnew(node_toadd);
+		new->previous = current;
+		current->next = new;
+		new->next = NULL;
+		(*head)->process->last = new;
+		(*head)->process->number++;
+		new->type = 39;
+		new->pos = current->pos++;
+		new->t_token = "TOKEN_HEREDOC_STRING";	
+	}
 }
 
-void	input_redir(t_datas *file)
-{
-	int	fd;
-	int	old_fd;
-	int	new_fd;
-	int	i;
-	
-	i = 0;
-	fd = open(file->data, O_RDONLY);
-	old_fd = dup(0);
-	dup2(fd, STDIN_FILENO);
-	dup2(old_fd, STDIN_FILENO);
-	close(fd);
-	close(old_fd);
-}
-
-void	simple_block_p(t_flist **gr_list)
+int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
 	t_datas	*list2;
 	t_flist	*head;
 	int		i;
+	int		fi;
+	int		wstatus;
+	char	*node_toadd;
 
 	list = (*gr_list)->process->first;
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
+	
 	if	(head->nb_heredoc == 1)
 	{
 		while (list && list->type != 33)
@@ -577,19 +591,31 @@ void	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		manage_one_redir(list->next);
+		fi = fork();
+		if	(fi < 0)
+			error_msgs();
+		if (fi == 0)
+		{
+			node_toadd = manage_one_redir(list->next);
+			insert_node(list->next, node_toadd, gr_list);
+		}
+		waitpid(fi, &wstatus, 0);
+		if (WIFEXITED (wstatus))
+			return (WEXITSTATUS(wstatus));
 	}
-	else if (head->nb_heredoc >= 2)
+	else if (head->nb_heredoc > 1)
 	{		
-		while (list && (list->type != 35 && list->type != 36 && list->type != 37))
+
+		while (list->type != 35 && list->type != 36 && list->type != 37)
 		{
 			if (list->next)
 				list = list->next;
-			else 
-				break ;
+			else
+				break;
 		}
 		manage_multiple_redir(list, gr_list);
 	}
+<<<<<<< HEAD
 	while( list2)
 	{
 		//printf("list2 -- > %s\n", list2->data);
@@ -602,6 +628,9 @@ void	simple_block_p(t_flist **gr_list)
 		else
 			break ;
 	}
+=======
+	return (0);
+>>>>>>> origin/Vamina
 }
 
 void	parse_args(char	*entry, char **env)
@@ -609,15 +638,24 @@ void	parse_args(char	*entry, char **env)
 	t_dblist		*fin_li;
 	t_flist			*gr_list;
 	t_flist			*copy;
+	t_dblist			*test;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
+<<<<<<< HEAD
+=======
+	//shell_parameter_expansion(fin_li, env);
+>>>>>>> origin/Vamina
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
 		simple_block_p(&gr_list);
 	// else
+<<<<<<< HEAD
 	// 	multiple_block_p(gr_list);
 	exec_launcher(gr_list, env);
+=======
+	// 	multiple_block_p(gr_list);	
+>>>>>>> origin/Vamina
 }

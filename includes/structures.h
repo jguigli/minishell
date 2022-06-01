@@ -44,8 +44,7 @@ typedef enum		e_toktype {
 	DQUOTED_DELIM,//36
 	SQUOTED_DELIM,//37
 	TOKEN_RRED_APPEND,//38
-
-
+	TOKEN_HEREDOC_STRING,//39	
 	TOKEN_MAX
 }					t_toktype;
 
