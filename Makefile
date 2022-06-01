@@ -15,14 +15,11 @@ SRC = minishell.c \
 		./src/sig/signal.c \
 		./src/err_msgs/err_messages.c \
 		./src/redir/manage_heredoc.c \
-<<<<<<< HEAD
 		./src/exec_prog/exec_prog.c \
 		./src/exec_prog/exec_prog_utils.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/exec_prog/exec_prog_complex.c \
-=======
 		./src/env/get_var_env.c \
->>>>>>> origin/Vamina
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)

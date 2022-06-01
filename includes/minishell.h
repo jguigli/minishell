@@ -34,7 +34,7 @@
 //Main functions
 void			get_prompt(char **env);
 char			**get_copy(char **d_tab);
-void			parse_args(char	*str, char **env);
+t_flist			*parse_args(char	*str, char **env);
 void			*get_ll(char **args);
 int	       		 check_quote(char *str);
 t_dblist		*get_tokens(char *entry);
@@ -53,14 +53,11 @@ int				manage_multiple_redir(t_datas *delimiter, t_flist **gen_list);
 void			input_redir(t_datas *file);
 void			output_redir(t_datas *file);
 int				my_lstsize(t_flist **lst);
-<<<<<<< HEAD
 int	            my_lstsize_dblist(t_dblist *lst);
-=======
 void			insert_node(t_datas *repere, char *node_toadd, t_flist **head);
 
 
 
->>>>>>> origin/Vamina
 
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
