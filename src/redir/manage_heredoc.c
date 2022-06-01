@@ -103,13 +103,13 @@ int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)
 					}
 					//printf("str to get ==> %s\n", str_to_get);
 					close(file);
-					insert_node(str_to_get, gen_list);
+					insert_node(copy, str_to_get, gen_list);
 					str_to_get = NULL;
 					free(str_to_get);
 					free(tmp);
 					//affiche((*gen_list)->process);
 					if (j == head->nb_heredoc)
-						exit(1);
+						return (0);
 					break ;
 				}
 				write(file, buf, ft_strlen(buf));

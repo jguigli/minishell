@@ -166,7 +166,6 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DIGIT] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_COMA] = 1;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_SQUOTE] = 1;
@@ -176,7 +175,6 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_RPAREN] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_RBRACE] = 1;
-	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_RRED][CHR_RRED] = 1;
@@ -517,14 +515,14 @@ t_datas	*my_lstnew(char *data)
 	return (newlist);
 }
 
-void	insert_node(char *node_toadd, t_flist **head)
+void	insert_node(t_datas *repere, char *node_toadd, t_flist **head)
 {
 	t_datas	*tmp_tonext;
 	t_datas	*current;
 	t_datas	*new;
 
 	current = (*head)->process->first;
-	while (current && (current->type != 35 &&  current->type != 36 && current->type != 37))
+	while (current && current->data != repere->data)
 	{
 		if (current->next)
 			current = current->next;
@@ -588,7 +586,7 @@ int	simple_block_p(t_flist **gr_list)
 		if (fi == 0)
 		{
 			node_toadd = manage_one_redir(list->next);
-			insert_node(node_toadd, gr_list);
+			insert_node(list->next, node_toadd, gr_list);
 			//printf("%s\n", node_toadd);
 		}
 		waitpid(fi, &wstatus, 0);
@@ -605,19 +603,6 @@ int	simple_block_p(t_flist **gr_list)
 			else
 				break;
 		}
-			// fi = fork();
-			// if	(fi < 0)
-			// 	error_msgs();
-			// if (fi == 0)
-			// {
-			// 	node_toadd = manage_one_redir(list);
-			// 	insert_node(node_toadd, gr_list);
-			// 	//printf("%s\n", node_toadd);
-			// }
-			// waitpid(fi, &wstatus, 0);
-			// if (WIFEXITED (wstatus))
-			// 	return (WEXITSTATUS(wstatus));
-			// i++;
 		manage_multiple_redir(list, gr_list);
 	}
 	return (0);
@@ -639,10 +624,9 @@ void	parse_args(char	*entry, char **env)
 	if (my_lstsize(&gr_list) == 1)
 	{
 		simple_block_p(&gr_list);
-		// test = gr_list->process;
-		// affiche(test);
+		test = gr_list->process;
+		affiche(test);
 	}
 	// else
-	// 	multiple_block_p(gr_list);
-	
+	// 	multiple_block_p(gr_list);	
 }

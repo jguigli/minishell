@@ -234,19 +234,22 @@ t_dblist	*token_tag(t_dblist *list)
 	aft_p = 1;
 	while(tag)
 	{
-		//printf("A ANALYSER %s\n", tag->data);
 		if (tag->type == 5)
 		{
 			aft_p = 1;
-			tag->t_token = "TOKEN_CMD";
+			//tag->t_token = "TOKEN_CMD";
+			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7 || tag->previous->type == 33))
+				tag->t_token = "TOKEN_FILE";
+			else if (!tag->previous)
+				tag->t_token = "TOKEN_CMD";
+			else
+				tag->t_token = "TOKEN_OPT";
 			if (tag->next != NULL)
 			{
 
 				tag = tag->next;
-				//printf("ICI 1  %s --- %s\n", tag->data, tag->t_token);
 				while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 				{
-					//printf("test 73\n");
 					tag->t_token = "TOKEN_OPT";
 					tag->type = 25;
 					if	(tag->next != NULL)
@@ -254,65 +257,50 @@ t_dblist	*token_tag(t_dblist *list)
 					else
 						return (list) ;
 				}
-				// printf("data ===> %s --- %d\n", tag->data, tag->type);
 				if	(tag->type == 6 || tag->type == 7)
 				{
-					//printf("ICI 2  %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 					if (tag->type == 6)
 					{
 						if (tag->length == 2)
 						{
-							//printf("test 74\n");
 							tag->t_token = "TOKEN_RRED_APPEND";
 							tag->type = 38;
 						}
 					}
 					if (tag->type == 7)
 					{
-						//printf("75 %s -- %s -- %d -- %d\n", tag->data, tag->t_token, tag->length, tag->type);
 						if (tag->length == 2)
 						{
 							tag->type = 33;
 							tag->t_token = "TOKEN_HEREDOC";
 						}
 					}
-					//printf("ici 1 \n");
 					if	(tag->next == NULL)
 						break ;
-					//printf("test 76\n");
 					tag = tag->next;
-					//printf("ici 2 %s -- %s\n", tag->data, tag->previous->data);
-					// if (tag->next == NULL)
-					// {
 					if (tag->previous->t_token != "TOKEN_HEREDOC")
 					{
-						//printf("test 77\n");
 						tag->type = 21;
 						tag->t_token = "TOKEN_FILE";
 					}
 					else
 					{
-						//printf("ici 78%s -- %d\n", tag->data, tag->type);
 						if (tag->type == 5)
 						{
-							//printf("test 79\n");
 							tag->type = 35;
 							tag->t_token = "SIMPLE_DELIM";
 						}
 						else if (tag->type == 13)
 						{
-							//printf("test 80\n");
 							tag->type = 36;
 							tag->t_token = "DQUOTED_DELIM";
 						}
 						else if (tag->type == 12)
 						{
-							//printf("test 81\n");
 							tag->type = 37;
 							tag->t_token = "SQUOTED_DELIM";
 						}
 					}
-					//printf("82%s\n", tag->t_token);
 					if (!tag->next)
 						break ;	
 					// }
@@ -321,50 +309,36 @@ t_dblist	*token_tag(t_dblist *list)
 				}
 				else if (tag->type == 11)
 				{
-					//printf("ici 84\n");
 					if	(tag->next == NULL)
 						break ;
 					aft_p = 0;
-					// tag = tag->next;
 				}
 			}
 		}
 		else if (tag->type == 7)
 		{
-			//printf("iciiiiii ==> %s \n", tag->next->data);
 			aft_p = 1;
 			if (tag->length == 2 || tag->length == 3)
 			{
-				//printf("ici 85\n");
-				//printf(" 6666 ---> %s -- %d\n", tag->data, tag->type);
 				if (tag->length == 2)
 				{
-					//printf(" 7777 ---> %s -- %d\n", tag->data, tag->type);
-					//printf("ici 86\n");
 					tag->t_token = "TOKEN_HEREDOC";
 					tag->type = 33;
 				}
 				aft_p = 0;
-				//printf("ici 87\n");
 				tag = tag->next;
-				//printf(" 888888 ---> %s -- %d\n", tag->data, tag->type);
-				//tag->t_token = "TOKEN_HEREDOC_DELIM";
-					//tag = tag->next;
 				if (tag->type == 5)
 				{
-					//printf("ici 88\n");
 					tag->type = 35;
 					tag->t_token = "SIMPLE_DELIM";
 				}
 				else if (tag->type == 13)
 				{
-					//printf("ici 89\n");
 					tag->type = 36;
 					tag->t_token = "DQUOTED_DELIM";
 				}
 				else if (tag->type == 12)
 				{
-					//printf("ici 90\n");
 					tag->type = 37;
 					tag->t_token = "SQUOTED_DELIM";
 				}
@@ -372,40 +346,34 @@ t_dblist	*token_tag(t_dblist *list)
 					tag = tag->next;
 				else
 					break ;
-				//printf("hereuuuh %s ---- %d\n", tag->data, tag->type);
 			}
 			else
 			{
 				if (tag->next != NULL)
 				{
-					//printf("ici 91\n");
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
 					tag->type = 21;
 				}
-				if (tag->next != NULL && tag->next->next != NULL)
+				if (tag->next != NULL && tag->next->next != NULL && (tag->previous->type != 7 && tag->previous->type != 33))
 				{
-					//printf("ici 92\n");
 					tag = tag->next;
 					tag->t_token = "TOKEN_CMD";
 					tag = tag->next;
 				}
-				else
+				if	(tag->next == NULL)
 					break ;
+				tag = tag->next;
 			}
 			while (tag->type != 6 && tag->type != 7 && tag->type != 11)
 			{
 				tag->t_token = "TOKEN_OPT";
 				tag->type = 25;
 				if	(tag->next != NULL)
-				{
-					//printf("ici 93\n");
 					tag = tag->next;
-				}
 				else
 					return (list) ;
 			}
-			// printf("%s\n", tag->data);
 			if	(tag->type == 6 || tag->type == 7)
 			{
 				if	(tag->next == NULL)
@@ -415,35 +383,34 @@ t_dblist	*token_tag(t_dblist *list)
 					tag->t_token = "TOKEN_HEREDOC";
 					tag->type = 33;
 					aft_p = 0;
-					//printf("ici 93\n");
 					if (tag->next)
 						tag = tag->next;
 					else
 						break ;
-					// tag->t_token = "TOKEN_HEREDOC";
-					// tag->type = 33;
 					if (tag->type == 5)
 					{
-						//printf("ici 94\n");
 						tag->type = 35;
 						tag->t_token = "SIMPLE_DELIM";
 					}
 					if (tag->type == 13)
 					{
-						//printf("ici 95\n");
 						tag->type = 36;
 						tag->t_token = "DQUOTED_DELIM";
 					}
 					if (tag->type == 12)
 					{
-						//printf("ici 96\n");
 						tag->type = 37;
 						tag->t_token = "SQUOTED_DELIM";		
 					}
 				}
-				else
+				else if (tag->type == 6 && tag->length == 2)
 				{
-					//printf("ici 97\n");
+					tag->t_token = "TOKEN_RRED_APPEND";
+					tag = tag->next;
+					tag->t_token = "TOKEN_FILE";
+				}
+				else 
+				{
 					aft_p = 0;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
@@ -451,27 +418,16 @@ t_dblist	*token_tag(t_dblist *list)
 			}
 			else if (tag->type == 11)
 			{
-				//printf("ici 97\n");
 				if	(tag->next == NULL)
 					break ;
 				aft_p = 0;
-				// tag = tag->next;
 			}
 		}
-		// printf("dataaa herev--> %s\n", tag->data);
 		if	(tag->next != NULL)
-		{
-			//printf("ici 98\n");
 			tag = tag->next;
-		}
 		else
-		{
-			//printf("ici 99\n");
 			break ;
-		}
 	}
-	//printf("ici 100\n");
-	affiche(list);
 	return (list);
 }
 
@@ -607,7 +563,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 		else if (p_list->type == 11)
 		{
-			if	(p_list->length != 1)
+			if	(p_list->length >= 1 && (p_list->next->type != 5 && p_list->next->type != 6 && p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33))
 			{
 				//printf("ici 10\n");
 				pers_err_msges(ARG);
