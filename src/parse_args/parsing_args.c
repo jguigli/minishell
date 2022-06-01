@@ -615,22 +615,7 @@ int	simple_block_p(t_flist **gr_list)
 		}
 		manage_multiple_redir(list, gr_list);
 	}
-<<<<<<< HEAD
-	while( list2)
-	{
-		//printf("list2 -- > %s\n", list2->data);
-		if (list2->type == 6 || list2->type == 38)
-			output_redir(list2);
-		if (list2->type == 7)
-			input_redir(list2);
-		if (list2->next)
-			list2 = list2->next;
-		else
-			break ;
-	}
-=======
 	return (0);
->>>>>>> origin/Vamina
 }
 
 void	parse_args(char	*entry, char **env)
@@ -643,19 +628,13 @@ void	parse_args(char	*entry, char **env)
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
 		return ;
-<<<<<<< HEAD
-=======
 	//shell_parameter_expansion(fin_li, env);
->>>>>>> origin/Vamina
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
 		simple_block_p(&gr_list);
 	// else
-<<<<<<< HEAD
 	// 	multiple_block_p(gr_list);
 	exec_launcher(gr_list, env);
-=======
 	// 	multiple_block_p(gr_list);	
->>>>>>> origin/Vamina
 }
