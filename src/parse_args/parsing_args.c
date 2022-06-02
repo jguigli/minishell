@@ -562,7 +562,9 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	{
 		new = my_lstnew(node_toadd);
 		new->previous = current;
+		printf("test %s  \n", new->previous->data);
 		current->next = new;
+		printf("test %s  \n", current->next->data);
 		new->next = NULL;
 		(*head)->process->last = new;
 		(*head)->process->number++;
@@ -753,7 +755,19 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			list = list->next;
 		else
 			break ;
-		insert_node(list->data, node_toadd, &head);
+		if (list->type == 35 || list->type == 36 || list->type == 37)
+			insert_node(list->data, node_toadd, &head);
+		else
+		{
+			while(list && (list->type != 35 || list->type != 36 || list->type != 37))
+			{
+				if (list->next)
+					list = list->next;
+				else
+					break ;
+			}
+			insert_node(list->data, node_toadd, &head);
+		}
 		node_toadd = NULL;
 		tmp = NULL;
 		//printf("HOLLAA %s --  \n", list->data);
