@@ -476,41 +476,42 @@ void counting(t_flist **gr_list)
 	pos = 1;
 	while(head)
 	{
-		while(list)
+		printf("list data ==> %s\n", head->process->first->data);
+		while(head->process->first)
 		{
-			if	(list->type == 6)
+			if	(head->process->first->type == 6)
 			{
 				head->nb_rred++;
 				head->pos_rred = pos;
 			}
-			if	(list->type == 7)
+			if	(head->process->first->type == 7)
 			{
 				head->nb_lred++ ;
 				head->pos_lred = pos;
 			}
-			if	(list->type == 33)
+			if	(head->process->first->type == 33)
 			{
 				head->nb_heredoc++;
 				head->pos_heredoc = pos;
 			}
-			if	(list->type == 38)
+			if	(head->process->first->type == 38)
 			{
 				head->pos_rred_app = pos;
 				head->nb_rred_app++;
 			}
-			if	(list->type == 25)
+			if	(head->process->first->type == 25)
 			{
 				head->nb_options++;
-				head->pos_options = pos;
+				head->pos_options = pos;;
 			}
 			pos++;
-			if (list->next != NULL)
-				list = 	list->next;
+			if (head->process->first->next != NULL)
+				head->process->first = 	head->process->first->next;
 			else 
 				break ;
 		}
 		pos = 0;
-		if (head->next != NULL)
+		if (head->next != NULL )
 			head = head->next;
 		else
 			break ;
@@ -688,26 +689,27 @@ t_flist	*parse_args(char	*entry, char **env)
 	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
+	//printf("gr_list %s --- %d \n", gr_list->next->process->first->data, gr_list->next->nb_heredoc);
 	if (my_lstsize(&gr_list) == 1)
 	{
 		//printf("%d \n", gr_list->nb_heredoc);
 		simple_block_p(&gr_list);
-		affiche(gr_list->process);
+		//affiche(gr_list->process);
 		//printf("OKKKKKK %d\n", gr_list->nb_heredoc);	
 		
 	}
 	//printf("lst size %d\n", my_lstsize(&gr_list));
-	// else if	(my_lstsize(&gr_list) > 1)
-	// {
-	// 	// printf("test ici\n");
-	// 	// printf("Ici %d\n", gr_list->nb_heredoc);
-	// 	// while(gr_list)
-	// 	// {
-	// 	// 	simple_block_p(&gr_list);
-	// 	// 	gr_list = gr_list->next;
-	// 	// }
-	// 	multiple_block_p(&gr_list);
-	// }
+	else if	(my_lstsize(&gr_list) > 1)
+	{
+		// printf("test ici\n");
+		// printf("Ici %d\n", gr_list->nb_heredoc);
+		while(gr_list)
+		{
+			simple_block_p(&gr_list);
+			gr_list = gr_list->next;
+		}
+		//multiple_block_p(&gr_list;);
+	}
 	//exec_launcher(&gr_list, env);
 	//affiche(gr_list->process);
 	return (gr_list);
