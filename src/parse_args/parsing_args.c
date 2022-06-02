@@ -446,6 +446,7 @@ int	my_lstsize(t_flist **lst)
 		lstnext = lstnext->next;
 		i++;
 	}
+	printf("%d \n", i);
 	return (i);
 }
 
@@ -503,17 +504,18 @@ void counting(t_flist **gr_list)
 				head->pos_options = pos;
 			}
 			pos++;
-			if (list->next)
+			if (list->next != NULL)
 				list = 	list->next;
 			else 
 				break ;
 		}
 		pos = 0;
-		if (head->next)
+		if (head->next != NULL)
 			head = head->next;
 		else
 			break ;
 	}
+	//printf("Nb heredoc depuis counting %d\n", head->nb_heredoc);
 }
 
 t_datas	*my_lstnew(char *data)
@@ -581,7 +583,7 @@ int	simple_block_p(t_flist **gr_list)
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	
+	//printf("there %d\n", head->next->nb_heredoc);
 	if	(head->nb_heredoc == 1)
 	{
 		while (list && list->type != 33)
@@ -625,23 +627,18 @@ int	multiple_block_p(t_flist **gr_list)
 	head = *gr_list;
 	while(head)
 	{
-		if (head->next)
-		{
-			simple_block_p(&head);
-			head = head->next;
-		}
-		else
-			break ;
+		printf("hola %d\n", head->nb_heredoc);
+		simple_block_p(&head);
+		head = head->next;
 	}
 	return (0);
 }
-
 
 t_flist	*parse_args(char	*entry, char **env)
 {
 	t_dblist		*fin_li;
 	t_flist			*gr_list;
-	t_flist			*copy;
+	//t_flist			*copy;
 	t_dblist			*test;
 
 	fin_li = get_tokens(entry);
@@ -652,7 +649,18 @@ t_flist	*parse_args(char	*entry, char **env)
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
 		simple_block_p(&gr_list);
-	else if	(my_lstsize(&gr_list) > 1)
-		multiple_block_p(&gr_list);
+	//printf("lst size %d\n", my_lstsize(&gr_list));
+	// else if	(my_lstsize(&gr_list) > 1)
+	// {
+	// 	// printf("test ici\n");
+	// 	// printf("Ici %d\n", gr_list->nb_heredoc);
+	// 	// while(gr_list)
+	// 	// {
+	// 	// 	simple_block_p(&gr_list);
+	// 	// 	gr_list = gr_list->next;
+	// 	// }
+	// 	multiple_block_p(&gr_list);
+	// }
+	//exec_launcher(&gr_list, env);
 	return (gr_list);
 }

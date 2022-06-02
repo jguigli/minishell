@@ -23,14 +23,20 @@ char	**list_to_tab(t_dblist *list)
 	return (tab);
 }
 
-int	exec_launcher(t_flist *list, char **env)
+int	exec_launcher(t_flist **li, char **env)
 {
 	int	pipe;
+	t_flist	*list;
+	t_flist	*list2;
 
+	list = *li;
+	list2 = *li;
 	pipe = my_lstsize(&list) - 1;
 	printf("pipe = %d\n", pipe);
 	if (pipe)
+	{
 		exec_complex_cmd(list, env);
+	}
 	else
 		exec_simple_cmd(list, env);
 	return (1);

@@ -240,7 +240,7 @@ t_dblist	*token_tag(t_dblist *list)
 			//tag->t_token = "TOKEN_CMD";
 			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7 || tag->previous->type == 33))
 				tag->t_token = "TOKEN_FILE";
-			else if (!tag->previous)
+			else if (!tag->previous || tag->previous->type == 11)
 				tag->t_token = "TOKEN_CMD";
 			else
 				tag->t_token = "TOKEN_OPT";
@@ -305,7 +305,7 @@ t_dblist	*token_tag(t_dblist *list)
 						break ;	
 					// }
 					aft_p = 0;
-					printf("83 %s ---> %s\n", tag->data, tag->t_token);
+					// printf("83 %s ---> %s\n", tag->data, tag->t_token);
 				}
 				else if (tag->type == 11)
 				{
@@ -428,6 +428,7 @@ t_dblist	*token_tag(t_dblist *list)
 		else
 			break ;
 	}
+	affiche(list);
 	return (list);
 }
 
@@ -488,7 +489,6 @@ t_flist *get_processes(t_dblist *list)
 		else 
 			break ;
 	}
-	//return (finli);
 	return (head);
 }
 
@@ -605,10 +605,8 @@ t_dblist *p_tok(t_dblist *list)
 			}
 		}
 	}
-	// printf("dataaa == %s\n", list->first->data);
 	//affiche(list);
 	token_tag(list);
-	//get_processes(list);
 	return (list);
 }
 
