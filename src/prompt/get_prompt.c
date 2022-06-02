@@ -88,9 +88,10 @@ void	get_prompt(char **env)
 			// RAJOUTER CONDITION SI CA FOIRE
 			printf("GETENV = %s\n", getenv("HOME"));
 	    	add_history(entry);
-			gr_list = parse_args(entry, env);
-			//parse_args(entry, env);
-			exec_launcher(&gr_list, env);
+			//gr_list = parse_args(entry, env);
+			parse_args(entry, env);
+			printf("%d \n", int_mode);
+			//exec_launcher(&gr_list, env);
         }
 	}
 }

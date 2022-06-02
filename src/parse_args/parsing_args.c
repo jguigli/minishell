@@ -446,7 +446,7 @@ int	my_lstsize(t_flist **lst)
 		lstnext = lstnext->next;
 		i++;
 	}
-	printf("%d \n", i);
+	//printf("%d \n", i);
 	return (i);
 }
 
@@ -529,20 +529,22 @@ t_datas	*my_lstnew(char *data)
 	return (newlist);
 }
 
-void	insert_node(t_datas *repere, char *node_toadd, t_flist **head)
+void	insert_node(char *repere, char *node_toadd, t_flist **head)
 {
 	t_datas	*tmp_tonext;
 	t_datas	*current;
 	t_datas	*new;
 
 	current = (*head)->process->first;
-	while (current && current->data != repere->data)
+	printf("repere%s  \n", repere);
+	while (current && (ft_strncmp(current->data, repere, ft_strlen(repere))))
 	{
 		if (current->next)
 			current = current->next;
 		else
 			break ;
 	}
+	printf("current data%s  \n", current->data);
 	if (current->next)
 	{
 		tmp_tonext = current->next;
@@ -567,6 +569,7 @@ void	insert_node(t_datas *repere, char *node_toadd, t_flist **head)
 		new->pos = current->pos++;
 		new->t_token = "TOKEN_HEREDOC_STRING";	
 	}
+	// exit(127);
 }
 
 int	simple_block_p(t_flist **gr_list)
@@ -575,16 +578,22 @@ int	simple_block_p(t_flist **gr_list)
 	t_datas	*list2;
 	t_flist	*head;
 	int		i;
+	int		j;
 	int		fi;
 	int		wstatus;
 	char	*node_toadd;
+	char	*tmp;
+	int		file;
 
 	list = (*gr_list)->process->first;
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	//printf("there %d\n", head->next->nb_heredoc);
-	if	(head->nb_heredoc == 1)
+	j = 0;
+	node_toadd = NULL;
+	tmp = NULL;
+	// printf("there %s\n", head->process->first->data);
+	if	(head->nb_heredoc >= 1)
 	{
 		while (list && list->type != 33)
 		{
@@ -593,53 +602,85 @@ int	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		fi = fork();
-		if	(fi < 0)
-			error_msgs();
-		if (fi == 0)
+		while (i < head->nb_heredoc && list)
 		{
-			node_toadd = manage_one_redir(list->next);
-			insert_node(list->next, node_toadd, gr_list);
-		}
-		waitpid(fi, &wstatus, 0);
-		if (WIFEXITED (wstatus))
-			return (WEXITSTATUS(wstatus));
-	}
-	else if (head->nb_heredoc > 1)
-	{		
-
-		while (list->type != 35 && list->type != 36 && list->type != 37)
-		{
+			fi = fork();
+			//printf("%d \n", fi);
+			if	(fi < 0)
+				error_msgs();
+			if (fi == 0)
+			{
+				//printf("list data %s \n", list->data);
+				manage_one_redir(list->next, head);
+				//printf("prout\n");
+				exit(1);
+			}	
+			if	(waitpid(fi, &wstatus, 0) == -1)
+				perror("wait() error");
+			file = open("infile", O_RDONLY);
+			if	(file < 0)
+				error_msgs();
+			tmp = get_next_line(file);
+			//printf("tmp ==> %s\n", tmp);
+			while (tmp != NULL)
+			{
+				//printf("tmp ==> %s\n", tmp);
+				node_toadd = ft_strjoin(node_toadd, tmp);
+				//printf("str to get ==> %s\n", node_toadd);
+				free(tmp);
+				tmp = get_next_line(file);
+				//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
+				if (head->nb_heredoc > 1 && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
+				{
+					free(tmp);
+					break ;
+				}		
+			}
+			close(file);
+			//printf("there %s --  node to add : %s\n", list->data, node_toadd);
 			if (list->next)
 				list = list->next;
 			else
-				break;
+				break ;
+			insert_node(list->data, node_toadd, &head);
+			node_toadd = NULL;
+			tmp = NULL;
+			while(list && list->type != 33)
+			{
+				if (list->next)
+					list = list->next;
+				else
+					break ;
+			}
+			i ++;
 		}
-		manage_multiple_redir(list, gr_list);
 	}
 	return (0);
 }
 
-int	multiple_block_p(t_flist **gr_list)
-{
-	t_flist	*head;
+// int	multiple_block_p(t_flist **gr_list)
+// {
+// 	t_flist	*head;
 
-	head = *gr_list;
-	while(head)
-	{
-		printf("hola %d\n", head->nb_heredoc);
-		simple_block_p(&head);
-		head = head->next;
-	}
-	return (0);
-}
+// 	head = *gr_list;
+// 	while(head)
+// 	{
+// 		//printf("hola %d\n", head->nb_heredoc);
+// 		simple_block_p(&head);
+// 		head = head->next;
+// 	}
+// 	return (0);
+// }
 
 t_flist	*parse_args(char	*entry, char **env)
 {
-	t_dblist		*fin_li;
-	t_flist			*gr_list;
+	t_dblist	*fin_li;
+	t_flist		*gr_list;
 	//t_flist			*copy;
-	t_dblist			*test;
+	t_dblist	*test;
+	int			file;
+	char 		*tmp;
+	char 		*str_to_get;
 
 	fin_li = get_tokens(entry);
 	if	(!fin_li)
@@ -648,7 +689,13 @@ t_flist	*parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
+	{
+		//printf("%d \n", gr_list->nb_heredoc);
 		simple_block_p(&gr_list);
+		affiche(gr_list->process);
+		//printf("OKKKKKK %d\n", gr_list->nb_heredoc);	
+		
+	}
 	//printf("lst size %d\n", my_lstsize(&gr_list));
 	// else if	(my_lstsize(&gr_list) > 1)
 	// {
@@ -662,5 +709,6 @@ t_flist	*parse_args(char	*entry, char **env)
 	// 	multiple_block_p(&gr_list);
 	// }
 	//exec_launcher(&gr_list, env);
+	//affiche(gr_list->process);
 	return (gr_list);
 }

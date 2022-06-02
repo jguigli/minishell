@@ -58,6 +58,14 @@ fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) fclean
 	rm -f $(NAME)
 
+# clean :
+# 	$(MAKE) -C $(GNL_PATH) clean
+# 	rm -rf $(OBJ)
+
+# fclean: clean
+# 	$(MAKE) -C $(GNL_PATH) fclean
+# 	rm -f $(NAME)
+
 re: fclean all
 
 .PHONY : all clean fclean re

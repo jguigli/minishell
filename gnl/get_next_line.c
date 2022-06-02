@@ -111,15 +111,15 @@ char	*get_next_line(int fd)
 	if (fd < 0 || 1 <= 0)
 		return (NULL);
 	next_sentence = read_get_nls(fd, next_sentence);
-	if (!next_sentence)
-		return (NULL);
-	if (!next_sentence[0])
-	{
-		//printf("ici 6");
-		free(next_sentence);
-		next_sentence = NULL;
-		return (NULL);
-	}
+	// if (!next_sentence)
+	// 	return (NULL);
+	// if (!next_sentence[0])
+	// {
+	// 	//printf("ici 6");
+	// 	free(next_sentence);
+	// 	next_sentence = NULL;
+	// 	return (NULL);
+	// }
 	string_to_display = get_string_nl(next_sentence);
 	next_sentence = next_sent(next_sentence);
 	return (string_to_display);
