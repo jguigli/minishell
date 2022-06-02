@@ -78,13 +78,6 @@ char	*get_command(char **path, char *cmd)
 	return (NULL);
 }
 
-char	*find_path(char **envp)
-{
-	while (ft_strncmp("PATH=", *envp, 5))
-		envp++;
-	return (*envp + 5);
-}
-
 void	create_pipes(t_exec_c *exec)
 {
 	int	i;
@@ -93,7 +86,7 @@ void	create_pipes(t_exec_c *exec)
 	while (i < exec->cmd_number - 1)
 	{
 		if (pipe(exec->pipe + 2 * i) < 0)
-			//write_error_path(ERROR_PIPE, exec);
+			exit(0);
 		i++;
 	}
 }
@@ -114,11 +107,13 @@ void	manage_dup2(t_exec_c exec, int first, int second)
 {
 	if (dup2(first, STDIN_FILENO) < 0)
 	{
+		printf("la 1 DUP\n");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);
 	}
 	if (dup2(second, STDOUT_FILENO) < 0)
 	{
+		printf("la 2 DUP\n");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);
 	}

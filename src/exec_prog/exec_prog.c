@@ -32,7 +32,6 @@ int	exec_launcher(t_flist **li, char **env)
 	list = *li;
 	list2 = *li;
 	pipe = my_lstsize(&list) - 1;
-	printf("pipe = %d\n", pipe);
 	if (pipe)
 	{
 		exec_complex_cmd(list, env);
