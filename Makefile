@@ -20,6 +20,13 @@ SRC = minishell.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/exec_prog/exec_prog_complex.c \
 		./src/env/get_var_env.c \
+		./src/builtin/cd.c \
+		./src/builtin/echo.c \
+		./src/builtin/env.c \
+		./src/builtin/exit.c \
+		./src/builtin/export.c \
+		./src/builtin/pwd.c \
+		./src/builtin/unset.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)
@@ -52,10 +59,12 @@ $(GNL):
 
 clean :
 	$(MAKE) -C $(LIBFT_PATH) clean
+	$(MAKE) -C $(GNL_PATH) clean
 	rm -rf $(OBJ)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) fclean
+	$(MAKE) -C $(GNL_PATH) fclean
 	rm -f $(NAME)
 
 re: fclean all

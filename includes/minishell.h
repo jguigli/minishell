@@ -81,6 +81,8 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env);
 void	exec_complex_cmd(t_flist *list, char **env);
 void	exec_simple_cmd(t_flist *list, char **env);
 int	    exec_launcher(t_flist **list, char **env);
+int		is_builtin(char *cmd);
+void	exec_builtin(char **arg, char **env);
 
 int	count_quote(char *argv);
 char	**split_arg(char *argv);
@@ -91,6 +93,13 @@ void	create_pipes(t_exec_c *exec);
 void	close_pipes(t_exec_c *exec);
 void	manage_dup2(t_exec_c exec, int first, int second);
 
+int    ft_cd(char **arg, char **env);
+int    ft_echo(char **arg);
+void    ft_env(char **env);
+void    ft_exit(char **str);
+void    ft_export(char **arg, char **env);
+int    ft_pwd(void);
+void    ft_unset(char **str, char **env);
 
 //void			freeing(char *paths[])
 

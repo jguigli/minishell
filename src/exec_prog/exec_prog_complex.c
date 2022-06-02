@@ -13,13 +13,22 @@ void	child_process_complex(t_exec_c exec, char **arg, char **envp)
 			exec.pipe[2 * exec.pid_number + 1]);
 	close_pipes(&exec);
 	exec.cmd_arg = arg;
-	if (!exec.cmd_arg)
+	if (is_builtin(arg[0]))
+	{
+		exec_builtin(arg, envp);
+		//kill(exec.pid[exec.pid_number], SIGKILL);
 		exit(0);
-	exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-	if (!exec.cmd)
-		exit(0);
-	if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
-		exit(0);
+	}
+	else
+	{
+		if (!exec.cmd_arg)
+			exit(0);
+		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
+		if (!exec.cmd)
+			exit(0);
+		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
+			exit(0);
+	}	
 }
 
 void	manage_exec(t_exec_c exec, t_flist *list, char **env)
@@ -34,11 +43,16 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	{
         shell_parameter_expansion(current->process, env);
 		arg = list_to_tab(current->process);
-		exec.pid[exec.pid_number] = fork();
-		if (exec.pid[exec.pid_number] == -1)
-			exit(0);
-		else if (!exec.pid[exec.pid_number])
-			child_process_complex(exec, arg, env);
+		// if (is_builtin(arg[0]))
+		// 	exec_builtin(arg, env);
+		// else
+		// {
+			exec.pid[exec.pid_number] = fork();
+			if (exec.pid[exec.pid_number] == -1)
+				exit(0);
+			else if (!exec.pid[exec.pid_number])
+				child_process_complex(exec, arg, env);
+		// }
 		exec.pid_number++;
 		free(arg);
         if (current->next) // a supprimer ou pas

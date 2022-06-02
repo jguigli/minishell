@@ -9,8 +9,7 @@ void    ft_env(char **env) // var d'env dans struct glob
         return ;
     while(env[i])
     {
-        write(1, &env[i], ft_strlen(env[i]));
-        write(1, "\n", 1);
+        printf("%s\n", env[i]);
         i++;
     }
 }

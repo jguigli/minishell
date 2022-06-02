@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void    ft_echo(char **arg)
+int    ft_echo(char **arg)
 {
 	int	i;
 
@@ -18,7 +18,7 @@ void    ft_echo(char **arg)
 		if (arg[i])
 			ft_putchar_fd(' ', 1);
 	}
-	if (n)
-		ft_putchar_fd('\n');
+	// if (n)
+	// 	ft_putchar_fd('\n');
 	return (0);
 }

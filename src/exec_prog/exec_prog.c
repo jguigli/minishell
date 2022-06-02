@@ -1,5 +1,38 @@
 #include "../../includes/minishell.h"
 
+int		is_builtin(char *cmd)
+{
+	int	i;
+	char	*builtin[] = {"cd", "echo", "env", "exit", "export", "pwd", "unset", NULL};
+
+	i = 0;
+	while (builtin[i])
+	{
+		if (!strcmp(builtin[i], cmd))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	exec_builtin(char **arg, char **env)
+{
+	if (!strcmp(arg[0], "cd"))
+		ft_cd(arg, env);
+	else if (!strcmp(arg[0], "echo"))
+		ft_echo(arg);
+	else if (!strcmp(arg[0], "env"))
+		ft_env(env);
+	else if (!strcmp(arg[0], "exit"))
+		ft_exit(arg);
+	else if (!strcmp(arg[0], "export"))
+		ft_export(arg, env);
+	else if (!strcmp(arg[0], "pwd"))
+		ft_pwd();
+	else if (!strcmp(arg[0], "unset"))
+		ft_unset(arg, env);
+}
+
 char	**list_to_tab(t_dblist *list)
 {
 	char	**tab;

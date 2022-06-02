@@ -21,7 +21,7 @@ static char	*check_home_path(char *data, char **env)
 
 static int	change_directory(char *data, char **env)
 {
-	char	temp;
+	char	*temp;
 	char	*str;
 
 	temp = getcwd(NULL, 0);
@@ -41,26 +41,22 @@ static int	change_directory(char *data, char **env)
 	return (0);
 }
 
-void	set_directory(char *data, char **env)
+static int	set_directory(char *data, char **env)
 {
 	if (change_directory(data, env))
 		return (1);
 }
 
-int    cd_home(void)
+static int    cd_home(void)
 {
 	
 }
 
-int    ft_cd(t_dblist *list, char **env)
+int    ft_cd(char **arg, char **env)
 {
-    t_datas *current;
-
-    current = list->first;
-    current = current->next;
     //getenv("HOME") pour recup le path de base
 	//changer la var env PWD si jamais on change de repertoire et OLDPWD pour l'ancien repertoire
-    if (current->data == NULL || ft_strcmp(current->data, "~") || ft_strcmp(current->data, "--"))
+    if (!arg[2] || ft_strcmp(arg[1], "~") || ft_strcmp(arg[1], "--"))
     {
         if (!getenv("HOME")) //STEP 1
         {
@@ -69,9 +65,9 @@ int    ft_cd(t_dblist *list, char **env)
         }
         return(cd_home()); //STEP 2
     }
-    else if (current->data)
+    else if (arg[2])
     {
-		check_home_path(current->data, env);
+		check_home_path(arg[1], env);
     }
     else
     {

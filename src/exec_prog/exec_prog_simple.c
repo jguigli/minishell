@@ -22,11 +22,16 @@ void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de com
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');
 	arg = list_to_tab(list->process);
-	exec.pid = fork();;
-	if (exec.pid == -1)
-		exit(0);
-	else if (!exec.pid)
-		child_process_simple(exec, arg, env);
+	if (is_builtin(arg[0]))
+		exec_builtin(arg, env);
+	else
+	{
+		exec.pid = fork();;
+		if (exec.pid == -1)
+			exit(0);
+		else if (!exec.pid)
+			child_process_simple(exec, arg, env);
+	}
 	free(arg);
 	waitpid(exec.pid, NULL, 0);
 }
