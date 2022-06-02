@@ -471,42 +471,42 @@ void counting(t_flist **gr_list)
 	t_flist	*head;
 	int	pos;
 
-	list = (*gr_list)->process->first;
 	head = *gr_list;
 	pos = 1;
 	while(head)
 	{
-		printf("list data ==> %s\n", head->process->first->data);
-		while(head->process->first)
+		list = head->process->first;
+		//printf("list data ==> %s\n", head->process->first->data);
+		while(list)
 		{
-			if	(head->process->first->type == 6)
+			if	(list->type == 6)
 			{
 				head->nb_rred++;
 				head->pos_rred = pos;
 			}
-			if	(head->process->first->type == 7)
+			if	(list->type == 7)
 			{
 				head->nb_lred++ ;
 				head->pos_lred = pos;
 			}
-			if	(head->process->first->type == 33)
+			if	(list->type == 33)
 			{
 				head->nb_heredoc++;
 				head->pos_heredoc = pos;
 			}
-			if	(head->process->first->type == 38)
+			if	(list->type == 38)
 			{
 				head->pos_rred_app = pos;
 				head->nb_rred_app++;
 			}
-			if	(head->process->first->type == 25)
+			if	(list->type == 25)
 			{
 				head->nb_options++;
 				head->pos_options = pos;;
 			}
 			pos++;
-			if (head->process->first->next != NULL)
-				head->process->first = 	head->process->first->next;
+			if (list->next != NULL)
+				list = 	list->next;
 			else 
 				break ;
 		}
@@ -659,19 +659,25 @@ int	simple_block_p(t_flist **gr_list)
 	return (0);
 }
 
-// int	multiple_block_p(t_flist **gr_list)
-// {
-// 	t_flist	*head;
 
-// 	head = *gr_list;
-// 	while(head)
-// 	{
-// 		//printf("hola %d\n", head->nb_heredoc);
-// 		simple_block_p(&head);
-// 		head = head->next;
-// 	}
-// 	return (0);
-// }
+int	check_tot_heredoc(t_flist **list)
+{
+	t_flist	*gr_list;
+	int		tota_heredoc;
+
+	tota_heredoc = 0;
+	gr_list = *list;
+	while(gr_list)
+	{
+		if (gr_list->nb_heredoc > 0)
+			tota_heredoc += gr_list->nb_heredoc;
+		if (gr_list->next)
+			gr_list = gr_list->next;
+		else
+			break ;
+	}
+	return (tota_heredoc);
+}
 
 t_flist	*parse_args(char	*entry, char **env)
 {
@@ -682,33 +688,40 @@ t_flist	*parse_args(char	*entry, char **env)
 	int			file;
 	char 		*tmp;
 	char 		*str_to_get;
+	int			tota_heredoc;
 
 	fin_li = get_tokens(entry);
+	tota_heredoc = 0;
 	if	(!fin_li)
 		return (NULL);
 	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	//printf("gr_list %s --- %d \n", gr_list->next->process->first->data, gr_list->next->nb_heredoc);
+	printf("herrrre %s\n", gr_list->process->first->data);
+	printf("lst size %d\n", my_lstsize(&gr_list));
 	if (my_lstsize(&gr_list) == 1)
 	{
 		//printf("%d \n", gr_list->nb_heredoc);
 		simple_block_p(&gr_list);
-		//affiche(gr_list->process);
 		//printf("OKKKKKK %d\n", gr_list->nb_heredoc);	
 		
 	}
-	//printf("lst size %d\n", my_lstsize(&gr_list));
 	else if	(my_lstsize(&gr_list) > 1)
 	{
 		// printf("test ici\n");
-		// printf("Ici %d\n", gr_list->nb_heredoc);
-		while(gr_list)
+		tota_heredoc = check_tot_heredoc(&gr_list);
+		//printf("tot heredoc %d\n", tota_heredoc);
+		if (tota_heredoc >= 1)
 		{
-			simple_block_p(&gr_list);
-			gr_list = gr_list->next;
+			multiple_block_p(&gr_list, tota_heredoc);
+			while (gr_list)
+			{
+				affiche(gr_list->process);
+				gr_list = gr_list->next;
+			}
+			
 		}
-		//multiple_block_p(&gr_list;);
 	}
 	//exec_launcher(&gr_list, env);
 	//affiche(gr_list->process);

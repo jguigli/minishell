@@ -51,11 +51,13 @@ void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
 char			*manage_one_redir(t_datas *delimiter, t_flist *gr_list);
 //int				manage_multiple_redir(t_datas *delimiter, t_flist **gen_list);
+int				multiple_block_p(t_flist **gr_list, int totalhd);
 void			input_redir(t_datas *file);
 void			output_redir(t_datas *file);
 int				my_lstsize(t_flist **lst);
 int	            my_lstsize_dblist(t_dblist *lst);
 void			insert_node(char *repere, char *node_toadd, t_flist **head);
+int				check_tot_heredoc(t_flist **list);
 
 
 

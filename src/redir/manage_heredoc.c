@@ -45,6 +45,108 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	return (NULL);
 }
 
+int	multiple_block_p(t_flist **gr_list, int totalhd)
+{
+	t_datas	*list;
+	// t_datas	*list2;
+	t_flist	*head;
+	int		i;
+	int		j;
+	int		k;
+	int		fi;
+	int		wstatus;
+	char	*node_toadd;
+	char	*tmp;
+	int		file;
+
+	// list = (*gr_list)->process->first;
+	// list2 = (*gr_list)->process->first;
+	head = *gr_list;
+	i = 0;
+	j = 0;
+	k = 0;
+	node_toadd = NULL;
+	tmp = NULL;
+	//printf("there %s\n", head->next->next->process->first->data);
+	while (head && k < totalhd)
+	{
+		while(head->nb_heredoc == 0)
+		{
+			if	(head->next)
+				head = head->next;
+			else
+				break ;
+		}
+		list = head->process->first;
+		while (list && list->type != 33)
+		{
+			if (list->next)	
+				list = list->next;
+			else 
+				break ;
+		}
+		while (i < head->nb_heredoc && list)
+		{
+			fi = fork();
+			//printf("%d \n", fi);
+			if	(fi < 0)
+				error_msgs();
+			if (fi == 0)
+			{
+				//printf("list data %s \n", list->data);
+				manage_one_redir(list->next, head);
+				//printf("prout\n");
+				exit(1);
+			}	
+			if	(waitpid(fi, &wstatus, 0) == -1)
+				perror("wait() error");
+			file = open("infile", O_RDONLY);
+			if	(file < 0)
+				error_msgs();
+			tmp = get_next_line(file);
+			//printf("tmp ==> %s\n", tmp);
+			while (tmp != NULL)
+			{
+				//printf("tmp ==> %s\n", tmp);
+				node_toadd = ft_strjoin(node_toadd, tmp);
+				//printf("str to get ==> %s\n", node_toadd);
+				free(tmp);
+				tmp = get_next_line(file);
+				//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
+				if (head->nb_heredoc > 1 && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
+				{
+					free(tmp);
+					break ;
+				}		
+			}
+			close(file);
+			//printf("there %s --  node to add : %s\n", list->data, node_toadd);
+			if (list->next)
+				list = list->next;
+			else
+				break ;
+			insert_node(list->data, node_toadd, &head);
+			node_toadd = NULL;
+			tmp = NULL;
+			while(list && list->type != 33)
+			{
+				if (list->next)
+					list = list->next;
+				else
+					break ;
+			}
+			i ++;
+			k += i;
+		}
+		if (head->next)
+			head = head->next;
+		else
+			break ;
+	}
+	return (0);
+}
+
+
 // int	manage_multiple_redir(t_datas *delimiter, t_flist **gen_list)
 // {
 // 	t_datas	*copy;
