@@ -659,6 +659,133 @@ int	simple_block_p(t_flist **gr_list)
 	return (0);
 }
 
+int	multiple_block_p(t_flist **gr_list, int totalhd)
+{
+	t_datas	*list;
+	// t_datas	*list2;
+	t_flist	*head;
+	int		i;
+	int		j;
+	int		k;
+	int		fi;
+	int		wstatus;
+	char	*node_toadd;
+	char	*tmp;
+	int		file;
+
+	// list = (*gr_list)->process->first;
+	// list2 = (*gr_list)->process->first;
+	head = *gr_list;
+	i = 0;
+	j = 0;
+	k = 0;
+	node_toadd = NULL;
+	tmp = NULL;
+	printf("there %s\n", head->process->first->data);
+	printf("boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
+	while(head->nb_heredoc == 0)
+	{
+		if	(head->next)
+			head = head->next;
+		else
+			break ;
+	}
+	printf("Fin boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
+	list = head->process->first;
+	printf("list %s\n", list->data);
+	while (list && list->type != 33)
+	{
+		if (list->next)	
+			list = list->next;
+		else 
+			break ;
+	}
+	printf("Fin boucle 2 list %s\n", list->data);
+	while (i < head->nb_heredoc && list && k < totalhd)
+	{
+		//printf("DEbut boucle 3 i = %d ---- head->heredoc %d --- list data %s\n", i, head->nb_heredoc, list->data);
+		fi = fork();
+		//printf("%d \n", fi);
+		if	(fi < 0)
+			error_msgs();
+		if (fi == 0)
+		{
+			//printf("list data %s \n", list->data);
+			if (list->next->type == 35 || list->next->type == 36 || list->next->type == 37)
+				manage_one_redir(list->next, head);
+			else
+			{
+				while (list && list->type != 33)
+				{
+					if (list->next)	
+						list = list->next;
+					else 
+						break ;
+				}
+				manage_one_redir(list->next, head);
+			}
+			//printf("prout\n");
+			exit(1);
+		}	
+		if	(waitpid(fi, &wstatus, 0) == -1)
+			perror("wait() error");
+		file = open("infile", O_RDONLY);
+		if	(file < 0)
+			error_msgs();
+		tmp = get_next_line(file);
+		//printf("tmp ==> %s\n", tmp);
+		while (tmp != NULL)
+		{
+			//printf("tmp ==> %s\n", tmp);
+			node_toadd = ft_strjoin(node_toadd, tmp);
+			//printf("str to get ==> %s\n", node_toadd);
+			free(tmp);
+			tmp = get_next_line(file);
+			//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
+			if (head->nb_heredoc > 1 && list->next && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
+			{
+				free(tmp);
+				break ;
+			}		
+		}
+		close(file);
+		if (list->next)
+			list = list->next;
+		else
+			break ;
+		insert_node(list->data, node_toadd, &head);
+		node_toadd = NULL;
+		tmp = NULL;
+		//printf("HOLLAA %s --  \n", list->data);
+		while(list && list->type != 33)
+		{
+			if (list->next)
+				list = list->next;
+			else
+				break ;
+		}
+		//printf("HOLLAA 222 %s --  \n", list->data);
+		i ++;
+		k += i;
+		//printf("HOLLAA 3333 %d --  \n", i);
+		//printf("HOLLAA 4444 %d --  \n", k);
+		if (i == head->nb_heredoc)
+		{
+			i = 0;
+			if (head->next)
+			{
+				head = head->next;
+				list = head->process->first;
+			}
+			else
+				break ;
+		}
+		//printf("head->process->first %s\n", head->process->first->data);
+		//printf("holaaa 444 --> list->data %s\n", list->data);
+	}
+	return (0);
+}
+
 
 int	check_tot_heredoc(t_flist **list)
 {
@@ -698,8 +825,8 @@ t_flist	*parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	//printf("gr_list %s --- %d \n", gr_list->next->process->first->data, gr_list->next->nb_heredoc);
-	printf("herrrre %s\n", gr_list->process->first->data);
-	printf("lst size %d\n", my_lstsize(&gr_list));
+//printf("herrrre %s\n", gr_list->process->first->data);
+//	printf("lst size %d\n", my_lstsize(&gr_list));
 	if (my_lstsize(&gr_list) == 1)
 	{
 		//printf("%d \n", gr_list->nb_heredoc);

@@ -428,7 +428,7 @@ t_dblist	*token_tag(t_dblist *list)
 		else
 			break ;
 	}
-	affiche(list);
+	//affiche(list);
 	return (list);
 }
 
