@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_prompt.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/03 19:01:57 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/06/03 19:02:02 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 char	*get_env_pwd(char **env)
@@ -74,7 +86,7 @@ void	get_prompt(char **env)
 	my_prompt = get_prompt_env(env);
 	if (!my_prompt)
 		my_prompt = "~$ ";
-	while(int_mode)
+	while (int_mode)
 	{
 		int_mode = isatty(STDIN_FILENO);
 		if (int_mode == 1)
@@ -85,10 +97,9 @@ void	get_prompt(char **env)
 				write(1, "exit", 5);
 				exit(0);
 			}
-			// RAJOUTER CONDITION SI CA FOIRE
-	    	add_history(entry);
+			add_history(entry);
 			gr_list = parse_args(entry, env);
 			exec_launcher(&gr_list, env);
-        }
+		}
 	}
 }

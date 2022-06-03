@@ -588,12 +588,10 @@ t_dblist	*get_tokens(char *entry)
 {
 	int	counter;
 	unsigned int token_type;
-	unsigned int token_typess;
 	unsigned int i;
 	unsigned int j;
 	int			is_quoted;
 	t_dblist	*list;
-	t_dblist	*p_list;
 	t_dblist	*gr_list;
 	int pos;
 
@@ -602,7 +600,6 @@ t_dblist	*get_tokens(char *entry)
 	j = 0;
 	is_quoted = 1;
 	list = init_linked_list();
-	p_list = init_linked_list();
 	char *str;
 
 	if (entry[0] == '\0')
@@ -610,10 +607,8 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		//printf("%d ---- %c\n", token_type, entry[i]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
-			//printf(" ICI 1 == %d ---- %c\n", token_type, entry[i]);
 			if (entry[i] == '\"' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
 				is_quoted = 1;
@@ -646,14 +641,12 @@ t_dblist	*get_tokens(char *entry)
 				break ;
 			i++;
 		}
-		//printf(" ICI 2 == %d ---- %c --- %d\n", token_type, entry[i], i);
-		if (token_type != 1) // MODIF
+		if (token_type != 1)
 		{	
 			str = ft_substr(entry, j, (i - j));
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		// printf(" str == %s \n", str);
 		if (entry[i] == '\0')
 			break ;
 		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22 && token_type != 6 && token_type != 7)
@@ -661,9 +654,7 @@ t_dblist	*get_tokens(char *entry)
 		else 
 			is_quoted = 1;
 		j = i;
-		//printf("entry [i] fin de boucle--- == %c ---- j = %d, i == %d\n", entry[i], j, i);
 	}
-	//affiche(list);
 	p_tok(list);
 	return (list);
 }
