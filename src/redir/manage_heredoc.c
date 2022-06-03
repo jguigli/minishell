@@ -24,9 +24,13 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
     {
         write(1, "> ", 3);
 		buf = get_next_line(0);
+		//printf("tetet == %s", buf);
+		// if (buf[0] == '\n')
+		// 	break ;
 		// quand saisie == NUll, le prg beugue ==> voir gnl et utils
+		//printf("%s \n ", buf);
         if (buf == NULL)
-            buf = ft_strdup("");
+            break ;
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
 		{
 			// if (gr_list->nb_heredoc > 1)

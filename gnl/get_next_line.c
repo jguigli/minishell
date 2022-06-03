@@ -21,22 +21,31 @@ char	*read_get_nls(int fd, char *tmp)
 	buf = malloc(sizeof(char) * (1 + 1));
 	if (!buf)
 	{
-		printf("ici 1");
+		//printf("ici 1");
 		return (NULL);
 	}
 	while (v_ret != 0 && !my_strchr(tmp, '\n'))
 	{
+		// printf("hehe");
 		v_ret = read(fd, buf, 1);
+		// printf("tmp %s", tmp);
+		// printf("strchr%d\n ", my_strchr(tmp, '\n'));
+		// printf("v_ret %d \n ", v_ret);		
+		//printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
 		if (v_ret == -1)
 		{
-			printf("ici 2");
+			//printf("ici 2");
 			free(buf);
 			return (NULL);
 		}				
 		buf[v_ret] = '\0';
+		//printf("buf %s", buf);
 		tmp = my_strjoin(tmp, buf);
+		//printf("tmp fin %s", tmp);
 	}
+	//printf("hihi\n");
 	free(buf);
+	//printf("hoho \n");
 	return (tmp);
 }
 
@@ -56,7 +65,7 @@ char	*get_string_nl(char		*result)
 		tmp = malloc(sizeof(char) * (i + 1));
 	if (!tmp)
 	{
-		printf("ici 3");
+		//printf("ici 3");
 		return (NULL);
 	}
 	while (result[j] && j < i)
@@ -81,14 +90,14 @@ char	*next_sent(char *final)
 		i++;
 	if (!final[i])
 	{
-		printf("ici 4");
+		//printf("ici 4");
 		free(final);
 		return (NULL);
 	}
 	memory = malloc(sizeof(char) * (my_strlen(final) - i) + 1);
 	if (!memory)
 	{
-		printf("ici 5");
+		//printf("ici 5");
 		return (NULL);
 	}
 	i++;
@@ -110,16 +119,16 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || 1 <= 0)
 		return (NULL);
+	//next_sentence = NULL;
 	next_sentence = read_get_nls(fd, next_sentence);
-	// if (!next_sentence)
-	// 	return (NULL);
-	// if (!next_sentence[0])
-	// {
-	// 	//printf("ici 6");
-	// 	free(next_sentence);
-	// 	next_sentence = NULL;
-	// 	return (NULL);
-	// }
+	if (!next_sentence)
+		return (NULL);
+	if (!next_sentence[0])
+	{
+		free(next_sentence);
+		next_sentence = NULL;
+		return (NULL);
+	}
 	string_to_display = get_string_nl(next_sentence);
 	next_sentence = next_sent(next_sentence);
 	return (string_to_display);

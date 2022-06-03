@@ -17,12 +17,12 @@ int	my_strchr(char *s, int c)
 	int	i;
 
 	i = 0;
-	// if (!s)
-	// 	return (0);
+	if (!s)
+		return (0);
 	while (s[i])
 	{
 		if (s[i] == (char)c)
-			return (i);
+			return (-200);
 		i++;
 	}
 	return (0);

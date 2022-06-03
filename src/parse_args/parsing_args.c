@@ -568,9 +568,9 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	{
 		new = my_lstnew(node_toadd);
 		new->previous = current;
-		printf("test %s  \n", new->previous->data);
+		//printf("test %s  \n", new->previous->data);
 		current->next = new;
-		printf("test %s  \n", current->next->data);
+		//printf("test %s  \n", current->next->data);
 		new->next = NULL;
 		copy_head->process->last = new;
 		copy_head->process->number++;
@@ -689,8 +689,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	k = 0;
 	node_toadd = NULL;
 	tmp = NULL;
-	printf("there %s\n", head->process->first->data);
-	printf("boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
+	// printf("there %s\n", head->process->first->data);
+	// printf("boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
 	while(head->nb_heredoc == 0)
 	{
 		if	(head->next)
@@ -698,9 +698,9 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		else
 			break ;
 	}
-	printf("Fin boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
+	//printf("Fin boucle 1 %s -- nb_heredoc : %d\n", head->process->first->data, head->nb_heredoc);
 	list = head->process->first;
-	printf("list %s\n", list->data);
+	//printf("list %s\n", list->data);
 	while (list && list->type != 33)
 	{
 		if (list->next)	
@@ -708,18 +708,18 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		else 
 			break ;
 	}
-	printf("Fin boucle 2 list %s\n", list->data);
+	//printf("Fin boucle 2 list %s\n", list->data);
 	while (i < head->nb_heredoc && list && k < totalhd)
 	{
-		printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s\n", i, k, head->nb_heredoc, list->data);
+		//printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s\n", i, k, head->nb_heredoc, list->data);
 		fi = fork();
 		//printf("%d \n", fi);
 		if	(fi < 0)
 			error_msgs();
-		printf("total nb heredoc %d \n", totalhd);
+		//printf("total nb heredoc %d \n", totalhd);
 		if (fi == 0)
 		{
-			printf("IIIRGEEENNT %s \n", list->data);
+			//printf("IIIRGEEENNT %s \n", list->data);
 			if (list->next->type == 35 || list->next->type == 36 || list->next->type == 37)
 				manage_one_redir(list->next, head);
 			else
@@ -731,7 +731,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 					else 
 						break ;
 				}
-				printf("IIIRGEEENNT 22222222222222 %s \n", list->next->data);
+				//printf("IIIRGEEENNT 22222222222222 %s \n", list->next->data);
 				manage_one_redir(list->next, head);
 			}
 			exit(1);
@@ -747,17 +747,10 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		{
 			//printf("tmp ==> %s\n", tmp);
 			node_toadd = ft_strjoin(node_toadd, tmp);
-			//printf("str to get ==> %s\n", node_toadd);
 			free(tmp);
-			tmp = get_next_line(file);
-			//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
-			// if (head->nb_heredoc > 1 && list->next && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
-			// {
-			// 	free(tmp);
-			// 	break ;
-			// }		
+			tmp = get_next_line(file);	
 		}
-		printf("prout\n");
+		//printf("prout\n");
 		close(file);
 		if (list->next)
 			list = list->next;
@@ -786,12 +779,12 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			else
 				break ;
 		}
-		printf("HOLLAA 222 %s --  \n", list->data);
+		//printf("HOLLAA 222 %s --  \n", list->data);
 		i ++;
 		k += i;
-		printf("HOLLAA 3333 %d --  \n", i);
-		printf("HOLLAA 4444 %d --  \n", k);
-		printf("nb_heredoc ==  %d && i == %d--  \n", head->nb_heredoc, i);
+		// printf("HOLLAA 3333 %d --  \n", i);
+		// printf("HOLLAA 4444 %d --  \n", k);
+		// printf("nb_heredoc ==  %d && i == %d--  \n", head->nb_heredoc, i);
 		//printf("head ->data %s \n", head->next->process->first->data);
 		if (i == head->nb_heredoc)
 		{
@@ -804,8 +797,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			else
 				break ;
 		}
-		printf("head->process->first %s\n", head->process->first->data);
-		printf("holaaa 444 --> list->data %s\n", list->data);
+		// printf("head->process->first %s\n", head->process->first->data);
+		// printf("holaaa 444 --> list->data %s\n", list->data);
 	}
 	return (0);
 }

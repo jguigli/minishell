@@ -52,10 +52,12 @@ $(GNL):
 
 clean :
 	$(MAKE) -C $(LIBFT_PATH) clean
+	$(MAKE) -C $(GNL_PATH) clean
 	rm -rf $(OBJ)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) fclean
+	$(MAKE) -C $(GNL_PATH) fclean
 	rm -f $(NAME)
 
 # clean :
