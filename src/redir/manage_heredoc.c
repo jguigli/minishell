@@ -29,12 +29,12 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
             buf = ft_strdup("");
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
 		{
-			if (gr_list->nb_heredoc > 1)
-			{
-				write(file, buf, ft_strlen(buf));
-				//write(file, "\n", 2);
-				free(buf);
-			}
+			// if (gr_list->nb_heredoc > 1)
+			// {
+			// 	write(file, buf, ft_strlen(buf));
+			// 	//write(file, "\n", 2);
+			// 	free(buf);
+			// }
             break ;
 		}
         write(file, buf, ft_strlen(buf));
