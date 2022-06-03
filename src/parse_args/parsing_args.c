@@ -711,7 +711,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	//printf("Fin boucle 2 list %s\n", list->data);
 	while (i < head->nb_heredoc && list && k < totalhd)
 	{
-		//printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s\n", i, k, head->nb_heredoc, list->data);
+		printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s --- %d==totalhd\n", i, k, head->nb_heredoc, list->data, totalhd);
 		fi = fork();
 		//printf("%d \n", fi);
 		if	(fi < 0)
@@ -771,7 +771,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		}
 		node_toadd = NULL;
 		tmp = NULL;
-		printf("HOLLAA %s --  \n", list->data);
+		//printf("HOLLAA %s --  \n", list->data);
 		while(list && list->type != 33)
 		{
 			if (list->next)
@@ -781,10 +781,10 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		}
 		//printf("HOLLAA 222 %s --  \n", list->data);
 		i ++;
-		k += i;
+		k ++;
 		// printf("HOLLAA 3333 %d --  \n", i);
 		// printf("HOLLAA 4444 %d --  \n", k);
-		// printf("nb_heredoc ==  %d && i == %d--  \n", head->nb_heredoc, i);
+		printf("nb_heredoc ==  %d && i == %d-- k = %d \n", head->nb_heredoc, i, k);
 		//printf("head ->data %s \n", head->next->process->first->data);
 		if (i == head->nb_heredoc)
 		{
@@ -797,8 +797,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			else
 				break ;
 		}
-		// printf("head->process->first %s\n", head->process->first->data);
-		// printf("holaaa 444 --> list->data %s\n", list->data);
+		printf("head->process->first %s\n", head->process->first->data);
+		printf("holaaa 444 --> list->data %s\n", list->data);
 	}
 	return (0);
 }
@@ -855,7 +855,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	{
 		// printf("test ici\n");
 		tota_heredoc = check_tot_heredoc(&gr_list);
-		//printf("tot heredoc %d\n", tota_heredoc);
+		printf("tot heredoc %d\n", tota_heredoc);
 		if (tota_heredoc >= 1)
 		{
 			multiple_block_p(&gr_list, tota_heredoc);
@@ -864,7 +864,6 @@ t_flist	*parse_args(char	*entry, char **env)
 				affiche(gr_list->process);
 				gr_list = gr_list->next;
 			}
-			
 		}
 	}
 	//exec_launcher(&gr_list, env);

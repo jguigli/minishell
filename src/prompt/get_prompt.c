@@ -90,7 +90,7 @@ void	get_prompt(char **env)
 	    	add_history(entry);
 			//gr_list = parse_args(entry, env);
 			parse_args(entry, env);
-			printf("%d \n", int_mode);
+			//printf("%d \n", int_mode);
 			//exec_launcher(&gr_list, env);
         }
 	}
