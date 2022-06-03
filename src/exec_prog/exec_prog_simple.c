@@ -14,14 +14,29 @@ void	child_process_simple(t_exec_s exec, char **arg, char **envp)
 
 int	output_r(t_datas *output_r)
 {
-	//printf("OUT PUT R%s\n", output_r->data);
-	return (0);
+	printf("OUT PUT R%s\n", output_r->next->data);
+	int file;
+	int	old_fd;
+
+	file = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+	if	(file < 0)
+		error_msgs();
+	old_fd = dup(1);
+	dup2(file, STDOUT_FILENO);
+	return (file);
 }
 
 int	input_r(t_datas *input_r)
 {
-	//printf("INPUT R %s\n", input_r->data);
-	return (0);
+	int file;
+	int	old_fd;
+
+	file = open(input_r->next->data, O_RDONLY, 000644);
+	if	(file < 0)
+		error_msgs();
+	old_fd = dup(0);
+	dup2(file, STDIN_FILENO);
+	return (file);
 }
 
 void	delete_node(t_flist **li)
