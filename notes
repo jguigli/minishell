@@ -1,0 +1,6 @@
+echo salut | cat <<lol | ls <<ow
+
+
+echo salut <<lol |cat <<hehe | ls <<ko <<juju
+
+echo salut <<kiki <<hehe <<lol | cat <<jojo

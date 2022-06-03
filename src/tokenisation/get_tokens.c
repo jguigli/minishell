@@ -29,7 +29,6 @@ int affiche(t_dblist *list)
 	static int count = 0;
 
 	current = list->first;
-	// printf("DATA =  %s\n", current->data);
 	i = 0;
 	printf("\nListe de tokens :\n");
 	while (i < list->number)
@@ -237,7 +236,6 @@ t_dblist	*token_tag(t_dblist *list)
 		if (tag->type == 5)
 		{
 			aft_p = 1;
-			//tag->t_token = "TOKEN_CMD";
 			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7 || tag->previous->type == 33))
 				tag->t_token = "TOKEN_FILE";
 			else if (!tag->previous || tag->previous->type == 11)
@@ -303,9 +301,7 @@ t_dblist	*token_tag(t_dblist *list)
 					}
 					if (!tag->next)
 						break ;	
-					// }
 					aft_p = 0;
-					// printf("83 %s ---> %s\n", tag->data, tag->t_token);
 				}
 				else if (tag->type == 11)
 				{
@@ -428,7 +424,6 @@ t_dblist	*token_tag(t_dblist *list)
 		else
 			break ;
 	}
-	affiche(list);
 	return (list);
 }
 
@@ -462,28 +457,23 @@ t_flist *get_processes(t_dblist *list)
 	t_flist		*finli_cur;
 	t_flist		*head;
 
-	//affiche(list);
 	finli = init_struct_flist();
 	head = finli;
 	while (list->first)
 	{
 		while(list->first->type != 11)
 		{
-			//finli->process = list;
-			//printf("data --> %s -- t_token = %s\n", list->first->data, list->first->t_token);
 			create_grtoken((finli)->process, list->first->data, list->first->t_token, list->first->type);
 			if	(list->first->next != NULL)
 				list->first = list->first->next;
 			else
 				break ;
 		}
-		//my_lstadd_back(head, (finli));
 		if	(list->first->next != NULL)
 		{
 			list->first = list->first->next;
 			finli_cur = init_struct_flist();
 			my_lstadd_back(&finli, finli_cur);
-			//printf("phrase --> %d\n", finli->next->number);
 			finli = finli_cur;
 		}
 		else 
@@ -501,11 +491,9 @@ t_dblist *p_tok(t_dblist *list)
 		pers_err_msges(ARG);
 	while(p_list)
 	{
-		//printf("token a analyser ---> %s \n", p_list->data);
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			//printf("ici 1 \n");
 			if	(check_dquotes_dol(p_list) == -1)
 			{
 				list->first->dq = 1;
@@ -513,19 +501,16 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else if (check_dquotes_dol(p_list) == -2)
 			{
-				//printf("ici 2 \n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_dquotes_dol(p_list) > 1)
 			{
-				//printf("ici 3 \n");
 				list->first->dq = 1;
 				list->first->dol = check_dquotes_dol(p_list);
 			}
 			else
 			{
-				//printf("ici 4\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -533,39 +518,33 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(check_squotes_dol(p_list) == -1)
 			{
-				//printf("ici 5\n");
 				list->first->dq = 1;
 				list->first->dol = 1;
 			}
 			else if (check_squotes_dol(p_list) == -2)
 			{
-				//printf("ici 6\n");
 				list->first->dq = 1;
 				list->first->dol = 0;
 			}
 			else if (check_squotes_dol(p_list) > 1)
 			{
-				//printf("ici 7\n");
 				list->first->dq = 1;
 				list->first->dol = check_squotes_dol(p_list);
 			}
 			else
 			{
-				//printf("ici 8\n");
 				pers_err_msges(ARG);
 			}
 		}
 		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			//printf("ici 9 --> %s\n", p_list->data);
 			check_spec_char(p_list, list);
 		}
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length >= 1 && (p_list->next->type != 5 && p_list->next->type != 6 && p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33))
 			{
-				//printf("ici 10\n");
 				pers_err_msges(ARG);
 			}
 		}
@@ -575,7 +554,6 @@ t_dblist *p_tok(t_dblist *list)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					//printf("ici 11\n");
 					pers_err_msges(ARG);
 				}
 			}
@@ -595,17 +573,12 @@ t_dblist *p_tok(t_dblist *list)
 		 	p_list = p_list->next;
 		else 
 			break ;
-		// printf("token = %s -- %s\n", p_list->data, p_list->t_token);
 		if	(p_list->next ==  NULL)
 		{
 			if	(p_list->type == 11 || p_list->type == 6 || p_list->type == 7)
-			{
-				 //printf("ici 14\n");
 				pers_err_msges(ARG);
-			}
 		}
 	}
-	//affiche(list);
 	token_tag(list);
 	return (list);
 }

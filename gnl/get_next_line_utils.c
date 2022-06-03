@@ -22,7 +22,7 @@ int	my_strchr(char *s, int c)
 	while (s[i])
 	{
 		if (s[i] == (char)c)
-			return (i);
+			return (-200);
 		i++;
 	}
 	return (0);
