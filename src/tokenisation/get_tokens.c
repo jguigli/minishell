@@ -31,7 +31,7 @@ int affiche(t_dblist *list)
 	current = list->first;
 	i = 0;
 	printf("\nListe de tokens :\n");
-	while (i < list->number)
+	while (current)
 	{
 		printf("\tListe numéro %d :\n", i);
 		printf("\t- Valeur token : %s\n", current->data);
@@ -41,7 +41,7 @@ int affiche(t_dblist *list)
 		printf("\t- Level : %d\n", current->level);
 		printf("\t- SPACE : %d\n\n", current->space);
 		current = current->next;
-		i++;
+		//i++;
 	}
 	count++;
 	return(count);
@@ -402,6 +402,7 @@ t_dblist	*token_tag(t_dblist *list)
 				else if (tag->type == 6 && tag->length == 2)
 				{
 					tag->t_token = "TOKEN_RRED_APPEND";
+					tag->type = 38;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
 				}

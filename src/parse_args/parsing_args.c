@@ -639,11 +639,11 @@ int	simple_block_p(t_flist **gr_list)
 				free(tmp);
 				tmp = get_next_line(file);
 				//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
-				if (head->nb_heredoc > 1 && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
-				{
-					free(tmp);
-					break ;
-				}		
+				// if (head->nb_heredoc > 1 && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
+				// {
+				// 	free(tmp);
+				// 	break ;
+				// }		
 			}
 			close(file);
 			//printf("there %s --  node to add : %s\n", list->data, node_toadd);
@@ -779,13 +779,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			else
 				break ;
 		}
-		//printf("HOLLAA 222 %s --  \n", list->data);
 		i ++;
 		k ++;
-		// printf("HOLLAA 3333 %d --  \n", i);
-		// printf("HOLLAA 4444 %d --  \n", k);
-		printf("nb_heredoc ==  %d && i == %d-- k = %d \n", head->nb_heredoc, i, k);
-		//printf("head ->data %s \n", head->next->process->first->data);
 		if (i == head->nb_heredoc)
 		{
 			i = 0;
@@ -797,8 +792,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			else
 				break ;
 		}
-		printf("head->process->first %s\n", head->process->first->data);
-		printf("holaaa 444 --> list->data %s\n", list->data);
 	}
 	return (0);
 }
@@ -827,7 +820,6 @@ t_flist	*parse_args(char	*entry, char **env)
 {
 	t_dblist	*fin_li;
 	t_flist		*gr_list;
-	//t_flist			*copy;
 	t_dblist	*test;
 	int			file;
 	char 		*tmp;
@@ -838,24 +830,13 @@ t_flist	*parse_args(char	*entry, char **env)
 	tota_heredoc = 0;
 	if	(!fin_li)
 		return (NULL);
-	//shell_parameter_expansion(fin_li, env);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
-	//printf("gr_list %s --- %d \n", gr_list->next->process->first->data, gr_list->next->nb_heredoc);
-//printf("herrrre %s\n", gr_list->process->first->data);
-//	printf("lst size %d\n", my_lstsize(&gr_list));
 	if (my_lstsize(&gr_list) == 1)
-	{
-		//printf("%d \n", gr_list->nb_heredoc);
 		simple_block_p(&gr_list);
-		//printf("OKKKKKK %d\n", gr_list->nb_heredoc);	
-		
-	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{
-		// printf("test ici\n");
 		tota_heredoc = check_tot_heredoc(&gr_list);
-		printf("tot heredoc %d\n", tota_heredoc);
 		if (tota_heredoc >= 1)
 		{
 			multiple_block_p(&gr_list, tota_heredoc);
@@ -866,7 +847,5 @@ t_flist	*parse_args(char	*entry, char **env)
 			}
 		}
 	}
-	//exec_launcher(&gr_list, env);
-	//affiche(gr_list->process);
 	return (gr_list);
 }
