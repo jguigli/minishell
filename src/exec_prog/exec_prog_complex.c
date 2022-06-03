@@ -43,16 +43,11 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	{
         shell_parameter_expansion(current->process, env);
 		arg = list_to_tab(current->process);
-		// if (is_builtin(arg[0]))
-		// 	exec_builtin(arg, env);
-		// else
-		// {
-			exec.pid[exec.pid_number] = fork();
-			if (exec.pid[exec.pid_number] == -1)
-				exit(0);
-			else if (!exec.pid[exec.pid_number])
-				child_process_complex(exec, arg, env);
-		// }
+		exec.pid[exec.pid_number] = fork();
+		if (exec.pid[exec.pid_number] == -1)
+			exit(0);
+		else if (!exec.pid[exec.pid_number])
+			child_process_complex(exec, arg, env);
 		exec.pid_number++;
 		free(arg);
         if (current->next) // a supprimer ou pas

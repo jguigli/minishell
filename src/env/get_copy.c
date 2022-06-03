@@ -15,5 +15,6 @@ char	**get_copy(char **d_tab)
 		new_dtab[i] = ft_strcpy(new_dtab[i], d_tab[i]);
 		i++;
 	}
+	new_dtab[i] = 0;
 	return (new_dtab);
 }
