@@ -618,6 +618,8 @@ t_dblist	*get_tokens(char *entry)
 			if (entry[i] == '\"')
 			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
+//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
 				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
@@ -629,9 +631,12 @@ t_dblist	*get_tokens(char *entry)
 					}
 					i++;
 				}
+				//}
 			}
-			if (entry[i] == '\'' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+			if (entry[i] == '\'')
 			{
+//				if (entry[i - 1] &&  list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
 				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
@@ -643,6 +648,7 @@ t_dblist	*get_tokens(char *entry)
 					}
 					i++;
 				}
+//				}
 			}
 			if	(list->infos->get_chr_c[entry[i]] == 22)
 				break ;
