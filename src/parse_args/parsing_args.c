@@ -826,6 +826,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	char 		*str_to_get;
 	int			tota_heredoc;
 
+	//printf("test1");
 	fin_li = get_tokens(entry);
 	tota_heredoc = 0;
 	if	(!fin_li)
