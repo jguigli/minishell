@@ -98,6 +98,7 @@ void	get_prompt(char **env)
 				exit(0);
 			}
 			add_history(entry);
+			//printf("entry ---> %s", entry);
 			gr_list = parse_args(entry, env);
 			exec_launcher(&gr_list, env);
 		}
