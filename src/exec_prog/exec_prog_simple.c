@@ -160,6 +160,7 @@ void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de com
 	char	**arg;
 
 	shell_parameter_expansion(list->process, env);
+	affiche(list->process);
 	manage_redirections(&list);
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');

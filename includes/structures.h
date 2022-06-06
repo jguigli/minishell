@@ -85,6 +85,12 @@ typedef enum		e_chr_class {
 	CHR_MAX
 }					t_chr_class;
 
+typedef struct s_glob
+{
+	int		status;
+	char	**env;
+}	t_glob;
+
 
 typedef	struct s_glob_infos
 {

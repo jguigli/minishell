@@ -32,6 +32,9 @@
 #define ARG "ERROR ARGUMENTS"
 #define PI  "ERROR PIPE"
 
+
+t_glob g;
+
 //Main functions
 void			get_prompt(char **env);
 char			**get_copy(char **d_tab);
@@ -41,6 +44,7 @@ int	       		 check_quote(char *str);
 t_dblist		*get_tokens(char *entry);
 t_dblist		*init_linked_list(void);
 t_glob_infos	*initst_infos();
+void	        init_global(void);
 int 			manage_signal(void);
 int				affiche(t_dblist *list); // A tej dans le futur
 int				pers_err_msges(char *error);
@@ -102,8 +106,16 @@ void    ft_env(char **env);
 void    ft_exit(char **str);
 void    ft_export(char **arg, char **env);
 int    ft_pwd(void);
-void    ft_unset(char **str, char **env);
+int    ft_unset(char **arg, char **env);
 
+
+int		export_appreciate_symbol(char arg);
+int		check_arg_export(char **arg);
+void	export_var_env(char **arg, int pos, char **env);
+void    ft_export(char **arg, char **env);
+char	**dup_env_tab(char **env);
+char	**env_sorted_export(char **env);
+void    print_export(char **env);
 //void			freeing(char *paths[])
 
 

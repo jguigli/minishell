@@ -1,24 +1,48 @@
 #include "../../includes/minishell.h"
 
-int    ft_echo(char **arg)
+int		n_option(char *arg)
 {
 	int	i;
 
+	i = 2;
+	if (arg[0] != '-' && arg[1] != 'n')
+		return (0);
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int    ft_echo(char **arg)
+{
+	int	i;
+	int	n;
+
 	i = 1;
+	n = 0;
 	if (!arg[1])
 	{
 		ft_putchar_fd('\n', 1);
 		return (1);
 	}
-	//checker si -n est present
 	while (arg[i])
 	{
-		ft_putstr_fd(arg[i], 1);
-		i++;
-		if (arg[i])
-			ft_putchar_fd(' ', 1);
+		if (n_option(arg[i]))
+		{
+			i++;
+			n++;
+		}
+		else
+		{
+			ft_putstr_fd(arg[i++], 1);
+			if (arg[i])
+				ft_putchar_fd(' ', 1);
+		}
 	}
-	// if (n)
-	// 	ft_putchar_fd('\n');
+	if (!n)
+		ft_putchar_fd('\n', 1);
 	return (0);
 }

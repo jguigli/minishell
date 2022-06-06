@@ -39,7 +39,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	current = list;
 	exec.pid_number = 0;
 	create_pipes(&exec);
-	while (exec.pid_number < exec.cmd_number)
+	while (current)
 	{
         shell_parameter_expansion(current->process, env);
 		arg = list_to_tab(current->process);
@@ -50,10 +50,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 			child_process_complex(exec, arg, env);
 		exec.pid_number++;
 		free(arg);
-        if (current->next) // a supprimer ou pas
-		    current = current->next;
-        else
-            break ;
+		current = current->next;
 	}
 	close_pipes(&exec);
 	exec.pid_number = -1;

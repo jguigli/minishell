@@ -24,7 +24,8 @@ SRC = minishell.c \
 		./src/builtin/echo.c \
 		./src/builtin/env.c \
 		./src/builtin/exit.c \
-		./src/builtin/export.c \
+		./src/builtin/export/export.c \
+		./src/builtin/export/export2.c \
 		./src/builtin/pwd.c \
 		./src/builtin/unset.c \
 		# ./src/process_launch/p_launch.c \
@@ -33,7 +34,7 @@ OBJ = $(SRC:.c=.o)
 
 CC = cc
 
-FLAG = -Wall -Werror -Wextra -g3 -fsanitize=address 
+FLAG = -Wall -Werror -Wextra #-g3 -fsanitize=address 
 
 HEADER = ./includes/minishell.h
 

@@ -6,3 +6,8 @@ echo salut <<lol |cat <<hehe | ls <<ko <<juju
 echo salut <<kiki <<hehe <<lol | cat <<jojo
 
 echo salut > file1 <hello >>file2 <<lol >file5
+
+Cas qui marche pas (JO) :
+- echo """"salut"" | cat -e
+- echo "${USER}" | "cat" -e (error arguments)
+- "cat" -e (segfault)

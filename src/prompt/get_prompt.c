@@ -83,11 +83,16 @@ void	get_prompt(char **env)
 	char	*my_prompt;
 	t_flist	*gr_list;
 
-	my_prompt = get_prompt_env(env);
-	if (!my_prompt)
-		my_prompt = "~$ ";
 	while (int_mode)
 	{
+		if (g.env)
+		{
+			free(env); // fonction full supressions
+			env = g.env;
+		}
+		my_prompt = get_prompt_env(env);
+		if (!my_prompt)
+			my_prompt = "~$ ";
 		int_mode = isatty(STDIN_FILENO);
 		if (int_mode == 1)
 		{
@@ -99,6 +104,7 @@ void	get_prompt(char **env)
 			}
 			add_history(entry);
 			gr_list = parse_args(entry, env);
+			affiche(gr_list->process);
 			exec_launcher(&gr_list, env);
 		}
 	}

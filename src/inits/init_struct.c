@@ -33,3 +33,9 @@ t_flist	*init_struct_flist()
 	// finli->nb_options = 0;
 	return (finli);
 }
+
+void	init_global(void)
+{
+	g.env = NULL;
+	g.status = 0;
+}
