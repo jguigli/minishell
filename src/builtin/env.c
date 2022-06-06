@@ -1,15 +1,19 @@
 #include "../../includes/minishell.h"
 
-void    ft_env(char **env) // var d'env dans struct glob
+void    ft_env(char **arg, char **env) // var d'env dans struct glob
 {
     int i;
 
     i = 0;
-    if (!*env)
-        return ;
-    while(env[i])
+    if (!arg[1])
     {
-        printf("%s\n", env[i]);
-        i++;
+        if (!*env)
+            return ;
+        while(env[i])
+        {
+            printf("%s\n", env[i]);
+            i++;
+        }
     }
+    printf("env: too much arguments\n");
 }

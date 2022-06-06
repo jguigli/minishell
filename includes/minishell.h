@@ -69,7 +69,7 @@ int				check_tot_heredoc(t_flist **list);
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	*search_in_env_var(char *str, char **env);
-void	set_var_in_env(char *var, char *path, char **env);
+char	**set_var_in_env(char *var, char *path, char **env);
 char	*case_no$_noquote(char *data, int *i, char *str);
 char	*case_$_noquote(char *data, char **env, int *i, char *str);
 char	*case_$bracket_noquote(char *data, char **env, int *i, char *str);
@@ -102,10 +102,10 @@ void	manage_dup2(t_exec_c exec, int first, int second);
 
 int    ft_cd(char **arg, char **env);
 int    ft_echo(char **arg);
-void    ft_env(char **env);
-void    ft_exit(char **str);
+void    ft_env(char **arg, char **env);
+void    ft_exit(char **arg);
 void    ft_export(char **arg, char **env);
-int    ft_pwd(void);
+int    ft_pwd(char **arg);
 int    ft_unset(char **arg, char **env);
 
 

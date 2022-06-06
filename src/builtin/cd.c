@@ -25,16 +25,16 @@ static int	change_directory(char *data, char **env)
 	char	*str;
 
 	temp = getcwd(NULL, 0);
-	if (temp)
+	if (!temp)
 		return (0);
 	if (!chdir(data))
 	{
-		set_var_in_env("OLDPWD", data, env);
+		g.env = set_var_in_env("OLDPWD", temp, env);
 		free (temp);
 		temp = getcwd(NULL, 0);
-		if (temp)
+		if (!temp)
 			return (0);
-		set_var_in_env("PWD", data, env);
+		g.env = set_var_in_env("PWD", temp, env);
 		free (temp);
 		return (1);
 	}
@@ -45,29 +45,31 @@ static int	set_directory(char *data, char **env)
 {
 	if (change_directory(data, env))
 		return (1);
+	return (0);
 }
 
-static int    cd_home(void)
+static int    cd_home(char **env)
 {
-	
+	if (set_directory(search_in_env_var("HOME", env), env))
+		return (1);
+	return (0);
 }
 
 int    ft_cd(char **arg, char **env)
 {
-    //getenv("HOME") pour recup le path de base
-	//changer la var env PWD si jamais on change de repertoire et OLDPWD pour l'ancien repertoire
-    if (!arg[2] || ft_strcmp(arg[1], "~") || ft_strcmp(arg[1], "--"))
+    if (!arg[1] || !ft_strcmp(arg[1], "~") || !ft_strcmp(arg[1], "--"))
     {
-        if (!getenv("HOME")) //STEP 1
+        if (!search_in_env_var("HOME", env)) //STEP 1
         {
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 			return (1);
         }
-        return(cd_home()); //STEP 2
+        return(cd_home(env)); //STEP 2
     }
-    else if (arg[2])
+    else if (arg[1] && !arg[2])
     {
-		check_home_path(arg[1], env);
+		if (set_directory(check_home_path(arg[1], env), env))
+			return (1);
     }
     else
     {

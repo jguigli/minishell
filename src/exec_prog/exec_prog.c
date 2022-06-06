@@ -22,13 +22,13 @@ void	exec_builtin(char **arg, char **env)
 	else if (!strcmp(arg[0], "echo"))
 		ft_echo(arg);
 	else if (!strcmp(arg[0], "env"))
-		ft_env(env);
+		ft_env(arg, env);
 	else if (!strcmp(arg[0], "exit"))
 		ft_exit(arg);
 	else if (!strcmp(arg[0], "export"))
 		ft_export(arg, env);
 	else if (!strcmp(arg[0], "pwd"))
-		ft_pwd();
+		ft_pwd(arg);
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, env);
 }

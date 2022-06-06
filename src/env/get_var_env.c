@@ -36,17 +36,19 @@ char	*search_in_env_var(char *var, char **env)
 	return (NULL);
 }
 
-void	set_var_in_env(char *var, char *path, char **env)
+char	**set_var_in_env(char *var, char *path, char **env)
 {
 	int		i;
 	int		j;
 	char	*str;
 	char	*temp;
+	char	**tab;
 
 	i = 0;
 	j = 0;
 	if (!var || !*env || !path)
-		return ;
+		return (NULL);
+	tab = dup_env_tab(env);
 	while (env[i])
 	{
 		j = 0;
@@ -56,10 +58,11 @@ void	set_var_in_env(char *var, char *path, char **env)
 		{
 			str = ft_substr(env[i], 0, j + 1);
 			str = ft_strjoin(str, path);
-			env[i] = ft_strdup(str);
+			free(tab[i]);
+			tab[i] = ft_strdup(str);
 		}
 		i++;
 	}
-	free(var);
-	return ;
+	free(str);
+	return (tab);
 }
