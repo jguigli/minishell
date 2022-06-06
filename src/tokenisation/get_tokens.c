@@ -197,7 +197,7 @@ int	check_squotes_dol(t_datas *list)
 
 int	check_spec_char(t_datas *token, t_dblist *list)
 {
-	int	i;                                                                                                                                                      
+	int	i;
 
 	i = 0;
 	while (token->data[i])
@@ -595,6 +595,7 @@ t_dblist	*get_tokens(char *entry)
 	t_dblist	*gr_list;
 	int pos;
 
+	//printf("test1");
 	i = 0;
 	pos = 0;
 	j = 0;
@@ -602,15 +603,23 @@ t_dblist	*get_tokens(char *entry)
 	list = init_linked_list();
 	char *str;
 
+	str = NULL;
+//	printf("test");
 	if (entry[0] == '\0')
 			return (NULL);
+	//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
+	
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+		//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
-			if (entry[i] == '\"' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+			if (entry[i] == '\"')
+			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
+//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
 				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
@@ -622,9 +631,12 @@ t_dblist	*get_tokens(char *entry)
 					}
 					i++;
 				}
+				//}
 			}
-			if (entry[i] == '\'' && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+			if (entry[i] == '\'')
 			{
+//				if (entry[i - 1] &&  list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
 				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
@@ -636,6 +648,7 @@ t_dblist	*get_tokens(char *entry)
 					}
 					i++;
 				}
+//				}
 			}
 			if	(list->infos->get_chr_c[entry[i]] == 22)
 				break ;

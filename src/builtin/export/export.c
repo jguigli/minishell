@@ -76,6 +76,7 @@ char	**export_var_env(char **arg, int pos, char **env)
 		i++;
 	env[i] = ft_strdup(arg[pos]);
 	env[++i] = 0;
+	return (env);
 }
 
 void    ft_export(char **arg, char **env)

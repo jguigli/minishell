@@ -111,7 +111,7 @@ int    ft_unset(char **arg, char **env);
 
 int		export_appreciate_symbol(char arg);
 int		check_arg_export(char **arg);
-void	export_var_env(char **arg, int pos, char **env);
+char	**export_var_env(char **arg, int pos, char **env);
 void    ft_export(char **arg, char **env);
 char	**dup_env_tab(char **env);
 char	**env_sorted_export(char **env);

@@ -57,19 +57,19 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[32m");
-	name = get_env_name(env);
+	name = search_in_env_var("USER", env);
 	if (!name)
-		return (free(name), free(temp), NULL);
+		return (free(temp), NULL);
 	temp = ft_strjoin(temp, name);
-	free(name);
+	//free(name);
 	name = ft_strjoin(temp, "\x1b[0m:");
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[34m");
-	pwd = get_env_pwd(env);
+	pwd = search_in_env_var("PWD", env);
 	if (!pwd)
-		return (free (pwd), free(name), free(temp), NULL);
+		return (free(name), free(temp), NULL);
 	temp = ft_strjoin(temp, pwd);
-	free(pwd);
+	//free(pwd);
 	pwd = ft_strjoin(temp, "\x1b[0m$ ");
 	prompt = ft_strjoin(name, pwd);
 	free(pwd);
@@ -103,6 +103,7 @@ void	get_prompt(char **env)
 				exit(0);
 			}
 			add_history(entry);
+			//printf("entry ---> %s", entry);
 			gr_list = parse_args(entry, env);
 			affiche(gr_list->process);
 			exec_launcher(&gr_list, env);
