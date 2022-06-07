@@ -33,7 +33,7 @@
 #define PI  "ERROR PIPE"
 
 
-t_glob g;
+extern t_glob g;
 
 //Main functions
 void			get_prompt(char **env);
@@ -81,8 +81,8 @@ char	*manage_dquote(char *data, char **env, int *i, char *str);
 
 
 
-void	child_process_simple(t_exec_s exec, char **arg, char **envp);
-void	child_process_complex(t_exec_c exec, char **arg, char **envp);
+void	child_process_simple(t_exec_s exec, t_flist *list, char **envp);
+void	child_process_complex(t_exec_c exec, t_flist *list, char **envp);
 char	**list_to_tab(t_dblist *list);
 void	manage_exec(t_exec_c exec, t_flist *list, char **env);
 void	exec_complex_cmd(t_flist *list, char **env);
@@ -117,6 +117,8 @@ char	**dup_env_tab(char **env);
 char	**env_sorted_export(char **env);
 void    print_export(char **env);
 //void			freeing(char *paths[])
+
+int	manage_redirections(t_flist **li);
 
 
 #endif

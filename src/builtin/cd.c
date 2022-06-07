@@ -1,5 +1,6 @@
 #include "../../includes/minishell.h"
 
+
 static char	*check_home_path(char *data, char **env)
 {
 	char	*temp;

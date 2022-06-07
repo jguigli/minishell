@@ -41,7 +41,7 @@ int affiche(t_dblist *list)
 		printf("\t- Level : %d\n", current->level);
 		printf("\t- SPACE : %d\n\n", current->space);
 		current = current->next;
-		//i++;
+		i++;
 	}
 	count++;
 	return(count);

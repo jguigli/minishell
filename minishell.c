@@ -1,15 +1,16 @@
 #include "./includes/minishell.h"
 
+t_glob g; // PAS SUR DE CA
+
 int	main(int argc, char *argv[], char *env[])
 {
 	(void)argc;
 	(void)argv;
-	char	**my_env;
 	manage_signal();
 	init_global();
 	if (!search_in_env_var("PATH", env))
 		return (-1); // MSG ERROR 
-	my_env = get_copy(env); //ATTENTION PLUSIEURS MALLOC DANS GET_COPY. A FREE A LA FIN
-	get_prompt(my_env);
+	g.env = get_copy(env); //ATTENTION PLUSIEURS MALLOC DANS GET_COPY. A FREE A LA FIN
+	get_prompt(g.env);
 	return (0);
 }

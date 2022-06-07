@@ -1,8 +1,8 @@
 #include "../../includes/minishell.h"
 
-void	child_process_complex(t_exec_c exec, char **arg, char **envp)
+void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 {
-	exec.cmd_arg = NULL;
+	manage_redirections(&list);
 	if (exec.pid_number == 0)
 		manage_dup2(exec, 0, exec.pipe[1]);
 	else if (exec.pid_number == exec.cmd_number - 1)
@@ -12,10 +12,10 @@ void	child_process_complex(t_exec_c exec, char **arg, char **envp)
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
 			exec.pipe[2 * exec.pid_number + 1]);
 	close_pipes(&exec);
-	exec.cmd_arg = arg;
-	if (is_builtin(arg[0]))
+	exec.cmd_arg = list_to_tab(list->process);
+	if (is_builtin(exec.cmd_arg[0]))
 	{
-		exec_builtin(arg, envp);
+		exec_builtin(exec.cmd_arg, envp);
 		//kill(exec.pid[exec.pid_number], SIGKILL);
 		exit(0);
 	}
@@ -42,14 +42,13 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	while (current)
 	{
         shell_parameter_expansion(current->process, env);
-		arg = list_to_tab(current->process);
 		exec.pid[exec.pid_number] = fork();
 		if (exec.pid[exec.pid_number] == -1)
 			exit(0);
 		else if (!exec.pid[exec.pid_number])
-			child_process_complex(exec, arg, env);
+			child_process_complex(exec, current, env);
 		exec.pid_number++;
-		free(arg);
+		//free(arg);
 		current = current->next;
 	}
 	close_pipes(&exec);

@@ -31,6 +31,7 @@ void	exec_builtin(char **arg, char **env)
 		ft_pwd(arg);
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, env);
+	exit(g.status);
 }
 
 char	**list_to_tab(t_dblist *list)

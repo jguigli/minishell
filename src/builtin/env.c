@@ -15,5 +15,6 @@ void    ft_env(char **arg, char **env) // var d'env dans struct glob
             i++;
         }
     }
-    printf("env: too much arguments\n");
+    else
+        printf("env: too much arguments\n");
 }

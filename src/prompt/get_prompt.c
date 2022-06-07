@@ -12,42 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-char	*get_env_pwd(char **env)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp("PWD", env[i], 3))
-		{
-			str = ft_strdup(&env[i][4]);
-			return (str);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_env_name(char **env)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp("USER", env[i], 4))
-		{
-			str = ft_strdup(&env[i][5]);
-			return (str);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
 char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 {
 	char	*name;
@@ -83,13 +47,9 @@ void	get_prompt(char **env)
 	char	*my_prompt;
 	t_flist	*gr_list;
 
+	int_mode = 1;
 	while (int_mode)
 	{
-		if (g.env)
-		{
-			free(env); // fonction full supressions
-			env = g.env;
-		}
 		my_prompt = get_prompt_env(env);
 		if (!my_prompt)
 			my_prompt = "~$ ";
@@ -105,7 +65,7 @@ void	get_prompt(char **env)
 			add_history(entry);
 			//printf("entry ---> %s", entry);
 			gr_list = parse_args(entry, env);
-			affiche(gr_list->process);
+			//affiche(gr_list->process);
 			exec_launcher(&gr_list, env);
 		}
 	}
