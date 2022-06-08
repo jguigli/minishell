@@ -8,7 +8,7 @@ void    ft_exit(char **arg)
     {
         exit(0);
     }
-    else if (!arg[2])
+    else if (arg[1] && !arg[2])
     {
         status = ft_atoi(arg[1]);
         exit(status);

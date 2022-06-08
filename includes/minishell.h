@@ -86,7 +86,7 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp);
 char	**list_to_tab(t_dblist *list);
 void	manage_exec(t_exec_c exec, t_flist *list, char **env);
 void	exec_complex_cmd(t_flist *list, char **env);
-void	exec_simple_cmd(t_flist *list, char **env);
+int 	exec_simple_cmd(t_flist *list, char **env);
 int	    exec_launcher(t_flist **list, char **env);
 int		is_builtin(char *cmd);
 void	exec_builtin(char **arg, char **env);

@@ -24,14 +24,17 @@ void	exec_builtin(char **arg, char **env)
 	else if (!strcmp(arg[0], "env"))
 		ft_env(arg, env);
 	else if (!strcmp(arg[0], "exit"))
+	{
+		printf("LAAAAAAAAAa\n");
 		ft_exit(arg);
+	}
 	else if (!strcmp(arg[0], "export"))
 		ft_export(arg, env);
 	else if (!strcmp(arg[0], "pwd"))
 		ft_pwd(arg);
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, env);
-	exit(g.status);
+	//exit(g.status);
 }
 
 char	**list_to_tab(t_dblist *list)
@@ -69,6 +72,7 @@ int	exec_launcher(t_flist **li, char **env)
 	if (pipe)
 		exec_complex_cmd(list, env);
 	else
-		exec_simple_cmd(list, env);
+		if	(exec_simple_cmd(list, env) != 0)
+			exit(g.status);
 	return (1);
 }

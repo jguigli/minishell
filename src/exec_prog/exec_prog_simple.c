@@ -7,7 +7,10 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 	if (!exec.cmd_arg)
 		exit(0);
 	if (is_builtin(exec.cmd_arg[0]))
+	{
+		printf("LAAAAAAAAAAAAA\n");
 		exec_builtin(exec.cmd_arg, envp);
+	}
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
@@ -215,13 +218,15 @@ int	manage_redirections(t_flist **li)
 	return (file);
 }
 
-void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec le process classique (pid, execve, etc..)
+int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec le process classique (pid, execve, etc..)
 {
 	t_exec_s	exec;
 	char	**arg;
 	int		file;
+	int		wstatus;
 
 //	affiche(list->process);
+	wstatus = 0;
 	shell_parameter_expansion(list->process, env);
 	//file = manage_redirections(&list);
 	//affiche(list->process);
@@ -229,12 +234,14 @@ void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de com
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');
 	// arg = list_to_tab(list->process);
-	exec.pid = fork();;
+	exec.pid = fork();
 	if (exec.pid == -1)
 		exit(0);
 	else if (!exec.pid)
 		child_process_simple(exec, list, env);
 	//close(file);
 	//free(arg);
-	waitpid(exec.pid, NULL, 0);
+	waitpid(exec.pid, &wstatus, 0);
+	printf("wstatus --> %d \n", wstatus);
+	return (wstatus);
 }
