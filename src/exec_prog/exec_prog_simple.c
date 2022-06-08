@@ -31,7 +31,10 @@ int	output_r(t_datas *output_r)
 	if	(output_r->type == 38)
 		file = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
 	if	(file < 0)
+	{
+		printf("11111 \n");
 		error_msgs();
+	}
 	old_fd = 0;
 	old_fd = dup(1);
 	dup2(file, 1);
@@ -48,7 +51,7 @@ int	input_r(t_datas *input_r)
 		file = open(input_r->next->data, O_RDONLY, 000644);
 		if	(file < 0)
 		{
-			//printf("LOOOOl \n");
+			printf("2222 \n");
 			error_msgs();
 		}
 	}
@@ -57,10 +60,10 @@ int	input_r(t_datas *input_r)
 		if (input_r->next->next && input_r->next->next->type == 39)
 			input_r = input_r->next->next;
 		//printf("data == %s --- heredoooooc %d\n", input_r->data, input_r->type);
-		file = open("heredoc.txt", O_TRUNC | O_CREAT | O_RDWR, 000666);
+		file = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000666);
 		write(file, input_r->data, ft_strlen(input_r->data));
 		close(file);
-		file = open("heredoc.txt", O_RDONLY);
+		file = open(".hd2", O_RDONLY);
 	}
 	old_fd = dup(0);
 	dup2(file, STDIN_FILENO);
@@ -111,13 +114,11 @@ void	delete_node(t_flist **li)
 			else
 				break ;
 		}
-		//current->next = NULL;
 		if (list->next)
 			list = list->next;
 		else
 			break ;
 	}
-	//affiche(list->process);
 }
 
 int	manage_redirections(t_flist **li)
@@ -135,10 +136,12 @@ int	manage_redirections(t_flist **li)
 	list = *li;
 	file = 0;
 	inp_redir = list->nb_heredoc + list->nb_lred;
+	//printf("inp redir --> %d \n", inp_redir);
 	outp_redir = list->nb_rred_app + list->nb_rred;
 	current = list->process->first;
 	while(current)
 	{
+		//printf("current->data %s \n", current->data);
 		if	(current->type == 6 || current->type == 38)
 		{
 			i++;
@@ -148,7 +151,6 @@ int	manage_redirections(t_flist **li)
 				current->data = ft_strdup("");
 				if (current->next && current->next->type == 21)
 					current->next->data = ft_strdup("");
-				break ;
 			}
 			else
 			{
@@ -163,32 +165,48 @@ int	manage_redirections(t_flist **li)
 		}
 		else if	(current->type == 7 || current->type == 33)
 		{
+			if (current->type == 7 && current->next->type == 21)
+			{
+				if (open(current->next->data, O_RDONLY) == -1)
+				{
+					perror(current->next->data);
+					g.status = 1;
+					exit(g.status);
+				}
+			}
 			j++;
 			if	(j == inp_redir)
 			{
+				//printf(" ---- current ->data %s \n", current->data);
 				file = input_r(current);
-				printf("fileuuuh = %d \n", file);
+				//printf("fileuuuh = %d \n", file);
 				current->data = ft_strdup("");
 				if(current->next && (current->next->type == 21 || current->next->type == 35 
 					|| current->next->type == 36 || current->next->type == 37))
 					current->next->data = ft_strdup("");
 				if (current->type == 33 && (current->next->next->type == 39))
 					current->next->next->data = ft_strdup("");
-				break ;
 			}
 			else
 			{
 				current->data = ft_strdup("");
 				if (current->next)
-					current->next->data = ft_strdup("");
+				{
+					current = current->next;
+					current->data = ft_strdup("");
+				}	
 				else
 					break ;
-				if (current->type == 33 && (current->next->next->type == 39))
-					current->next->next->data = ft_strdup("");
+				if (current->next->type == 39)
+				{
+					current->next->data = ft_strdup("");
+				}
 			}
 		}
 		if (current->next)
+		{
 			current = current->next;
+		}
 		else
 			break ;
 	}
@@ -203,6 +221,7 @@ void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de com
 	char	**arg;
 	int		file;
 
+//	affiche(list->process);
 	shell_parameter_expansion(list->process, env);
 	//file = manage_redirections(&list);
 	//affiche(list->process);

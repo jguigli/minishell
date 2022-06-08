@@ -14,9 +14,12 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
-	file = open("infile", O_TRUNC | O_CREAT | O_RDWR , 0000644);
+	file = open(".hd1", O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (file < 0)
+	{
+		printf("200000\n");
 		error_msgs();
+	}
 	while (1)
     {
         write(1, "> ", 3);

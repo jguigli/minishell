@@ -616,7 +616,10 @@ int	simple_block_p(t_flist **gr_list)
 			fi = fork();
 			//printf("%d \n", fi);
 			if	(fi < 0)
+			{
+				printf("3333 \n");
 				error_msgs();
+			}
 			if (fi == 0)
 			{
 				//printf("list data %s \n", list->data);
@@ -628,7 +631,10 @@ int	simple_block_p(t_flist **gr_list)
 				perror("wait() error");
 			file = open("infile", O_RDONLY);
 			if	(file < 0)
+			{
+				printf("44444 \n");
 				error_msgs();
+			}
 			tmp = get_next_line(file);
 			//printf("tmp ==> %s\n", tmp);
 			while (tmp != NULL)
@@ -711,11 +717,14 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	//printf("Fin boucle 2 list %s\n", list->data);
 	while (i < head->nb_heredoc && list && k < totalhd)
 	{
-		printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s --- %d==totalhd\n", i, k, head->nb_heredoc, list->data, totalhd);
+		//printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s --- %d==totalhd\n", i, k, head->nb_heredoc, list->data, totalhd);
 		fi = fork();
 		//printf("%d \n", fi);
 		if	(fi < 0)
+		{
+			printf("5555 \n");
 			error_msgs();
+		}
 		//printf("total nb heredoc %d \n", totalhd);
 		if (fi == 0)
 		{
@@ -738,9 +747,12 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		}	
 		if	(waitpid(fi, &wstatus, 0) == -1)
 			perror("wait() error");
-		file = open("infile", O_RDONLY);
+		file = open(".hd1", O_RDONLY);
 		if	(file < 0)
+		{
+			printf("88888 \n");
 			error_msgs();
+		}
 		tmp = get_next_line(file);
 		//printf("tmp ==> %s\n", tmp);
 		while (tmp != NULL)
@@ -841,11 +853,11 @@ t_flist	*parse_args(char	*entry, char **env)
 		if (tota_heredoc >= 1)
 		{
 			multiple_block_p(&gr_list, tota_heredoc);
-			while (gr_list)
-			{
-				affiche(gr_list->process);
-				gr_list = gr_list->next;
-			}
+			// while (gr_list)
+			// {
+			// 	//affiche(gr_list->process);
+			// 	gr_list = gr_list->next;
+			// }
 		}
 	}
 	return (gr_list);

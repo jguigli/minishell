@@ -11,3 +11,5 @@ Cas qui marche pas (JO) :
 - echo """"salut"" | cat -e
 - echo "${USER}" | "cat" -e (error arguments)
 - "cat" -e (segfault)
+- echo salut > lol | cat < infile <<oh >file5 | ls
+- cat < infile <<oh >file5 avec infile qui nexiste pas 
