@@ -67,9 +67,7 @@ int	exec_launcher(t_flist **li, char **env)
 	list2 = *li;
 	pipe = my_lstsize(&list) - 1;
 	if (pipe)
-	{
 		exec_complex_cmd(list, env);
-	}
 	else
 		exec_simple_cmd(list, env);
 	return (1);

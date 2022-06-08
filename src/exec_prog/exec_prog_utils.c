@@ -75,7 +75,7 @@ char	*get_command(char **path, char *cmd)
 		free(path_cmd);
 		path++;
 	}
-	return (NULL);
+	return (cmd);
 }
 
 void	create_pipes(t_exec_c *exec)

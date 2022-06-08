@@ -11,10 +11,13 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-		if (!exec.cmd)
-			exit(0);
+		//printf("exec cmd = %s\n", exec.cmd);
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
+		{
+			fprintf(stderr, "POPOPOPO\n");
+			perror("Error: ");
 			exit(0);
+		}
 	}
 }
 
@@ -23,13 +26,16 @@ int	output_r(t_datas *output_r)
 	int file;
 	int	old_fd;
 
-	file = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+	if	(output_r->type == 6)
+		file = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+	if	(output_r->type == 38)
+		file = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
 	if	(file < 0)
 		error_msgs();
 	old_fd = 0;
 	old_fd = dup(1);
 	dup2(file, 1);
-	return (file);
+	return (old_fd);
 }
 
 int	input_r(t_datas *input_r)
@@ -37,9 +43,25 @@ int	input_r(t_datas *input_r)
 	int file;
 	int	old_fd;
 
-	file = open(input_r->next->data, O_RDONLY, 000644);
-	if	(file < 0)
-		error_msgs();
+	if (input_r->type == 7)
+	{
+		file = open(input_r->next->data, O_RDONLY, 000644);
+		if	(file < 0)
+		{
+			//printf("LOOOOl \n");
+			error_msgs();
+		}
+	}
+	else if (input_r->type == 33)
+	{
+		if (input_r->next->next && input_r->next->next->type == 39)
+			input_r = input_r->next->next;
+		//printf("data == %s --- heredoooooc %d\n", input_r->data, input_r->type);
+		file = open("heredoc.txt", O_TRUNC | O_CREAT | O_RDWR, 000666);
+		write(file, input_r->data, ft_strlen(input_r->data));
+		close(file);
+		file = open("heredoc.txt", O_RDONLY);
+	}
 	old_fd = dup(0);
 	dup2(file, STDIN_FILENO);
 	return (file);
@@ -59,7 +81,6 @@ void	delete_node(t_flist **li)
 		current =  list->process->first;
 		while(current)
 		{
-			printf("data heeeeeeeeeeeeere %s\n", current->data);
 			if (current->data[0] == '\0')
 			{
 				if	(current->previous)
@@ -116,7 +137,6 @@ int	manage_redirections(t_flist **li)
 	inp_redir = list->nb_heredoc + list->nb_lred;
 	outp_redir = list->nb_rred_app + list->nb_rred;
 	current = list->process->first;
-	//saffiche(list->process);
 	while(current)
 	{
 		if	(current->type == 6 || current->type == 38)
@@ -147,9 +167,13 @@ int	manage_redirections(t_flist **li)
 			if	(j == inp_redir)
 			{
 				file = input_r(current);
+				printf("fileuuuh = %d \n", file);
 				current->data = ft_strdup("");
-				if(current->next && current->next->type == 21)
+				if(current->next && (current->next->type == 21 || current->next->type == 35 
+					|| current->next->type == 36 || current->next->type == 37))
 					current->next->data = ft_strdup("");
+				if (current->type == 33 && (current->next->next->type == 39))
+					current->next->next->data = ft_strdup("");
 				break ;
 			}
 			else
@@ -192,6 +216,6 @@ void	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de com
 	else if (!exec.pid)
 		child_process_simple(exec, list, env);
 	//close(file);
-	free(arg);
+	//free(arg);
 	waitpid(exec.pid, NULL, 0);
 }
