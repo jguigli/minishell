@@ -63,15 +63,16 @@ void	get_prompt(char **env)
 				write(1, "exit", 5);
 				exit(0);
 			}
-			//printf("entry ---> %s", entry);
-			if (entry[0])
+			//printf("entryyyyyyyyyy == %s\n", entry);
+			add_history(entry);
+			if (entry[0] && (entry[0] != ' ' && entry[0] != '\t'))
 			{
-				add_history(entry);
+			//	printf("heheheh\n");
 				gr_list = parse_args(entry, env);
-				//affiche(gr_list->process);
 				exec_launcher(&gr_list, env);
-				//printf("iiciii \n");
 			}
+			else
+				g.status = 0;
 		}
 	}
 }
