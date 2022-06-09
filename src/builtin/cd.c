@@ -39,6 +39,11 @@ static int	change_directory(char *data, char **env)
 		free (temp);
 		return (1);
 	}
+	else
+	{
+		perror("cd");
+		g.status = 1;
+	}
 	return (0);
 }
 
@@ -58,11 +63,13 @@ static int    cd_home(char **env)
 
 int    ft_cd(char **arg, char **env)
 {
+	g.status = 0;
     if (!arg[1] || !ft_strcmp(arg[1], "~") || !ft_strcmp(arg[1], "--"))
     {
         if (!search_in_env_var("HOME", env)) //STEP 1
         {
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			g.status = 1;
 			return (1);
         }
         return(cd_home(env)); //STEP 2
@@ -70,11 +77,15 @@ int    ft_cd(char **arg, char **env)
     else if (arg[1] && !arg[2])
     {
 		if (set_directory(check_home_path(arg[1], env), env))
+		{
+			g.status = 1;
 			return (1);
+		}
     }
     else
     {
         printf("usage: cd <directory>\n");
+		g.status = 1;
         return (1);
     }
     return (0);

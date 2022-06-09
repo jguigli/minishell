@@ -67,6 +67,7 @@ void	get_prompt(char **env)
 			gr_list = parse_args(entry, env);
 			//affiche(gr_list->process);
 			exec_launcher(&gr_list, env);
+			printf("G.STATUS dans get_prompt = %d\n", g.status);
 		}
 	}
 }

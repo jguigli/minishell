@@ -14,6 +14,8 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	close_pipes(&exec);
 	manage_redirections(&list);
 	exec.cmd_arg = list_to_tab(list->process);
+	if (!exec.cmd_arg)
+		exit(0);
 	if (is_builtin(exec.cmd_arg[0]))
 	{
 		exec_builtin(exec.cmd_arg, envp);
@@ -22,8 +24,6 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	}
 	else
 	{
-		if (!exec.cmd_arg)
-			exit(0);
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd)
 			exit(0);
@@ -49,7 +49,6 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 		else if (!exec.pid[exec.pid_number])
 			child_process_complex(exec, current, env);
 		exec.pid_number++;
-		//free(arg);
 		current = current->next;
 	}
 	close_pipes(&exec);
