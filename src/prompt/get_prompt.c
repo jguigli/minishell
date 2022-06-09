@@ -21,19 +21,19 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[32m");
-	name = search_in_env_var("USER", env);
+	name = ft_strdup("minishell");
 	if (!name)
 		return (free(temp), NULL);
 	temp = ft_strjoin(temp, name);
-	//free(name);
+	free(name);
 	name = ft_strjoin(temp, "\x1b[0m:");
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[34m");
-	pwd = search_in_env_var("PWD", env);
+	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (free(name), free(temp), NULL);
 	temp = ft_strjoin(temp, pwd);
-	//free(pwd);
+	free(pwd);
 	pwd = ft_strjoin(temp, "\x1b[0m$ ");
 	prompt = ft_strjoin(name, pwd);
 	free(pwd);
@@ -59,9 +59,8 @@ void	get_prompt(char **env)
 			entry = readline(my_prompt);
 			if (entry == NULL)
 			{
-				//printf("LOL");
 				write(1, "exit", 5);
-				exit(0);
+				exit(g.status);
 			}
 			//printf("entryyyyyyyyyy == %s\n", entry);
 			add_history(entry);

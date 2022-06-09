@@ -19,16 +19,19 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	if (is_builtin(exec.cmd_arg[0]))
 	{
 		exec_builtin(exec.cmd_arg, envp);
-		//kill(exec.pid[exec.pid_number], SIGKILL);
-		exit(0);
 	}
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd)
-			exit(0);
+		{
+			g.status = 127;
+			//exit(g.status);
+		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
-			exit(0);
+		{
+			g.status = 126;
+		}
 	}	
 }
 
@@ -55,6 +58,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
+	printf("G.STATUS dans exec_simple_cmd = %d\n", g.status);
 }
 
 void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec l'ast => gestion des pipes
@@ -63,7 +67,7 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 	int		pipe;
 
 	pipe = my_lstsize(&list) - 1;
-    //redir
+	g.status = 0;
 	exec.pipe_number = 2 * (my_lstsize(&list) - 1);
 	exec.cmd_number = my_lstsize(&list);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);

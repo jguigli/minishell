@@ -202,7 +202,6 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		exit(0);
 	if (is_builtin(exec.cmd_arg[0]))
 	{
-		printf("LAAAAAAAAAAAAA\n");
 		exec_builtin(exec.cmd_arg, envp);
 	}
 	else
@@ -210,17 +209,16 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd)
 		{
-			perror("cmd");
+			perror("minishell: cmd");
 			g.status = 127;
-			exit(g.status);
+			return ;
 		}
 		//printf("exec cmd = %s\n", exec.cmd);
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
-			fprintf(stderr, "POPOPOPO\n");
-			perror("Error: ");
+			perror("minishell: cmd");
 			g.status = 126;
-			//exit(g.status);
+			return ;
 		}
 	}
 }
@@ -234,6 +232,7 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 
 //	affiche(list->process);
 	wstatus = 0;
+	g.status = 0;
 	shell_parameter_expansion(list->process, env);
 	//file = manage_redirections(&list);
 	//affiche(list->process);

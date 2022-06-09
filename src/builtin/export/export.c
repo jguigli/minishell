@@ -94,5 +94,8 @@ void    ft_export(char **arg, char **env)
 		g.env = export_var_env(arg, pos, env);
 	}
 	else
+	{
 		printf("CEST PAS BON\n");
+		g.status = 2;
+	}
 }
