@@ -160,6 +160,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_EQ] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;
