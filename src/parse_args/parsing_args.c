@@ -91,6 +91,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['9'] = CHR_DIGIT;
 	tok_info->get_chr_c['='] = CHR_EQ;
 	tok_info->get_chr_c['\0'] = CHR_EOF;
+	tok_info->get_chr_c['\n'] = CHR_NL;
 	tok_info->get_chr_c['\\'] = CHR_BS;
 	tok_info->get_chr_c['/'] = CHR_SLASH;
 	tok_info->get_chr_c['.'] = CHR_DOT;
@@ -129,13 +130,37 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_ESP] = TOKEN_ESP;
 	tok_info->get_tok_type[CHR_BS] = TOKEN_BS;
 	tok_info->get_tok_type[CHR_UNDS] = TOKEN_UNDS;
+	tok_info->get_tok_type[CHR_NL] = TOKEN_NL;
 }
 
 void	init_rules(t_glob_infos *tok_info)
 {
 	tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
 
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_DIGIT] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SQUOTE] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_DQUOTE] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_BQUOTE] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_LPAREN] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_RPAREN] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_LBRACE] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_RBRACE] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_COMA] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_DOL] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SEMI] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_BANG] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_BS] = 0;	
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_DOT] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SLASH] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_ESP] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_DASH] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_RRED] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_LRED] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_EQ] = 0;
+	tok_info->get_chr_rules[TOKEN_NL][CHR_NL] = 1;
 	tok_info->get_chr_rules[TOKEN_COMA][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_SEMI][CHR_SEMI] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_WORD] = 1;
@@ -160,6 +185,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DASH] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_EQ] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;

@@ -15,46 +15,6 @@
 // 	return (count);
 // }
 
-// char	**split_arg(char *argv)
-// {
-// 	int		count;
-// 	char	**tab;
-
-// 	count = count_quote(argv);
-// 	if (count == 2)
-// 		tab = ft_split_cmd_quote(argv);
-// 	else
-// 		tab = ft_split(argv, ' ');
-// 	return (tab);
-// }
-
-int	check_arg(char *argv)
-{
-	int	i;
-	int	count;
-	int	final;
-
-	i = 0;
-	count = 0;
-	final = ft_strlen(argv);
-	if (argv[0] == ' ' || argv[final - 1] == ' ')
-		return (1);
-	while (argv[i])
-	{
-		if (ft_isalpha(argv[i]))
-		{
-			count++;
-			while (ft_isalpha(argv[i + 1]))
-				i++;
-		}
-		i++;
-	}
-	if (count == 1)
-		return (1);
-	else
-		return (0);
-}
-
 char	*get_command(char **path, char *cmd)
 {
 	char	*temp;
