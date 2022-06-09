@@ -44,7 +44,8 @@ typedef enum		e_toktype {
 	DQUOTED_DELIM,//36
 	SQUOTED_DELIM,//37
 	TOKEN_RRED_APPEND,//38
-	TOKEN_HEREDOC_STRING,//39	
+	TOKEN_HEREDOC_STRING,//39
+	TOKEN_NL,//40	
 	TOKEN_MAX
 }					t_toktype;
 
@@ -82,6 +83,7 @@ typedef enum		e_chr_class {
 	CHR_ESP,
 	CHR_DASH,
 	CHR_UNDS,
+	CHR_NL,
 	CHR_MAX
 }					t_chr_class;
 

@@ -59,14 +59,19 @@ void	get_prompt(char **env)
 			entry = readline(my_prompt);
 			if (entry == NULL)
 			{
+				//printf("LOL");
 				write(1, "exit", 5);
 				exit(0);
 			}
-			add_history(entry);
 			//printf("entry ---> %s", entry);
-			gr_list = parse_args(entry, env);
-			//affiche(gr_list->process);
-			exec_launcher(&gr_list, env);
+			if (entry[0])
+			{
+				add_history(entry);
+				gr_list = parse_args(entry, env);
+				//affiche(gr_list->process);
+				exec_launcher(&gr_list, env);
+				//printf("iiciii \n");
+			}
 		}
 	}
 }

@@ -489,6 +489,7 @@ t_dblist *p_tok(t_dblist *list)
 	t_datas	*p_list;
 
 	p_list = list->first;
+	//printf("new line == %s \n", p_list->data);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28)
 		pers_err_msges(ARG);
 	while(p_list)
@@ -609,7 +610,7 @@ t_dblist	*get_tokens(char *entry)
 	if (entry[0] == '\0')
 			return (NULL);
 	//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
-	
+	//printf("new line == %c \n", entry[0]);
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
@@ -669,6 +670,7 @@ t_dblist	*get_tokens(char *entry)
 			is_quoted = 1;
 		j = i;
 	}
+	//printf("new line == %s \n", list->first->data);
 	p_tok(list);
 	return (list);
 }

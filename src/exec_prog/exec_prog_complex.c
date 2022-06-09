@@ -69,7 +69,10 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 	exec.cmd_number = my_lstsize(&list);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);
 	if (!exec.pipe)
+	{
+		//printf("heeeeeeeeeeeeeeeere");
 		exit(0);
+	}
 	exec.pid = (pid_t *)malloc(sizeof(pid_t) * exec.cmd_number);
 	if (!exec.pid)
 	{
