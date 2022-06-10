@@ -206,6 +206,7 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 			&& list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
 				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH
 				 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOL
+					 && list->infos->get_chr_c[token->data[i]] != CHR_QUERY
 					 	&& list->infos->get_chr_c[token->data[i]] != CHR_SLASH
 					 		&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
 						 		&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
