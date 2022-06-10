@@ -68,7 +68,7 @@ int	exec_launcher(t_flist **li, char **env)
 	pipe = my_lstsize(&list) - 1;
 	if (pipe > 0)
 	{
-
+		//printf("OKKKKK geuuuurl \n");
 		exec_complex_cmd(list, env);
 	}
 	else if	(pipe == 0)
@@ -76,5 +76,6 @@ int	exec_launcher(t_flist **li, char **env)
 		if (exec_simple_cmd(list, env) == 10)
 			exit(g.status);
 	}
+
 	return (1);
 }

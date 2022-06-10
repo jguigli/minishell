@@ -5,11 +5,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	if (exec.pid_number == 0)
 		manage_dup2(exec, 0, exec.pipe[1]);
 	else if (exec.pid_number == exec.cmd_number - 1)
-		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
-			1);
+		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2], 1);
 	else
+	{
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
 			exec.pipe[2 * exec.pid_number + 1]);
+	}
 	close_pipes(&exec);
 	manage_redirections(&list);
 	exec.cmd_arg = list_to_tab(list->process);
@@ -33,7 +34,7 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 			freeing_execution_c(exec, errno);
 			return ;
 		}
-	}	
+	}
 }
 
 void	manage_exec(t_exec_c exec, t_flist *list, char **env)
@@ -47,6 +48,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	while (current)
 	{
         shell_parameter_expansion(current->process, env);
+		//affiche(current->process);
 		exec.pid[exec.pid_number] = fork();
 		if (exec.pid[exec.pid_number] == -1)
 		{
@@ -54,7 +56,9 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 			exit(0);
 		}
 		else if (!exec.pid[exec.pid_number])
+		{
 			child_process_complex(exec, current, env);
+		}
 		exec.pid_number++;
 		current = current->next;
 		fprintf(stderr, "WAOUUUH\n");
@@ -63,7 +67,6 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
-	//printf("G.STATUS dans exec_simple_cmd = %d\n", g.status);
 }
 
 void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec l'ast => gestion des pipes
@@ -72,7 +75,7 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 	int		pipe;
 
 	pipe = my_lstsize(&list) - 1;
-	exec.pipe_number = 2 * (my_lstsize(&list) - 1);
+	exec.pipe_number = 2 *(my_lstsize(&list) - 1);
 	exec.cmd_number = my_lstsize(&list);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);
 	if (!exec.pipe)
@@ -88,5 +91,6 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 	}
 	exec.path = search_in_env_var("PATH", env);
 	exec.cmd_path = ft_split(exec.path, ':');
+	//printf("cmd path %s \n", exec.cmd_path[0]);
 	manage_exec(exec, list, env);
 }

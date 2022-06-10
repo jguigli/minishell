@@ -40,7 +40,7 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	return (prompt);
 }
 
-void	get_prompt(void)
+void	get_prompt(char **env)
 {
 	char	*entry;
 	int		int_mode;
@@ -70,7 +70,10 @@ void	get_prompt(void)
 			if	(!gr_list)
 				get_p = 0;
 			if	(get_p == 1)
+			{
+				//affiche(gr_list->process);
 				exec_launcher(&gr_list, g.env);
+			}
 			else
 				g.status = 0;
 		}
