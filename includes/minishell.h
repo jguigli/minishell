@@ -30,6 +30,7 @@
 #define CMD "ERROR COMMANDE"
 #define OPT "ERROR OPTIONS"
 #define SYNTAX_ERR "syntax error near unexpected token"
+#define DIR_ERR "Is a directory"
 #define PI  "ERROR PIPE"
 
 
@@ -47,7 +48,8 @@ t_glob_infos	*initst_infos();
 void	        init_global(void);
 int 			manage_signal(void);
 int				affiche(t_dblist *list); // A tej dans le futur
-int				pers_err_msges(char *error, char *data);
+int				syntax_err(char *error, char *data);
+int				isdir_err(char *error, char *data);
 void			error_msgs(void);
 t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();

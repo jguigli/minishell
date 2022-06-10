@@ -69,7 +69,7 @@ void	get_prompt(char **env)
 			gr_list = parse_args(entry, env);
 			if	(!gr_list)
 				get_p = 0;
-			if	(get_p = 1)
+			if	(get_p == 1)
 				exec_launcher(&gr_list, env);
 			else
 				g.status = 0;

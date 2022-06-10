@@ -103,6 +103,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	element = malloc(sizeof(t_datas));
 	if (!element)
 		exit(EXIT_FAILURE);
+	//printf("token type == %s \n", type[t]);
 	if (!l->number)
 	{
 		l->first = element;
@@ -163,7 +164,7 @@ int	check_dquotes_dol(t_datas *list)
 	else if (dq % 2 == 0 && dol > 1)
 		return (dol);
 	else if (!(dq % 2))
-		pers_err_msges(SYNTAX_ERR, list->data);
+		syntax_err(SYNTAX_ERR, list->data);
 	return (0);
 }
 
@@ -191,7 +192,7 @@ int	check_squotes_dol(t_datas *list)
 	else if (sq % 2 == 0 && dol > 1)
 		return (dol);
 	else if (!(sq % 2))
-		pers_err_msges(SYNTAX_ERR, list->data);
+		syntax_err(SYNTAX_ERR, list->data);
 	return (0);
 }
 
@@ -217,11 +218,12 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 													 	&& list->infos->get_chr_c[token->data[i]] != CHR_EQ
 					 )
 				 {
-					pers_err_msges(SYNTAX_ERR, token->data);
+					syntax_err(SYNTAX_ERR, token->data);
+					return(0);
 				 }
 		i ++;
 	}
-	return (0);
+	return (1);
 }
 
 t_dblist	*token_tag(t_dblist *list)
@@ -485,6 +487,16 @@ t_flist *get_processes(t_dblist *list)
 	return (head);
 }
 
+int	check_if_pathname(t_datas *data)
+{
+	if	(data->type == 27 && data->length > 1 && (data->data[0] == data->data[1] || data->data[1] != CHR_WORD))
+	{
+		isdir_err(DIR_ERR, data->data);
+		return (0);
+	}
+	return (1);
+}	
+
 t_dblist *p_tok(t_dblist *list)
 {
 	t_datas	*p_list;
@@ -495,9 +507,11 @@ t_dblist *p_tok(t_dblist *list)
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28 || (p_list->type == 7 && p_list->length > 1))
 	{
-		pers_err_msges(SYNTAX_ERR, p_list->data);
+		syntax_err(SYNTAX_ERR, p_list->data);
 		return (NULL);
 	}
+	if	(check_if_pathname(p_list) == 0)
+		return (NULL);
 	while(p_list)
 	{
 		p_list->length = ft_strlen(p_list->data);
@@ -520,7 +534,7 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}
@@ -543,20 +557,21 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}
 		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			check_spec_char(p_list, list);
+			if	(check_spec_char(p_list, list) == 0)
+				return (NULL);
 		}
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length >= 1 && (p_list->next->type != 5 && p_list->next->type != 6 && p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33))
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}
@@ -566,13 +581,13 @@ t_dblist *p_tok(t_dblist *list)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					pers_err_msges(SYNTAX_ERR, p_list->data);
+					syntax_err(SYNTAX_ERR, p_list->data);
 					return (NULL);
 				}
 			}
 			else if (p_list->length > 2)
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}
@@ -580,13 +595,13 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if (list->first->length == 1)
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}
 		else
 		{
-			pers_err_msges(SYNTAX_ERR, p_list->data);
+			syntax_err(SYNTAX_ERR, p_list->data);
 			return (NULL);
 		}
 		if	(p_list->next != NULL)
@@ -597,7 +612,7 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(p_list->type == 11 || p_list->type == 6 || p_list->type == 7)
 			{
-				pers_err_msges(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
 		}

@@ -18,8 +18,8 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['\"'] = CHR_DQUOTE;
 	tok_info->get_chr_c['\''] = CHR_SQUOTE;
 	tok_info->get_chr_c['&'] = CHR_ESP;
-	tok_info->get_chr_c['('] = CHR_WORD;
-	tok_info->get_chr_c[')'] = CHR_WORD;
+	tok_info->get_chr_c['('] = CHR_RPAREN;
+	tok_info->get_chr_c[')'] = CHR_LPAREN;
 	tok_info->get_chr_c['*'] = CHR_WILDC;
 	tok_info->get_chr_c['['] = CHR_LBRACE;
 	tok_info->get_chr_c[']'] = CHR_RBRACE;
@@ -110,6 +110,8 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_DIEZ] = TOKEN_WORD;
 	tok_info->get_tok_type[CHR_RRED] = TOKEN_RRED;
 	tok_info->get_tok_type[CHR_LRED] = TOKEN_LRED;
+	tok_info->get_tok_type[CHR_LPAREN] = TOKEN_LPAREN;
+	tok_info->get_tok_type[CHR_RPAREN] = TOKEN_RPAREN;	
 	tok_info->get_tok_type[CHR_DIGIT] = TOKEN_WORD;
 	tok_info->get_tok_type[CHR_BANG] = TOKEN_BANG;
 	tok_info->get_tok_type[CHR_SEMI] = TOKEN_SEMI;
