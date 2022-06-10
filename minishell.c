@@ -8,9 +8,13 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argv;
 	manage_signal();
 	init_global();
+	// int i = 0;
+	// while(env[i])
+	// 	printf("env -i avec bash = %s\n", env[i++]);
 	if (!search_in_env_var("PATH", env))
-		return (-1); // MSG ERROR 
-	g.env = get_copy(env); //ATTENTION PLUSIEURS MALLOC DANS GET_COPY. A FREE A LA FIN
+		g.env = manage_env_i();
+	else
+		g.env = get_copy(env); //A FREE A LA FIN
 	get_prompt(g.env);
 	return (0);
 }

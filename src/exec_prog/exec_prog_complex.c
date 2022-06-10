@@ -68,7 +68,6 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 	int		pipe;
 
 	pipe = my_lstsize(&list) - 1;
-	g.status = 0;
 	exec.pipe_number = 2 * (my_lstsize(&list) - 1);
 	exec.cmd_number = my_lstsize(&list);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);

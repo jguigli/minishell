@@ -21,6 +21,7 @@ SRC = minishell.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/exec_prog/exec_prog_complex.c \
 		./src/env/get_var_env.c \
+		./src/env/get_env_i.c \
 		./src/builtin/cd.c \
 		./src/builtin/echo.c \
 		./src/builtin/env.c \
