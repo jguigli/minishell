@@ -15,7 +15,7 @@
 // 	return (count);
 // }
 
-char	*ft_strjoin_path(char *s1, char *s2) // PAS FINIIIIIIII
+char	*ft_strjoin_path(char *s1, char *s2)
 {
 	static char	*cat;
 	int		length;
