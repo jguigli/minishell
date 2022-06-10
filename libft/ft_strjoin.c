@@ -12,32 +12,6 @@
 
 #include "libft.h"
 
-static char	*ft_strcat(char *dest, char *src)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (dest[i])
-		i++;
-	while (src[j])
-	{
-		dest[i + j] = src[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-	return (dest);
-}
-
-static int	ft_length_total(char *s1, char *s2)
-{
-	int	length;
-
-	length = ft_strlen(s1) + ft_strlen(s2);
-	return (length);
-}
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*cat;
@@ -45,7 +19,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	if (!s1)
 		s1 = ft_strdup("");
-	length = ft_length_total(s1, s2);
+	length = ft_strlen(s1) + ft_strlen(s2);
 	cat = (char *)malloc(sizeof(char) * length + 1);
 	if (!cat)
 		return (NULL);

@@ -22,7 +22,7 @@ char	*ft_strjoin_path(char *s1, char *s2) // PAS FINIIIIIIII
 
 	if (!s1)
 		s1 = ft_strdup("");
-	length = ft_length_total(s1, s2);
+	length = ft_strlen(s1) + ft_strlen(s2);
 	cat = (char *)malloc(sizeof(char) * length + 1);
 	if (!cat)
 		return (NULL);
@@ -46,7 +46,7 @@ char	*get_command(char **path, char *cmd)
 	{
 		if (cmd[0] == '/')
 			return (NULL);
-		temp = ft_strjoin(*path, "/");
+		temp = ft_strjoin_path(*path, "/");
 		path_cmd = ft_strjoin(temp, cmd);
 		if (access(path_cmd, 0) == 0)
 			return (path_cmd);

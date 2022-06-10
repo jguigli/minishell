@@ -26,11 +26,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 		if (!exec.cmd)
 		{
 			g.status = 127;
-			//exit(g.status);
+			return ;
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
 			g.status = 126;
+			return ;
 		}
 	}	
 }
