@@ -14,9 +14,8 @@ void	error_msgs(int error, char *data)
 void	syntax_err(char *error, char *data)
 {
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(data, 2);
-	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
+	ft_putstr_fd(data, 2);
 	ft_putstr_fd("\n", 2);
 	g.status = 2;
 }
@@ -33,6 +32,7 @@ void	isdir_err(char *error, char *data)
 
 void	cmd_not_found(char *error, char *cmd)
 {
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
