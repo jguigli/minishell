@@ -15,6 +15,7 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd)
 		{
+			printf("strerror %s\n", strerror(errno));
 			perror("minishell: cmd");
 			g.status = 127;
 			return ;
