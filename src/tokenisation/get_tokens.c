@@ -91,7 +91,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	t_datas *element;
 	t_datas *current;
 	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_FILE", "TOKEN_EQ", "TOKEN_EOF", "TOKEN_CMD", "TOKEN_OPT", "TOKEN_BS","TOKEN_SLASH",
-	"TOKEN_DOT", "TOKEN_COMA", "TOKEN_ESP", "TOKEN_DASH", "TOKEN_MAX"};
+	"TOKEN_DOT", "TOKEN_COMA", "TOKEN_ESP", "TOKEN_DASH", "TOKEN_HEREDOC", "TOKEN_HEREDOC_DASH", "SIMPLE_DELIM", "DQUOTED_DELIM", "SQUOTED_DELIM","TOKEN_RRED_APPEND","TOKEN_HEREDOC_STRING", "TOKEN_NL", "TOKEN_QUERY","TOKEN_AROB","TOKEN_MAX"};
 	/* POur les niveaux :
 		- Niveau 4 = pipes, &, $
 		- Niveau 3 = redirection ; > >> <
@@ -215,6 +215,7 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 										 		&& list->infos->get_chr_c[token->data[i]] != CHR_RRED
 								 					&& list->infos->get_chr_c[token->data[i]] != CHR_LRED
 													 	&& list->infos->get_chr_c[token->data[i]] != CHR_EQ
+														 	&& list->infos->get_chr_c[token->data[i]] != CHR_AROB
 					 )
 				 {
 					syntax_err(SYNTAX_ERR, token->data);
@@ -707,5 +708,6 @@ t_dblist	*get_tokens(char *entry)
 	//printf("new line == %s \n", list->first->data);
 	if	(p_tok(list) == NULL)
 		return (NULL);
+	affiche(list);
 	return (list);
 }

@@ -8,6 +8,6 @@ int    ft_pwd(char **arg)
     str = getcwd(NULL, 0);
     if (!str)
         return (-1); // MESSAGE ERREUR
-    printf("%s\n", str);
+    //printf("%s\n", str);
     return (0);
 }

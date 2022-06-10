@@ -30,6 +30,7 @@ SRC = minishell.c \
 		./src/builtin/export/export2.c \
 		./src/builtin/pwd.c \
 		./src/builtin/unset.c \
+		./src/freeing/freeing.c \
 		# ./src/process_launch/p_launch.c \
 
 OBJ = $(SRC:.c=.o)

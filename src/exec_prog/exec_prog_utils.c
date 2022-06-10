@@ -33,6 +33,18 @@ char	*ft_strjoin_path(char *s1, char *s2)
 	return (cat);
 }
 
+int	parse_cmd(char *argument)
+{
+	if (argument[0] == '/')
+		return (-1);
+	else if (ft_strchr(argument, '/') == 2)
+		return (-1);
+	else if (ft_strchr(argument, '.') != 0)
+		return (-1);
+	else
+		return (0);
+}
+
 char	*get_command(char **path, char *cmd)
 {
 	char	*temp;
@@ -40,18 +52,26 @@ char	*get_command(char **path, char *cmd)
 
 	if (!cmd)
 		return (NULL);
-	if (access(cmd, F_OK) == 0 && cmd[0] == '/')
-		return (cmd);
-	while (*path)
+	if (parse_cmd(cmd) == -1)
 	{
-		if (cmd[0] == '/')
-			return (NULL);
-		temp = ft_strjoin_path(*path, "/");
-		path_cmd = ft_strjoin(temp, cmd);
-		if (access(path_cmd, 0) == 0)
-			return (path_cmd);
-		free(path_cmd);
-		path++;
+		printf("cmd = %s\n", cmd);
+		if	(access(cmd, F_OK) == 0)
+			return (cmd);
+	}
+	else 
+	{
+		while (*path)
+		{
+			if (cmd[0] == '/')
+				return (NULL);
+			temp = ft_strjoin_path(*path, "/");
+			path_cmd = ft_strjoin(temp, cmd);
+			if (access(path_cmd, 0) == 0)
+				return (path_cmd);
+			free(path_cmd);
+			path++;
+		}
+
 	}
 	return (NULL);
 }
