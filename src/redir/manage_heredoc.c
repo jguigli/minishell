@@ -17,8 +17,8 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	file = open(".hd1", O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (file < 0)
 	{
-		printf("200000\n");
-		error_msgs();
+		error_msgs(errno, ".hd1");
+		return (-200);
 	}
 	while (1)
     {

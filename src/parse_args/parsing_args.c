@@ -10,6 +10,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c[','] = CHR_COMA;
 	tok_info->get_chr_c['$'] = CHR_DOL;
 	tok_info->get_chr_c['#'] = CHR_DIEZ;
+	tok_info->get_chr_c['@'] = CHR_AROB;
 	tok_info->get_chr_c['|'] = CHR_PIPE;
 	tok_info->get_chr_c['-'] = CHR_DASH;
 	tok_info->get_chr_c['_'] = CHR_UNDS;
@@ -135,6 +136,7 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_UNDS] = TOKEN_UNDS;
 	tok_info->get_tok_type[CHR_NL] = TOKEN_NL;
 	tok_info->get_tok_type[CHR_QUERY] = TOKEN_QUERY;
+	tok_info->get_tok_type[CHR_AROB] = TOKEN_AROB;
 }
 
 void	init_rules(t_glob_infos *tok_info)
@@ -187,6 +189,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_DASH] = 1;
+	tok_info->get_chr_rules[TOKEN_WORD][CHR_AROB] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EQ] = 1;
@@ -448,7 +451,23 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_UNDS][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_UNDS][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_UNDS][CHR_ESP] = 1;
-	tok_info->get_chr_rules[TOKEN_UNDS][CHR_BS] = 1;	
+	tok_info->get_chr_rules[TOKEN_UNDS][CHR_BS] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_AROB] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_DIGIT] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_WORD] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_DQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_BQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_LPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_RPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_LBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_DOL] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_PIPE] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_SLASH] = 1;	
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_ESP] = 1;
+	tok_info->get_chr_rules[TOKEN_AROB][CHR_BS] = 1;
 }
 
 t_glob_infos	*initst_infos()
@@ -647,42 +666,35 @@ int	simple_block_p(t_flist **gr_list)
 			//printf("%d \n", fi);
 			if	(fi < 0)
 			{
-				printf("3333 \n");
-				error_msgs();
+				// freee tous les mallocs
+				error_msgs(errno, "Fork failed");
+				return (-200);
 			}
 			if (fi == 0)
 			{
 				//printf("list data %s \n", list->data);
 				manage_one_redir(list->next, head);
 				//printf("prout\n");
-				exit(1);
+				//exit(1);
+				return (1); // a essayer
 			}	
 			if	(waitpid(fi, &wstatus, 0) == -1)
 				perror("wait() error");
 			file = open("infile", O_RDONLY);
 			if	(file < 0)
 			{
-				printf("44444 \n");
-				error_msgs();
+				error_msgs(errno, "infile");
+				return (-200);
 			}
 			tmp = get_next_line(file);
 			//printf("tmp ==> %s\n", tmp);
 			while (tmp != NULL)
 			{
-				//printf("tmp ==> %s\n", tmp);
 				node_toadd = ft_strjoin(node_toadd, tmp);
-				//printf("str to get ==> %s\n", node_toadd);
 				free(tmp);
-				tmp = get_next_line(file);
-				//printf("fd file ==> %d -- tmp =%s -- node_toadd : %s\n", file, tmp, node_toadd);
-				// if (head->nb_heredoc > 1 && !ft_strncmp(tmp, list->next->data, ft_strlen(list->next->data)))
-				// {
-				// 	free(tmp);
-				// 	break ;
-				// }		
+				tmp = get_next_line(file);		
 			}
 			close(file);
-			//printf("there %s --  node to add : %s\n", list->data, node_toadd);
 			if (list->next)
 				list = list->next;
 			else
@@ -752,8 +764,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		//printf("%d \n", fi);
 		if	(fi < 0)
 		{
-			printf("5555 \n");
-			error_msgs();
+			error_msgs(errno, "Fork failed");
+			return (-200);
 		}
 		//printf("total nb heredoc %d \n", totalhd);
 		if (fi == 0)
@@ -780,8 +792,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 		file = open(".hd1", O_RDONLY);
 		if	(file < 0)
 		{
-			printf("88888 \n");
-			error_msgs();
+			error_msgs(errno, "Temporary file failed");
+			return (-200);
 		}
 		tmp = get_next_line(file);
 		//printf("tmp ==> %s\n", tmp);
@@ -876,13 +888,17 @@ t_flist	*parse_args(char	*entry, char **env)
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
 	if (my_lstsize(&gr_list) == 1)
-		simple_block_p(&gr_list);
+	{
+		if	(simple_block_p(&gr_list) == -200)
+			return (NULL);
+	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{
 		tota_heredoc = check_tot_heredoc(&gr_list);
 		if (tota_heredoc >= 1)
 		{
-			multiple_block_p(&gr_list, tota_heredoc);
+			if	(multiple_block_p(&gr_list, tota_heredoc) == -200)
+				return (NULL);
 			// while (gr_list)
 			// {
 			// 	//affiche(gr_list->process);

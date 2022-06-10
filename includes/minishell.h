@@ -27,7 +27,9 @@
 # include <sys/wait.h>
 
 #define OP  "ERROR OPERATOR"
-#define CMD "ERROR COMMANDE"
+#define CMD "command not found"
+# define ERR_INFILE "Infile"
+# define ERR_OUTFILE "Outfile"
 #define OPT "ERROR OPTIONS"
 #define SYNTAX_ERR "syntax error near unexpected token"
 #define DIR_ERR "Is a directory"
@@ -48,9 +50,8 @@ t_glob_infos	*initst_infos();
 void	        init_global(void);
 int 			manage_signal(void);
 int				affiche(t_dblist *list); // A tej dans le futur
-int				syntax_err(char *error, char *data);
-int				isdir_err(char *error, char *data);
-void			error_msgs(void);
+void			syntax_err(char *error, char *data);
+void				isdir_err(char *error, char *data);
 t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();
 void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
@@ -64,6 +65,14 @@ int				my_lstsize(t_flist **lst);
 int	            my_lstsize_dblist(t_dblist *lst);
 void			insert_node(char *repere, char *node_toadd, t_flist **head);
 int				check_tot_heredoc(t_flist **list);
+void			freeing_cmd(t_exec_s	exec);
+void				cmd_not_found(char *error, char *cmd);
+void			error_msgs(int error, char *data);
+void			freeing_execution(t_exec_s	exec, int error);
+void			freeing_execution_c(t_exec_c	exec, int error);
+void			freeing_cmd_c(t_exec_c	exec);
+
+
 
 
 
