@@ -103,7 +103,6 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	element = malloc(sizeof(t_datas));
 	if (!element)
 		exit(EXIT_FAILURE);
-	//printf("token type == %s \n", type[t]);
 	if (!l->number)
 	{
 		l->first = element;
