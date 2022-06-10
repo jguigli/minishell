@@ -23,7 +23,6 @@ int    ft_echo(char **arg)
 
 	i = 1;
 	n = 0;
-	g.status = 0;
 	if (!arg[1])
 	{
 		ft_putchar_fd('\n', 1);

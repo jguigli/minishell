@@ -32,41 +32,45 @@ int		export_appreciate_symbol(char arg)
 	return (0);
 }
 
-int		check_arg_export(char **arg)
+int		check_arg_export(char *arg)
 {
 	int	i;
-	int	j;
 	int	pos;
 
 	i = 1;
-	j = 0;
 	pos = 1;
-	while (ft_strcmp(arg[i], "="))
+	if (!ft_isalpha(arg[0]))
 	{
-		j = 1;
-		if (!ft_isalpha(arg[i][0]))
-			return (0);
-		while (arg[i][j])
+		printf("minishell: '%s': not a valid identifier\n", arg);
+		return (0);
+	}
+	while (arg[i] != '=' && arg[i])
+	{
+		if (!ft_isalnum(arg[i]))
 		{
-			if (!ft_isalpha(arg[i][i]) || !ft_isdigit(arg[1][i]))
-				return (0);
-			j++;
+			printf("minishell: '%s': not a valid identifier\n", arg);
+			return (0);
 		}
-		pos++;
 		i++;
 	}
-	while (arg[++i][j])
+	if (arg[i + 1] != '\0')
+		i++;
+	while (arg[i])
 	{
-		if (!ft_isalpha(arg[1][i]) || !ft_isdigit(arg[1][i]) || !export_appreciate_symbol(arg[i][j]))
+		printf("arg = %c\n", arg[i]);
+		if (!ft_isalnum(arg[i]) && !export_appreciate_symbol(arg[i]))
+		{
+			printf("minishell: '%s': not a valid identifier\n", arg);
 			return (0);
-		j++;
-	}
-	if (arg[++i])
+		}
+		i++;
+	}	
+	if (!ft_strchr(arg, '='))
 		return (0);
-	return (pos);
+	return (1);
 }
 
-char	**export_var_env(char **arg, int pos, char **env)
+char	**export_var_env(char *arg, char **env)
 {
 	int	i;
 
@@ -74,8 +78,11 @@ char	**export_var_env(char **arg, int pos, char **env)
 	env = dup_env_tab_export(env);
 	while (env[i])
 		i++;
-	env[i] = ft_strdup(arg[pos]);
+	env[i] = ft_strdup(arg);
 	env[++i] = 0;
+	i = 0;
+	while (env[i])
+		printf("env = %s\n", env[i++]);
 	return (env);
 }
 
@@ -84,18 +91,17 @@ void    ft_export(char **arg, char **env)
 	int	i;
 	int	pos;
 
-	i = 0;
+	i = 1;
 	pos = 0;
+	g.status = 0;
 	if (!arg[1])
 		print_export(env);
-	if (check_arg_export(arg))
+	while (arg[i])
 	{
-		pos = check_arg_export(arg);
-		g.env = export_var_env(arg, pos, env);
-	}
-	else
-	{
-		printf("CEST PAS BON\n");
-		g.status = 2;
+		if (check_arg_export(arg[i]))
+			g.env = export_var_env(arg[i], env);
+		else
+			g.status = 1;
+		i++;
 	}
 }

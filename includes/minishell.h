@@ -39,7 +39,7 @@
 extern t_glob g;
 
 //Main functions
-void			get_prompt(char **env);
+void			get_prompt(void);
 char			**get_copy(char **d_tab);
 t_flist			*parse_args(char	*str, char **env);
 void			*get_ll(char **args);
@@ -121,8 +121,8 @@ int    ft_unset(char **arg, char **env);
 
 
 int		export_appreciate_symbol(char arg);
-int		check_arg_export(char **arg);
-char	**export_var_env(char **arg, int pos, char **env);
+int		check_arg_export(char *arg);
+char	**export_var_env(char *arg, char **env);
 void    ft_export(char **arg, char **env);
 char	**dup_env_tab(char **env);
 char	**env_sorted_export(char **env);
@@ -134,6 +134,7 @@ int	output_r(t_datas *output_r);
 int	input_r(t_datas *input_r);
 void	delete_node(t_flist **li);
 //static char	*ft_strcat(char *dest, char *src);
+char    **manage_env_i(void);
 
 
 #endif
