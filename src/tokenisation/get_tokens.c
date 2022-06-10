@@ -163,7 +163,7 @@ int	check_dquotes_dol(t_datas *list)
 	else if (dq % 2 == 0 && dol > 1)
 		return (dol);
 	else if (!(dq % 2))
-		pers_err_msges(ARG);
+		pers_err_msges(SYNTAX_ERR, list->data);
 	return (0);
 }
 
@@ -191,7 +191,7 @@ int	check_squotes_dol(t_datas *list)
 	else if (sq % 2 == 0 && dol > 1)
 		return (dol);
 	else if (!(sq % 2))
-		pers_err_msges(ARG);
+		pers_err_msges(SYNTAX_ERR, list->data);
 	return (0);
 }
 
@@ -216,7 +216,7 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 													 	&& list->infos->get_chr_c[token->data[i]] != CHR_EQ
 					 )
 				 {
-					pers_err_msges(ARG);
+					pers_err_msges(SYNTAX_ERR, token->data);
 				 }
 		i ++;
 	}
@@ -489,9 +489,14 @@ t_dblist *p_tok(t_dblist *list)
 	t_datas	*p_list;
 
 	p_list = list->first;
-	//printf("new line == %s \n", p_list->data);
-	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28)
-		pers_err_msges(ARG);
+	p_list->length = ft_strlen(p_list->data);
+	//printf("new line == %s -- %d --- %d \n", p_list->data, p_list->type, p_list->length);
+	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
+	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28 || (p_list->type == 7 && p_list->length > 1))
+	{
+		pers_err_msges(SYNTAX_ERR, p_list->data);
+		return (NULL);
+	}
 	while(p_list)
 	{
 		p_list->length = ft_strlen(p_list->data);
@@ -514,7 +519,8 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else
 			{
-				pers_err_msges(ARG);
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
 			}
 		}
 		else if	(p_list->type == 12)
@@ -536,7 +542,8 @@ t_dblist *p_tok(t_dblist *list)
 			}
 			else
 			{
-				pers_err_msges(ARG);
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
 			}
 		}
 		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
@@ -548,7 +555,8 @@ t_dblist *p_tok(t_dblist *list)
 		{
 			if	(p_list->length >= 1 && (p_list->next->type != 5 && p_list->next->type != 6 && p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33))
 			{
-				pers_err_msges(ARG);
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
 			}
 		}
 		else if (p_list->type == 6 || p_list->type == 7)
@@ -557,20 +565,28 @@ t_dblist *p_tok(t_dblist *list)
 			{
 				if (p_list->data[1] != p_list->data[0])
 				{
-					pers_err_msges(ARG);
+					pers_err_msges(SYNTAX_ERR, p_list->data);
+					return (NULL);
 				}
 			}
-			else if (p_list->length >= 2)
-				pers_err_msges(ARG);
+			else if (p_list->length > 2)
+			{
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
+			}
 		}
 		else if	(p_list->type == 31)
 		{
 			if (list->first->length == 1)
-				pers_err_msges(ARG);
+			{
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
+			}
 		}
 		else
 		{
-			pers_err_msges(ARG);
+			pers_err_msges(SYNTAX_ERR, p_list->data);
+			return (NULL);
 		}
 		if	(p_list->next != NULL)
 		 	p_list = p_list->next;
@@ -579,7 +595,10 @@ t_dblist *p_tok(t_dblist *list)
 		if	(p_list->next ==  NULL)
 		{
 			if	(p_list->type == 11 || p_list->type == 6 || p_list->type == 7)
-				pers_err_msges(ARG);
+			{
+				pers_err_msges(SYNTAX_ERR, p_list->data);
+				return (NULL);
+			}
 		}
 	}
 	token_tag(list);
@@ -671,6 +690,7 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 	}
 	//printf("new line == %s \n", list->first->data);
-	p_tok(list);
+	if	(p_tok(list) == NULL)
+		return (NULL);
 	return (list);
 }

@@ -45,11 +45,14 @@ void	get_prompt(char **env)
 	char	*entry;
 	int		int_mode;
 	char	*my_prompt;
+	int		get_p;
+
 	t_flist	*gr_list;
 
 	int_mode = 1;
 	while (int_mode)
 	{
+		get_p = 1;
 		my_prompt = get_prompt_env(env);
 		if (!my_prompt)
 			my_prompt = "~$ ";
@@ -62,14 +65,12 @@ void	get_prompt(char **env)
 				write(1, "exit", 5);
 				exit(g.status);
 			}
-			//printf("entryyyyyyyyyy == %s\n", entry);
 			add_history(entry);
-			if (entry[0] && (entry[0] != ' ' && entry[0] != '\t'))
-			{
-			//	printf("heheheh\n");
-				gr_list = parse_args(entry, env);
+			gr_list = parse_args(entry, env);
+			if	(!gr_list)
+				get_p = 0;
+			if	(get_p = 1)
 				exec_launcher(&gr_list, env);
-			}
 			else
 				g.status = 0;
 		}

@@ -16,6 +16,7 @@ SRC = minishell.c \
 		./src/err_msgs/err_messages.c \
 		./src/redir/manage_heredoc.c \
 		./src/exec_prog/exec_prog.c \
+		./src/exec_prog/exec_manage_redir.c \
 		./src/exec_prog/exec_prog_utils.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/exec_prog/exec_prog_complex.c \
