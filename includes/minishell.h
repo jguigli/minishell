@@ -29,7 +29,8 @@
 #define OP  "ERROR OPERATOR"
 #define CMD "ERROR COMMANDE"
 #define OPT "ERROR OPTIONS"
-#define ARG "ERROR ARGUMENTS"
+#define SYNTAX_ERR "syntax error near unexpected token"
+#define DIR_ERR "Is a directory"
 #define PI  "ERROR PIPE"
 
 
@@ -47,7 +48,8 @@ t_glob_infos	*initst_infos();
 void	        init_global(void);
 int 			manage_signal(void);
 int				affiche(t_dblist *list); // A tej dans le futur
-int				pers_err_msges(char *error);
+int				syntax_err(char *error, char *data);
+int				isdir_err(char *error, char *data);
 void			error_msgs(void);
 t_flist 		*get_processes(t_dblist *list);
 t_flist			*init_struct_flist();
@@ -119,6 +121,10 @@ void    print_export(char **env);
 //void			freeing(char *paths[])
 
 int	manage_redirections(t_flist **li);
+int	output_r(t_datas *output_r);
+int	input_r(t_datas *input_r);
+void	delete_node(t_flist **li);
+//static char	*ft_strcat(char *dest, char *src);
 
 
 #endif

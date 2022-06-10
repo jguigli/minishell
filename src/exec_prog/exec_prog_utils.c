@@ -17,7 +17,7 @@
 
 char	*ft_strjoin_path(char *s1, char *s2) // PAS FINIIIIIIII
 {
-	char	*cat;
+	static char	*cat;
 	int		length;
 
 	if (!s1)

@@ -6,10 +6,28 @@ void	error_msgs(void)
 	exit(1);
 }
 
-int	pers_err_msges(char *error)
+int	syntax_err(char *error, char *data)
 {
-	write(2, error, ft_strlen(error));
-	exit(1);
+	// write(2, error, ft_strlen(error) + 1);
+	// write(2, " ", 2);
+	// write(2, data, ft_strlen(data));
+	// write(2, data, ft_strlen(data));
+	printf("minishell: %s %s\n", error, data);
+	g.status = 2;
+	return (0);
+	// exit(1);
+}
+
+int	isdir_err(char *error, char *data)
+{
+	// write(2, error, ft_strlen(error) + 1);
+	// write(2, " ", 2);
+	// write(2, data, ft_strlen(data));
+	// write(2, data, ft_strlen(data));
+	printf("minishell: %s: %s\n", data, error);
+	g.status = 2;
+	return (0);
+	// exit(1);
 }
 
 int	cmd_not_found(char *error)
@@ -17,9 +35,3 @@ int	cmd_not_found(char *error)
 	write(2, error, ft_strlen(error));
 	exit(127);
 }
-
-// void	args_error_msgs(void)
-// {
-// 	write(1, "Error\n", 7);
-// 	exit(1);
-// }

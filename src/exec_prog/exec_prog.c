@@ -69,13 +69,12 @@ int	exec_launcher(t_flist **li, char **env)
 	list = *li;
 	list2 = *li;
 	pipe = my_lstsize(&list) - 1;
-	if (pipe)
+	if (pipe > 0)
 	{
 
-		//printf("tessssssst\n");
 		exec_complex_cmd(list, env);
 	}
-	else
+	else if	(pipe == 0)
 	{
 		if (exec_simple_cmd(list, env) == 10)
 			exit(g.status);
