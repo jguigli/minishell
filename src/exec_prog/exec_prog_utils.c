@@ -103,18 +103,16 @@ void	close_pipes(t_exec_c *exec)
 
 void	manage_dup2(t_exec_c exec, int first, int second)
 {
-	printf("first = %d et second = %d\n", first, second);
 	if (dup2(first, STDIN_FILENO) < 0)
 	{
-		printf("la 1 DUP\npidnumber = %d\nernno = %d\n", first, exec.pid_number, errno);
-		printf("stdin= %d\n", STDIN_FILENO);
-		perror(0);
+		error_msgs(errno, "Fd's duplication failed");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);
 	}
 	if (dup2(second, STDOUT_FILENO) < 0)
 	{
-		printf("la 2 DUP\n");
+		//printf("la 2 DUP\n");
+		error_msgs(errno, "Fd's duplication failed");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);
 	}
