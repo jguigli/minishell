@@ -37,7 +37,7 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	int		file;
 	int		wstatus;
 
-//	affiche(list->process);
+ 	//affiche(list->process);
 	wstatus = 0;
 	g.status = 0;
 	shell_parameter_expansion(list->process, env);

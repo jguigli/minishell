@@ -18,7 +18,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 			if (list->data[i] == '$' && list->data[i + 1] == '?')
 			{
 				str = ft_strjoin(str, ft_itoa(g.status)); // PAS SUR
-				i += 2;
+				i += 1;
 			}
 			else if (list->data[i] == '$' && list->data[i + 1] != '{')
 				str = case_$_noquote(list->data, env, &i, str);
