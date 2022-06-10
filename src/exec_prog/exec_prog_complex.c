@@ -25,12 +25,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd)
 		{
-			g.status = 127;
+			freeing_cmd_c(exec);
 			return ;
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
-			g.status = 126;
+			freeing_execution_c(exec, errno);
 			return ;
 		}
 	}	
@@ -49,7 +49,10 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
         shell_parameter_expansion(current->process, env);
 		exec.pid[exec.pid_number] = fork();
 		if (exec.pid[exec.pid_number] == -1)
+		{
+			printf("Fork failed : %s\n", strerror(errno));
 			exit(0);
+		}
 		else if (!exec.pid[exec.pid_number])
 			child_process_complex(exec, current, env);
 		exec.pid_number++;
@@ -59,7 +62,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
-	printf("G.STATUS dans exec_simple_cmd = %d\n", g.status);
+	//printf("G.STATUS dans exec_simple_cmd = %d\n", g.status);
 }
 
 void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec l'ast => gestion des pipes

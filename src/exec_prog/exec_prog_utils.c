@@ -33,7 +33,7 @@ char	*ft_strjoin_path(char *s1, char *s2) // PAS FINIIIIIIII
 	return (cat);
 }
 
-int	parse_args(char *argument)
+int	parse_cmd(char *argument)
 {
 	if (argument[0] == '/')
 		return (-1);
@@ -51,33 +51,28 @@ char	*get_command(char **path, char *cmd)
 	char	*path_cmd;
 
 	if (!cmd)
-	{
-		printf("heeeeere  1111 \n");
-		printf("heeeeere 111 errno == %d\n", errno);
 		return (NULL);
-	}
-	if (cmd[0] == '/')
+	if (parse_cmd(cmd) == -1)
 	{
+		printf("cmd = %s\n", cmd);
 		if	(access(cmd, F_OK) == 0)
-		{
-			printf("heeeeere 222\n");
-			printf("heeeeere 222 errno == %d\n", errno);
 			return (cmd);
-		}
 	}
-	while (*path)
+	else 
 	{
-		if (cmd[0] == '/')
-			return (NULL);
-		temp = ft_strjoin_path(*path, "/");
-		path_cmd = ft_strjoin(temp, cmd);
-		if (access(path_cmd, 0) == 0)
-			return (path_cmd);
-		free(path_cmd);
-		path++;
+		while (*path)
+		{
+			if (cmd[0] == '/')
+				return (NULL);
+			temp = ft_strjoin_path(*path, "/");
+			path_cmd = ft_strjoin(temp, cmd);
+			if (access(path_cmd, 0) == 0)
+				return (path_cmd);
+			free(path_cmd);
+			path++;
+		}
+
 	}
-	printf("heeeeere 33333 \n");
-	printf("heeeeere 333 errno == %d\n", errno);
 	return (NULL);
 }
 

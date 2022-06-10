@@ -1,37 +1,41 @@
 #include "../../includes/minishell.h"
 
-void	error_msgs(void)
+void	error_msgs(int error, char *data)
 {
-	perror("Error ");
-	exit(1);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd("\n", 2);
+	g.status = 1;
+	return ;
 }
 
-int	syntax_err(char *error, char *data)
+void	syntax_err(char *error, char *data)
 {
-	// write(2, error, ft_strlen(error) + 1);
-	// write(2, " ", 2);
-	// write(2, data, ft_strlen(data));
-	// write(2, data, ft_strlen(data));
-	printf("minishell: %s %s\n", error, data);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
 	g.status = 2;
-	return (0);
-	// exit(1);
 }
 
-int	isdir_err(char *error, char *data)
+void	isdir_err(char *error, char *data)
 {
-	// write(2, error, ft_strlen(error) + 1);
-	// write(2, " ", 2);
-	// write(2, data, ft_strlen(data));
-	// write(2, data, ft_strlen(data));
-	printf("minishell: %s: %s\n", data, error);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
 	g.status = 2;
-	return (0);
-	// exit(1);
 }
 
-int	cmd_not_found(char *error)
+void	cmd_not_found(char *error, char *cmd)
 {
-	write(2, error, ft_strlen(error));
-	exit(127);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
+	g.status = 127;
 }
