@@ -50,9 +50,10 @@ char	**env_sorted_export(char **env)
 
 void    print_export(char **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	**tab;
+	int		lim;
 
 	i = 0;
 	tab = env_sorted_export(env);
@@ -61,12 +62,16 @@ void    print_export(char **env)
 	while (tab[i])
 	{
 		j = 0;
+		lim = 0;
 		printf("declare -x ");
 		while (tab[i][j])
 		{
 			printf("%c", tab[i][j]);
-			if (tab[i][j] == '=')
+			if (tab[i][j] == '=' && lim == 0)
+			{
 				printf("\"");
+				lim = 1;
+			}
 			j++;
 		}
 		printf("\"\n");

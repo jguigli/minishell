@@ -39,7 +39,6 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 
  	//affiche(list->process);
 	wstatus = 0;
-	g.status = 0;
 	shell_parameter_expansion(list->process, env);
 	//file = manage_redirections(&list);
 	//affiche(list->process);
@@ -58,7 +57,5 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	//close(file);
 	//free(arg);
 	waitpid(exec.pid, &wstatus, 0);
-	//printf("wstatus --> %d \n", wstatus);
-	//printf("G.STATUS dans exec_simple_cmd = %d\n", g.status);
 	return (wstatus);
 }
