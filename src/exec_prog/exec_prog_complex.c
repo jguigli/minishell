@@ -2,7 +2,6 @@
 
 void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 {
-	// manage_redirections(&list);
 	if (exec.pid_number == 0)
 		manage_dup2(exec, 0, exec.pipe[1]);
 	else if (exec.pid_number == exec.cmd_number - 1)
@@ -19,6 +18,7 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	if (is_builtin(exec.cmd_arg[0]))
 	{
 		exec_builtin(exec.cmd_arg, envp);
+		exit(g.status);
 	}
 	else
 	{
@@ -57,6 +57,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 			child_process_complex(exec, current, env);
 		exec.pid_number++;
 		current = current->next;
+		fprintf(stderr, "WAOUUUH\n");
 	}
 	close_pipes(&exec);
 	exec.pid_number = -1;

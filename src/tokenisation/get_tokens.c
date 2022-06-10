@@ -708,6 +708,6 @@ t_dblist	*get_tokens(char *entry)
 	//printf("new line == %s \n", list->first->data);
 	if	(p_tok(list) == NULL)
 		return (NULL);
-	affiche(list);
+	//affiche(list);
 	return (list);
 }

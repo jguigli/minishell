@@ -38,5 +38,5 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 		free(str);
 		list = list->next;
 	}
-	//affiche(gr_list);
+	affiche(gr_list);
 }
