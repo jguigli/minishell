@@ -98,7 +98,7 @@ char	*hd_expansion(char *str)
 	return (rep);
 }
 
-char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
+void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 {
 	t_datas	*copy;
 	int		file;
@@ -108,11 +108,11 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	char	*tmp;
 	int	old_fd;
 
-
+	manage_signal_hd();
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
-	affiche(gr_list->process);
+	//affiche(gr_list->process);
 	if (copy->type == 35)
 	{
 		if (!count_quote(copy->data))
@@ -137,7 +137,7 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	if (file < 0)
 	{
 		error_msgs(errno, ".hd1");
-		return (-200);
+		exit(g.status);
 	}
 	while (1)
     {
@@ -145,18 +145,14 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 		buf = get_next_line(0);
         if (buf == NULL)
             break ;
-		printf("buf non expand = %s\n", buf);
 		if (copy->expansion)
-		{
 			buf = hd_expansion(buf);
-			printf("buf expand = %s\n", buf);
-		}
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
             break ;
         write(file, buf, ft_strlen(buf));
         free(buf);
 	}
 	close(file);
-	return (NULL);
+	exit(g.status);
 }
 

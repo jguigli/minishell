@@ -21,3 +21,17 @@ int manage_signal(void)
 	signal(SIGQUIT, handler);
     return (0);
 }
+
+static void		handler_hd(int sig)
+{
+	if (sig = SIGINT)
+	{
+		exit(0);
+	}
+}
+
+int	manage_signal_hd(void)
+{
+	signal(SIGINT, handler_hd);
+	return (0);
+}

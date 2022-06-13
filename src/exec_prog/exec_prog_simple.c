@@ -51,7 +51,7 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	if (exec.pid == -1)
 	{
 		printf("Fork failed : %s\n", strerror(errno));
-		exit(0);
+		exit(g.status);
 	}
 	else if (!exec.pid)
 	{
