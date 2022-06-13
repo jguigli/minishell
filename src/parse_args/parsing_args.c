@@ -522,6 +522,7 @@ void counting(t_flist **gr_list)
 
 	head = *gr_list;
 	pos = 1;
+	//affiche(head->process);
 	while(head)
 	{
 		list = head->process->first;
@@ -646,11 +647,11 @@ int	simple_block_p(t_flist **gr_list)
 	list = (*gr_list)->process->first;
 	list2 = (*gr_list)->process->first;
 	head = *gr_list;
+	//affiche(head->process);
 	i = 0;
 	j = 0;
 	node_toadd = NULL;
 	tmp = NULL;
-	// printf("there %s\n", head->process->first->data);
 	if	(head->nb_heredoc >= 1)
 	{
 		while (list && list->type != 33)
@@ -660,6 +661,7 @@ int	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
+		//printf("there %s\n", list->data);
 		while (i < head->nb_heredoc && list)
 		{
 			fi = fork();
@@ -672,18 +674,18 @@ int	simple_block_p(t_flist **gr_list)
 			}
 			if (fi == 0)
 			{
-				//printf("list data %s \n", list->data);
+				//printf("list data %s \n", list->next->data);
 				manage_one_redir(list->next, head);
 				//printf("prout\n");
-				//exit(1);
-				return (1); // a essayer
+				exit(1);
+				//return (1); // a essayer
 			}	
 			if	(waitpid(fi, &wstatus, 0) == -1)
 				perror("wait() error");
-			file = open("infile", O_RDONLY);
+			file = open(".hd1", O_RDONLY);
 			if	(file < 0)
 			{
-				error_msgs(errno, "infile");
+				error_msgs(errno, ".hd1");
 				return (-200);
 			}
 			tmp = get_next_line(file);
