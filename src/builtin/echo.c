@@ -38,8 +38,8 @@ int    ft_echo(char **arg)
 		else
 		{
 			ft_putstr_fd(arg[i++], 1);
-			if (arg[i])
-				ft_putchar_fd(' ', 1);
+			// if (arg[i])
+			// 	ft_putchar_fd(' ', 1); // j'ai commenté ca pour tester / echo ">" bonjour et ca marche
 		}
 	}
 	if (!n)

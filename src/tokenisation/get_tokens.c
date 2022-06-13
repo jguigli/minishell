@@ -702,7 +702,6 @@ t_dblist	*get_tokens(char *entry)
 						i++;
 					break ;
 				}
-				//}
 			}
 
 			if	(list->infos->get_chr_c[entry[i]] == 23)
