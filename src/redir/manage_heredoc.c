@@ -117,21 +117,21 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	{
 		if (!count_quote(copy->data))
 		{
-			printf("testttt 1 -- %s\n", copy->data);
+			//printf("testttt 1 -- %s\n", copy->data);
 			copy->expansion = 1;
 		}
 		else
 		{
-			printf("testttt 2 -- %s\n", copy->data);
+			//printf("testttt 2 -- %s\n", copy->data);
 			copy->data = hd_removedquote(copy->data);
 		}
-		printf("quand y a pas de quote = %s\n", copy->data);
+		//printf("quand y a pas de quote = %s\n", copy->data);
 	}
 	else if (copy->type == 36 || copy->type == 37)//double quoted
 	{
-		printf("testttt 2\n");
+		//printf("testttt 2\n");
 		copy->data = hd_removedquote(copy->data);
-		printf("quand y a des quote = %s\n", copy->data);
+		//printf("quand y a des quote = %s\n", copy->data);
 	}
 	file = open(".hd1", O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (file < 0)

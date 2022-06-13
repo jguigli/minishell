@@ -15,6 +15,7 @@ void	syntax_err(char *error, char *data)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(error, 2);
+	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(data, 2);
 	ft_putstr_fd("\n", 2);
 	g.status = 2;

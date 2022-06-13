@@ -152,19 +152,15 @@ int	check_dquotes_dol(t_datas *list)
 	{
 		if (list->data[i] == 34)
 			dq++;
-		if (list->data[i] == '$')
-			dol++;
 		i++;
 	}
-	if (dq % 2 == 0 && dol == 1)
-		return (-1); // double quote pair et dol
-	else if (dq % 2 == 0 && dol == 0)
-		return (-2); // double quote et pas de dol
-	else if (dq % 2 == 0 && dol > 1)
-		return (dol);
-	else if (!(dq % 2))
-		syntax_err(SYNTAX_ERR, list->data);
-	return (0);
+	//printf("dq ! %d --- data = %s\n", dq, list->data);
+	if (dq > 0 && dq % 2 == 0)
+		return (-1); // double quote pair et dol;
+	else if (dq > 0 && (dq % 2) != 0)
+		return(-50);
+	else 
+		return (0);
 }
 
 int	check_squotes_dol(t_datas *list)
@@ -180,19 +176,18 @@ int	check_squotes_dol(t_datas *list)
 	{
 		if (list->data[i] == 39)
 			sq++;
-		if (list->data[i] == '$')
-			dol++;
 		i++;
 	}
-	if (sq % 2 == 0 && dol == 1)
+	//printf("sq ! %d --- data = %s\n", sq, list->data);
+	if (sq > 0 && sq % 2 == 0)
 		return (-1); // double quote pair et dol
-	else if (sq % 2 == 0 && dol == 0)
-		return (-2); // double quote et pas de dol
-	else if (sq % 2 == 0 && dol > 1)
-		return (dol);
-	else if (!(sq % 2))
-		syntax_err(SYNTAX_ERR, list->data);
-	return (0);
+	else if (sq > 0 && (sq % 2) != 0)
+	{
+		//printf("ici\n");
+		return (-100);
+	}
+	else 
+		return (0);
 }
 
 int	check_spec_char(t_datas *token, t_dblist *list)
@@ -223,6 +218,17 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 				 }
 		i ++;
 	}
+	if	(check_squotes_dol(token) == -100)
+	{
+		syntax_err(SYNTAX_ERR, token->data);
+		return (NULL);
+	}
+	if	(check_dquotes_dol(token) == -50)
+	{
+		syntax_err(SYNTAX_ERR, token->data);
+		return (NULL);
+	}
+	
 	return (1);
 }
 
@@ -503,7 +509,7 @@ t_dblist *p_tok(t_dblist *list)
 
 	p_list = list->first;
 	p_list->length = ft_strlen(p_list->data);
-	affiche(list);
+	//affiche(list);
 	//printf("new line == %s -- %d --- %d \n", p_list->data, p_list->type, p_list->length);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28 || (p_list->type == 7 && p_list->length > 1))
@@ -518,22 +524,7 @@ t_dblist *p_tok(t_dblist *list)
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			if	(check_dquotes_dol(p_list) == -1)
-			{
-				list->first->dq = 1;
-				list->first->dol = 1;
-			}
-			else if (check_dquotes_dol(p_list) == -2)
-			{
-				list->first->dq = 1;
-				list->first->dol = 0;
-			}
-			else if (check_dquotes_dol(p_list) > 1)
-			{
-				list->first->dq = 1;
-				list->first->dol = check_dquotes_dol(p_list);
-			}
-			else
+			if	(check_dquotes_dol(p_list) == -50)
 			{
 				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
@@ -541,22 +532,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 		else if	(p_list->type == 12)
 		{
-			if	(check_squotes_dol(p_list) == -1)
-			{
-				list->first->dq = 1;
-				list->first->dol = 1;
-			}
-			else if (check_squotes_dol(p_list) == -2)
-			{
-				list->first->dq = 1;
-				list->first->dol = 0;
-			}
-			else if (check_squotes_dol(p_list) > 1)
-			{
-				list->first->dq = 1;
-				list->first->dol = check_squotes_dol(p_list);
-			}
-			else
+			if	(check_squotes_dol(p_list) == -100)
 			{
 				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
@@ -634,77 +610,71 @@ t_dblist	*get_tokens(char *entry)
 	int pos;
 	char *str;
 
-	//printf("test1");
 	i = 0;
 	pos = 0;
 	j = 0;
 	is_quoted = 1;
 	list = init_linked_list();
 	str = NULL;
-//	printf("test");
-	//printf("caracte == %c", entry[i]);
 	if (entry[0] == '\0')
 			return (NULL);
-	//printf("new line == %c \n", entry[0]);
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
 			if (entry[i] == '\"')
-			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
-//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-//				{
 				is_quoted = 1;
 				i++;
 				while(is_quoted == 1)
 				{
-					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 23)
+					if (entry[i] == '\"')
 					{
 						is_quoted = 0;
-						i++;
+						if (list->infos->get_chr_c[entry[i + 1]] != 24)
+							i++;
 						break ;
 					}
 					i++;
 				}
-				printf("entry i --> %c\n", entry[i]);
 				if	(list->infos->get_chr_c[entry[i]] != CHR_SP)
 				{
 					while (entry[i] && list->infos->get_chr_c[entry[i]] != CHR_SP)
 						i++;
 					break ;
 				}
-				//}
 			}
 			if (entry[i] == '\'')
-			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
 			{
-//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-//				{
 				is_quoted = 1;
-				i++;
+				if (list->infos->get_chr_c[entry[i + 1]] != 24)
+					i++;
+				else
+				{
+					is_quoted = 0;
+					i++;
+					break ;
+				}
 				while(is_quoted == 1)
 				{
-					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 23)
+					if (entry[i] == '\'')
 					{
 						is_quoted = 0;
-						i++;
+						if (list->infos->get_chr_c[entry[i]] != 24)
+							i++;
 						break ;
 					}
 					i++;
 				}
-				printf("entry i --> %c\n", entry[i]);
-				if	(list->infos->get_chr_c[entry[i]] != CHR_SP)
+				if	(list->infos->get_chr_c[entry[i]] != CHR_SP )
 				{
 					while (entry[i] && list->infos->get_chr_c[entry[i]] != CHR_SP)
 						i++;
 					break ;
 				}
 			}
-
-			if	(list->infos->get_chr_c[entry[i]] == 23)
+			if	(list->infos->get_chr_c[entry[i]] == 24)
 				break ;
 			i++;
 		}
@@ -716,15 +686,15 @@ t_dblist	*get_tokens(char *entry)
 		}
 		if (entry[i] == '\0')
 			break ;
-		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 22 && token_type != 6 && token_type != 7)
+		if (is_quoted == 1 && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
 			i++;
 		else 
 			is_quoted = 1;
 		j = i;
 	}
 	//printf("new line == %s \n", list->first->data);
+	//affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
-	//affiche(list);
 	return (list);
 }
