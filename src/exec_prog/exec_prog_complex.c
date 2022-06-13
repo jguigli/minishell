@@ -57,11 +57,15 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 		}
 		else if (!exec.pid[exec.pid_number])
 		{
+			if (g.my_fds[0] != -1000)
+				close(g.my_fds[0]);
+			if (g.my_fds[1] != -1000)
+				close(g.my_fds[1]);
 			child_process_complex(exec, current, env);
 		}
 		exec.pid_number++;
 		current = current->next;
-		fprintf(stderr, "WAOUUUH\n");
+		//fprintf(stderr, "WAOUUUH\n");
 	}
 	close_pipes(&exec);
 	exec.pid_number = -1;

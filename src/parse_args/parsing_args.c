@@ -901,11 +901,6 @@ t_flist	*parse_args(char	*entry, char **env)
 		{
 			if	(multiple_block_p(&gr_list, tota_heredoc) == -200)
 				return (NULL);
-			// while (gr_list)
-			// {
-			// 	//affiche(gr_list->process);
-			// 	gr_list = gr_list->next;
-			// }
 		}
 	}
 	return (gr_list);
