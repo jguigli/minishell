@@ -503,6 +503,7 @@ t_dblist *p_tok(t_dblist *list)
 
 	p_list = list->first;
 	p_list->length = ft_strlen(p_list->data);
+	affiche(list);
 	//printf("new line == %s -- %d --- %d \n", p_list->data, p_list->type, p_list->length);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28 || (p_list->type == 7 && p_list->length > 1))
@@ -651,41 +652,59 @@ t_dblist	*get_tokens(char *entry)
 		//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
-// 			if (entry[i] == '\"')
-// 			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-// 			{
-// //				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-// //				{
-// 				is_quoted = 1;
-// 				i++;
-// 				while(is_quoted == 1)
-// 				{
-// 					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 22)
-// 					{
-// 						is_quoted = 0;
-// 						break ;
-// 					}
-// 					i++;
-// 				}
-// 				//}
-// 			}
-// 			if (entry[i] == '\'')
-// 			{
-// //				if (entry[i - 1] &&  list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-// //				{
-// 				is_quoted = 1;
-// 				i++;
-// 				while(is_quoted == 1)
-// 				{
-// 					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 22)
-// 					{
-// 						is_quoted = 0;
-// 						break ;
-// 					}
-// 					i++;
-// 				}
-// //				}
-// 			}
+			if (entry[i] == '\"')
+			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+			{
+//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
+				is_quoted = 1;
+				i++;
+				while(is_quoted == 1)
+				{
+					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 23)
+					{
+						is_quoted = 0;
+						i++;
+						break ;
+					}
+					i++;
+				}
+				printf("entry i --> %c\n", entry[i]);
+				if	(list->infos->get_chr_c[entry[i]] != CHR_SP)
+				{
+					while (entry[i] && list->infos->get_chr_c[entry[i]] != CHR_SP)
+						i++;
+					break ;
+				}
+				//}
+			}
+			if (entry[i] == '\'')
+			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+			{
+//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+//				{
+				is_quoted = 1;
+				i++;
+				while(is_quoted == 1)
+				{
+					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 23)
+					{
+						is_quoted = 0;
+						i++;
+						break ;
+					}
+					i++;
+				}
+				printf("entry i --> %c\n", entry[i]);
+				if	(list->infos->get_chr_c[entry[i]] != CHR_SP)
+				{
+					while (entry[i] && list->infos->get_chr_c[entry[i]] != CHR_SP)
+						i++;
+					break ;
+				}
+				//}
+			}
+
 			if	(list->infos->get_chr_c[entry[i]] == 23)
 				break ;
 			i++;
