@@ -2,37 +2,31 @@
 
 int	output_r(t_datas *output_r)
 {
-	int file;
-	int	old_fd;
-
 	if	(output_r->type == 6)
-		file = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+		g.my_fds[0] = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
 	if	(output_r->type == 38)
-		file = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
-	if	(file < 0)
+		g.my_fds[0] = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
+	if	(g.my_fds[0] < 0)
 	{
 		error_msgs(errno, output_r->next->data);
 		return (-5);
 	}
-	old_fd = 0;
-	old_fd = dup(1);
-	if (dup2(file, 1) == -1)
+	g.my_oldfds[0] = dup(1);
+	if (dup2(g.my_fds[0], 1) == -1)
 	{
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
 	}
-	return (old_fd);
+	return (g.my_oldfds[0]);
 }
 
 int	input_r(t_datas *input_r)
 {
-	int file;
-	int	old_fd;
 
 	if (input_r->type == 7)
 	{
-		file = open(input_r->next->data, O_RDONLY, 000644);
-		if	(file < 0)
+		g.my_fds[1] = open(input_r->next->data, O_RDONLY, 000644);
+		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			return (-5);
@@ -43,28 +37,28 @@ int	input_r(t_datas *input_r)
 		if (input_r->next->next && input_r->next->next->type == 39)
 			input_r = input_r->next->next;
 		//printf("data == %s --- heredoooooc %d\n", input_r->data, input_r->type);
-		file = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000666);
-		if	(file < 0)
+		g.my_fds[1] = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000666);
+		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			return (-5);
 		}
-		write(file, input_r->data, ft_strlen(input_r->data));
-		close(file);
-		file = open(".hd2", O_RDONLY);
-		if	(file < 0)
+		write(g.my_fds[1], input_r->data, ft_strlen(input_r->data));
+		close(g.my_fds[1]);
+		g.my_fds[1] = open(".hd2", O_RDONLY);
+		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			return (-5);
 		}
 	}
-	old_fd = dup(0);
-	if	(dup2(file, STDIN_FILENO) == -1)
+	g.my_oldfds[1] = dup(0);
+	if	(dup2(g.my_fds[1], STDIN_FILENO) == -1)
 	{
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
 	}
-	return (file);
+	return (g.my_fds[1]);
 }
 
 void	delete_node(t_flist **li)

@@ -27,12 +27,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 		if (!exec.cmd)
 		{
 			freeing_cmd_c(exec);
-			return ;
+			exit(g.status);
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
 			freeing_execution_c(exec, errno);
-			return ;
+			exit(g.status);
 		}
 	}
 }

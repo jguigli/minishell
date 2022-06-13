@@ -39,7 +39,7 @@
 extern t_glob g;
 
 //Main functions
-void			get_prompt(char **env);
+void			get_prompt(void);
 char			**get_copy(char **d_tab);
 t_flist			*parse_args(char	*str, char **env);
 void			*get_ll(char **args);

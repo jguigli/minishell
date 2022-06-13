@@ -10,6 +10,7 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 	if (is_builtin(exec.cmd_arg[0]))
 	{
 		exec_builtin(exec.cmd_arg, envp);
+		exit(g.status);
 	}
 	else
 	{
@@ -19,13 +20,13 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 			// printf("strerror %s\n", strerror(errno));
 			// perror("minishell: cmd");
 			freeing_cmd(exec);
-			return ;
+			exit(g.status);
 		}
 		//printf("exec cmd = %s\n", exec.cmd);
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
 			freeing_execution(exec, errno);
-			return ;
+			exit(g.status);
 		}
 	}
 }
@@ -53,7 +54,13 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 		exit(0);
 	}
 	else if (!exec.pid)
+	{
+		if (g.my_fds[0] != -1000)
+			close(g.my_fds[0]);
+		if (g.my_fds[1] != -1000)
+			close(g.my_fds[1]);
 		child_process_simple(exec, list, env);
+	}
 	//close(file);
 	//free(arg);
 	waitpid(exec.pid, &wstatus, 0);

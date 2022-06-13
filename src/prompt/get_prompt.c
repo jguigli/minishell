@@ -40,7 +40,7 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	return (prompt);
 }
 
-void	get_prompt(char **env)
+void	get_prompt(void)
 {
 	char	*entry;
 	int		int_mode;

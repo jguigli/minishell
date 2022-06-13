@@ -95,6 +95,8 @@ typedef struct s_glob
 {
 	int		status;
 	char	**env;
+	int		my_fds[2];
+	int		my_oldfds[2];
 }	t_glob;
 
 
