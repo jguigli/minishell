@@ -60,12 +60,13 @@ void	get_prompt(void)
 		if (int_mode == 1)
 		{
 			entry = readline(my_prompt);
-			if (entry == NULL)
+			if (entry == NULL )
 			{
 				write(1, "exit", 5);
 				exit(g.status);
 			}
 			add_history(entry);
+			//printf("entryyyyyy %s\n", entry);
 			gr_list = parse_args(entry, g.env);
 			if	(!gr_list)
 				get_p = 0;
@@ -74,8 +75,6 @@ void	get_prompt(void)
 				//affiche(gr_list->process);
 				exec_launcher(&gr_list, g.env);
 			}
-			else
-				g.status = 0;
 		}
 	}
 }

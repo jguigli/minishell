@@ -631,6 +631,7 @@ t_dblist	*get_tokens(char *entry)
 	t_dblist	*list;
 	t_dblist	*gr_list;
 	int pos;
+	char *str;
 
 	//printf("test1");
 	i = 0;
@@ -638,13 +639,11 @@ t_dblist	*get_tokens(char *entry)
 	j = 0;
 	is_quoted = 1;
 	list = init_linked_list();
-	char *str;
-
 	str = NULL;
 //	printf("test");
+	//printf("caracte == %c", entry[i]);
 	if (entry[0] == '\0')
 			return (NULL);
-	//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
 	//printf("new line == %c \n", entry[0]);
 	while (entry[i])
 	{
@@ -652,42 +651,42 @@ t_dblist	*get_tokens(char *entry)
 		//printf("caracte == %c ---- token typ e== %d", entry[i], token_type);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && is_quoted == 1)
 		{
-			if (entry[i] == '\"')
-			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-			{
-//				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-//				{
-				is_quoted = 1;
-				i++;
-				while(is_quoted == 1)
-				{
-					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 22)
-					{
-						is_quoted = 0;
-						break ;
-					}
-					i++;
-				}
-				//}
-			}
-			if (entry[i] == '\'')
-			{
-//				if (entry[i - 1] &&  list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
-//				{
-				is_quoted = 1;
-				i++;
-				while(is_quoted == 1)
-				{
-					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 22)
-					{
-						is_quoted = 0;
-						break ;
-					}
-					i++;
-				}
-//				}
-			}
-			if	(list->infos->get_chr_c[entry[i]] == 22)
+// 			if (entry[i] == '\"')
+// 			//&& list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+// 			{
+// //				if (entry[i - 1] && list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+// //				{
+// 				is_quoted = 1;
+// 				i++;
+// 				while(is_quoted == 1)
+// 				{
+// 					if (entry[i] == '\"' || list->infos->get_chr_c[entry[i]] == 22)
+// 					{
+// 						is_quoted = 0;
+// 						break ;
+// 					}
+// 					i++;
+// 				}
+// 				//}
+// 			}
+// 			if (entry[i] == '\'')
+// 			{
+// //				if (entry[i - 1] &&  list->infos->get_tok_type[list->infos->get_chr_c[entry[i - 1]]] == 1)
+// //				{
+// 				is_quoted = 1;
+// 				i++;
+// 				while(is_quoted == 1)
+// 				{
+// 					if (entry[i] == '\'' || list->infos->get_chr_c[entry[i]] == 22)
+// 					{
+// 						is_quoted = 0;
+// 						break ;
+// 					}
+// 					i++;
+// 				}
+// //				}
+// 			}
+			if	(list->infos->get_chr_c[entry[i]] == 23)
 				break ;
 			i++;
 		}

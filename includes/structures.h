@@ -39,7 +39,7 @@ typedef enum		e_toktype {
 	TOKEN_DASH, //31
 	TOKEN_UNDS, //32
 	TOKEN_HEREDOC, //33
-	TOKEN_HEREDOC_DASH, //34
+	TOKEN_HEREDOC_DASH, //34=
 	SIMPLE_DELIM, //35
 	DQUOTED_DELIM,//36
 	SQUOTED_DELIM,//37
@@ -47,7 +47,8 @@ typedef enum		e_toktype {
 	TOKEN_HEREDOC_STRING,//39
 	TOKEN_NL,//40
 	TOKEN_QUERY,//41
-	TOKEN_AROB,//42	
+	TOKEN_AROB,//42
+	TOKEN_DIEZ,//43
 	TOKEN_MAX
 }					t_toktype;
 
@@ -123,6 +124,7 @@ typedef	struct s_datas
 	int				sq;
 	int				sp_char;
 	int				length;
+	int				expansion;
 	struct s_datas 	*next;
 	struct s_datas 	*previous;
 } t_datas;

@@ -1,20 +1,102 @@
 #include "../../includes/minishell.h"
 #include "../../libft/libft.h"
 
-// static int	count_quote(char *argv)
-// {
-// 	int	i;
-// 	int	count;
+int	count_quote(char *argv)
+{
+	int	i;
+	int	count;
 
-// 	i = 0;
-// 	count = 0;
-// 	while (argv[++i])
-// 	{
-// 		if (argv[i] == 39)
-// 			count++;
-// 	}
-// 	return (count);
-// }
+	i = 0;
+	count = 0;
+	while (argv[i])
+	{
+		if (argv[i] == 39 || argv[i] == 34)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+char	*hd_removedquote(char *str)
+{
+	int	i;
+	int	j;
+	char	*temp;
+	char	*rep;
+
+	i = 0;
+	j = 0; 
+	rep = ft_strdup("");
+	while(str[i])
+	{
+		j = i;
+		while (str[i] != 34 && str[i] != 39 && str[i])
+			i++;
+		if (i != j)
+		{
+			temp = ft_substr(str, j, i - j);
+			rep = ft_strjoin(rep, temp);
+		}
+		if (str[i] == '\"')
+		{
+			i++;
+			j = i;
+			while (str[i] != '\"' && str[i])
+				i++;
+			temp = ft_substr(str, j, i - j);
+			rep = ft_strjoin(rep, temp);
+			free(temp);
+		}
+		else if (str[i] == '\'')
+		{
+			i++;
+			j = i;
+			while (str[i] != '\'' && str[i])
+				i++;
+			temp = ft_substr(str, j, i - j);
+			rep = ft_strjoin(rep, temp);
+			free(temp);
+		}
+	}
+	free (str);
+	return (rep);
+}
+
+char	*hd_expansion(char *str)
+{
+	int	i;
+	int j;
+	char	*temp;
+	char	*rep;
+
+	i = 0;
+	j = 0;
+	rep = ft_strdup("");
+	while (str[i])
+	{
+		j = i;
+		while (str[i] != '$' && str[i])
+			i++;
+		if (i != j)
+		{
+			temp = ft_substr(str, j, i - j);
+			rep = ft_strjoin(rep, temp);
+		}
+		if (str[i] == '$')
+		{
+			i++;
+			j = i;
+			while (ft_isalnum(str[i]) && str[i])
+				i++;
+			temp = ft_substr(str, j, i - j);
+			temp = search_in_env_var(temp, g.env);
+			printf("TEMP = %s\n", temp);
+			if (temp)
+				rep = ft_strjoin(rep, temp);
+		}
+	}
+	return (rep);
+}
 
 char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 {
@@ -30,18 +112,27 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
-	// if (copy->type == 36)
-	// {
-
-	// }
-	// else if (copy->type == 37)
-	// {
-
-	// }
-	// else if (copy->type == 38)
-	// {
-
-	// }
+	affiche(gr_list->process);
+	if (copy->type == 35)
+	{
+		if (!count_quote(copy->data))
+		{
+			printf("testttt 1 -- %s\n", copy->data);
+			copy->expansion = 1;
+		}
+		else
+		{
+			printf("testttt 2 -- %s\n", copy->data);
+			copy->data = hd_removedquote(copy->data);
+		}
+		printf("quand y a pas de quote = %s\n", copy->data);
+	}
+	else if (copy->type == 36 || copy->type == 37)//double quoted
+	{
+		printf("testttt 2\n");
+		copy->data = hd_removedquote(copy->data);
+		printf("quand y a des quote = %s\n", copy->data);
+	}
 	file = open(".hd1", O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (file < 0)
 	{
@@ -54,10 +145,12 @@ char	*manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 		buf = get_next_line(0);
         if (buf == NULL)
             break ;
-		// if (copy->type == 36)
-		// {
-		// 	//expand
-		// }
+		printf("buf non expand = %s\n", buf);
+		if (copy->expansion)
+		{
+			buf = hd_expansion(buf);
+			printf("buf expand = %s\n", buf);
+		}
         if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
             break ;
         write(file, buf, ft_strlen(buf));
