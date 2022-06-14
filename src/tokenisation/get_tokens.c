@@ -654,11 +654,11 @@ t_dblist	*get_tokens(char *entry)
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
-		//printf("token type == %d  -- entry[i] == %c --- chr = %d\n", token_type, entry[i], list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]]);
 		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && (is_dquoted == 1 && is_squoted == 1))
 		{
 			if (entry[i] == '\"')
 			{
+				printf("1 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 				is_dquoted = 1;
 				i++;
 				token_type_cpy = token_type;
@@ -668,10 +668,12 @@ t_dblist	*get_tokens(char *entry)
 					{
 						//printf("caracteeeere == %c -- %d\n", entry[i], token_type);
 						is_dquoted = 0;
+						printf("2 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 						break ;
 					}
 					i++;
-				}				
+				}
+				printf("3 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 			}
 			if (entry[i] == '\'')
 			{
@@ -682,18 +684,19 @@ t_dblist	*get_tokens(char *entry)
 				{
 					if (entry[i] == '\'')
 					{
-						//printf("caracteeeere == %c -- %d\n", entry[i], token_type);
 						is_squoted = 0;
 						break ;
 					}
 					i++;
 				}				
 			}
+			///////  ******************* ca marche avec ci-dessous
 			if (list->infos->get_chr_c[entry[i + 1]] != 1 && list->infos->get_chr_c[entry[i + 1]] != 24)
 			{
 				is_dquoted = 1;
 				is_squoted = 1;
 				i++;
+				// printf("4 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 			}
 			else
 			{
@@ -707,8 +710,13 @@ t_dblist	*get_tokens(char *entry)
 					is_squoted = 1;
 					is_dquoted = 1;
 					i++;
+					printf("5 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 				}
 			}
+			//**********************************************************************
+			// if ((list->infos->get_chr_c[entry[i + 1]] == 1 && (list->infos->get_chr_c[entry[i + 2]] == 2 
+			// 	|| list->infos->get_chr_c[entry[i + 2]] == 14 || list->infos->get_chr_c[entry[i + 2]] == 13)) || (list->infos->get_chr_c[entry[i + 1]] == 2 
+			// 	|| list->infos->get_chr_c[entry[i + 1]] == 14 || list->infos->get_chr_c[entry[i + 1]] == 13) || list->infos->get_chr_c[entry[i + 1]] == 24)
 		}
 		if (token_type != 1)
 		{	
