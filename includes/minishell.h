@@ -71,6 +71,7 @@ void			error_msgs(int error, char *data);
 void			freeing_execution(t_exec_s	exec, int error);
 void			freeing_execution_c(t_exec_c	exec, int error);
 void			freeing_cmd_c(t_exec_c	exec);
+int				manage_signal_hd();
 
 
 

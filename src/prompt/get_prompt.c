@@ -72,6 +72,7 @@ void	get_prompt(void)
 				get_p = 0;
 			if	(get_p == 1)
 			{
+				//printf("dataaaaa -- >%s, siiizeeuh = %zu\n", gr_list->process->first->next->data, ft_strlen(gr_list->process->first->next->data));
 				//affiche(gr_list->process);
 				exec_launcher(&gr_list, g.env);
 			}

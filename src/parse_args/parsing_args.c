@@ -923,5 +923,6 @@ t_flist	*parse_args(char	*entry, char **env)
 				return (NULL);
 		}
 	}
+	//printf("dataaaaa -- >%s, siiizeeuh = %zu\n", gr_list->process->first->next->data, ft_strlen(gr_list->process->first->next->data));
 	return (gr_list);
 }
