@@ -613,7 +613,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 	}
 	token_tag(list);
-	affiche(list);
+	//affiche(list);
 	return (list);
 }
 
@@ -707,15 +707,15 @@ t_dblist	*get_tokens(char *entry)
 			pos++;
 			create_token_list(list, str, pos, token_type);
 		}
-		// if (is_dquoted == 1 && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
+		// if (is_dquoted == 1 && )
 		// 	i++;
 		// else 
 		// 	is_dquoted = 1;
-		if (entry[i + 1] != '\0')
+		if (entry[i + 1] != '\0' && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
 			i++;
 		j = i;
 	}
-	//affiche(list);
+	affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
