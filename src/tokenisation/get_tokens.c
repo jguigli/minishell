@@ -228,16 +228,22 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 							syntax_err(SYNTAX_ERR, token->data);
 							return (NULL);
 						}
-	
 					 }
-					 
-					 
 					syntax_err(SYNTAX_ERR, token->data);
 					return(0);
 				 }
 		i ++;
 	}
-
+	if	(check_squotes_dol(token) == -100)
+	{
+		syntax_err(SYNTAX_ERR, token->data);
+		return (NULL);
+	}
+	if	(check_dquotes_dol(token) == -50)
+	{
+		syntax_err(SYNTAX_ERR, token->data);
+		return (NULL);
+	}
 	return (1);
 }
 
@@ -702,7 +708,7 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 	}
 	//printf("new line == %s \n", list->first->data);
-	affiche(list);
+	//affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
