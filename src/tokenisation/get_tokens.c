@@ -640,7 +640,7 @@ t_dblist	*get_tokens(char *entry)
 	is_squoted = 1;
 	list = init_linked_list();
 	str = NULL;
-	if (entry[0] == '\0')
+	if (entry[0] == '\0' || list->infos->get_chr_c[entry[i]] == CHR_SP)
 			return (NULL);
 	while (entry[i])
 	{
