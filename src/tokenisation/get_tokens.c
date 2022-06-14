@@ -213,22 +213,31 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 														 	&& list->infos->get_chr_c[token->data[i]] != CHR_AROB
 					 )
 				 {
+					 if (token->data[i] == '\'')
+					 {
+						if	(check_squotes_dol(token) == -100)
+						{
+							syntax_err(SYNTAX_ERR, token->data);
+							return (NULL);
+						}
+					 }
+					 else if (token->data[i] == '\"')
+					 {
+						if	(check_dquotes_dol(token) == -50)
+						{
+							syntax_err(SYNTAX_ERR, token->data);
+							return (NULL);
+						}
+	
+					 }
+					 
+					 
 					syntax_err(SYNTAX_ERR, token->data);
 					return(0);
 				 }
 		i ++;
 	}
-	if	(check_squotes_dol(token) == -100)
-	{
-		syntax_err(SYNTAX_ERR, token->data);
-		return (NULL);
-	}
-	if	(check_dquotes_dol(token) == -50)
-	{
-		syntax_err(SYNTAX_ERR, token->data);
-		return (NULL);
-	}
-	
+
 	return (1);
 }
 
@@ -667,7 +676,7 @@ t_dblist	*get_tokens(char *entry)
 					}
 					i++;
 				}
-				if	(list->infos->get_chr_c[entry[i]] != CHR_SP )
+				if	(list->infos->get_chr_c[entry[i]] != CHR_SP)
 				{
 					while (entry[i] && list->infos->get_chr_c[entry[i]] != CHR_SP)
 						i++;
@@ -693,7 +702,7 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 	}
 	//printf("new line == %s \n", list->first->data);
-	//affiche(list);
+	affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
