@@ -5,7 +5,7 @@ int		n_option(char *arg)
 	int	i;
 
 	i = 2;
-	if (arg[0] != '-' && arg[1] != 'n')
+	if (arg[0] != '-' || arg[1] != 'n')
 		return (0);
 	while (arg[i])
 	{
@@ -20,9 +20,11 @@ int    ft_echo(char **arg)
 {
 	int	i;
 	int	n;
+	int delim;
 
 	i = 1;
 	n = 0;
+	delim = 0;
 	if (!arg[1])
 	{
 		ft_putchar_fd('\n', 1);
@@ -30,16 +32,17 @@ int    ft_echo(char **arg)
 	}
 	while (arg[i])
 	{
-		if (n_option(arg[i]))
+		if (n_option(arg[i]) && !delim)
 		{
 			i++;
 			n++;
 		}
 		else
 		{
+			delim = 1;
 			ft_putstr_fd(arg[i++], 1);
-			// if (arg[i])
-			// 	ft_putchar_fd(' ', 1); // j'ai commenté ca pour tester / echo ">" bonjour et ca marche
+			if (arg[i])
+				ft_putchar_fd(' ', 1); // j'ai commenté ca pour tester / echo ">" bonjour et ca marche
 		}
 	}
 	if (!n)
