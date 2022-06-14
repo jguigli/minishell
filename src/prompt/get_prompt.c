@@ -72,7 +72,7 @@ void	get_prompt(void)
 				get_p = 0;
 			if	(get_p == 1)
 			{
-				//affiche(gr_list->process);
+				affiche(gr_list->process);
 				exec_launcher(&gr_list, g.env);
 			}
 		}

@@ -695,8 +695,9 @@ t_dblist	*get_tokens(char *entry)
 		}
 		if (token_type != 1)
 		{	
-			str = ft_substr(entry, j, (i - j));
+			str = ft_substr(entry, j, (i - j) + 1);
 			pos++;
+			printf("strrrr == %s\n", str);
 			create_token_list(list, str, pos, token_type);
 		}
 		if (entry[i] == '\0')

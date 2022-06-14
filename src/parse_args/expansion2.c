@@ -35,22 +35,6 @@ char	*case_$_noquote(char *data, char **env, int *i, char *str) // RAJOUTER FREE
 	return (str);
 }
 
-char	*case_$bracket_noquote(char *data, char **env, int *i, char *str)
-{
-	char	*temp;
-	int		j;
-
-    (*i) += 2;
-    j = *i;
-    while (data[*i] != '}' && data[*i])
-        (*i)++;
-    temp = ft_substr(data, j, *i - j);
-    temp = search_in_env_var(temp, env);
-    if (temp)
-        str = ft_strjoin(str, temp);
-	return (str);
-}
-
 char	*case_single_quote(char *data, int *i, char *str)
 {
 	char	*temp;

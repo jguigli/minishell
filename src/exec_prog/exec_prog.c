@@ -76,6 +76,5 @@ int	exec_launcher(t_flist **li, char **env)
 		if (exec_simple_cmd(list, env) == 10)
 			exit(g.status);
 	}
-
 	return (1);
 }
