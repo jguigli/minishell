@@ -19,6 +19,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['\"'] = CHR_DQUOTE;
 	tok_info->get_chr_c['\''] = CHR_SQUOTE;
 	tok_info->get_chr_c['&'] = CHR_ESP;
+	tok_info->get_chr_c['~'] = CHR_TILDE;
 	tok_info->get_chr_c['('] = CHR_RPAREN;
 	tok_info->get_chr_c[')'] = CHR_LPAREN;
 	tok_info->get_chr_c['*'] = CHR_WILDC;
@@ -137,6 +138,7 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_NL] = TOKEN_NL;
 	tok_info->get_tok_type[CHR_QUERY] = TOKEN_QUERY;
 	tok_info->get_tok_type[CHR_AROB] = TOKEN_AROB;
+	tok_info->get_tok_type[CHR_TILDE] = TOKEN_TILDE;
 }
 
 void	init_rules(t_glob_infos *tok_info)
@@ -488,6 +490,23 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DIEZ][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_DIEZ][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_DIEZ][CHR_BS] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_TILDE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_DIGIT] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_WORD] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_DQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_BQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_LPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_RPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_LBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_DOL] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_PIPE] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_SLASH] = 1;	
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_ESP] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_BS] = 1;
+
 }
 
 t_glob_infos	*initst_infos()

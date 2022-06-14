@@ -92,7 +92,7 @@ void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
 	t_datas *element;
 	t_datas *current;
 	char types[1024][1024] = {"TOKEN_ERROR","TOKEN_SP","TOKEN_BANG","TOKEN_AND","TOKEN_SEMI","TOKEN_WORD","TOKEN_RRED","TOKEN_LRED","TOKEN_ESCAPE","TOKEN_DIGIT","TOKEN_DOL","TOKEN_PIPE","TOKEN_SQUOTE","TOKEN_DQUOTE","TOKEN_BQUOTE","TOKEN_LPAREN","TOKEN_RPAREN","TOKEN_HYPHEN","TOKEN_LBRACE","TOKEN_RBRACE","TOKEN_WILDC","TOKEN_FILE", "TOKEN_EQ", "TOKEN_EOF", "TOKEN_CMD", "TOKEN_OPT", "TOKEN_BS","TOKEN_SLASH",
-	"TOKEN_DOT", "TOKEN_COMA", "TOKEN_ESP", "TOKEN_DASH", "TOKEN_HEREDOC", "TOKEN_HEREDOC_DASH", "SIMPLE_DELIM", "DQUOTED_DELIM", "SQUOTED_DELIM","TOKEN_RRED_APPEND","TOKEN_HEREDOC_STRING", "TOKEN_NL", "TOKEN_QUERY","TOKEN_AROB","TOKEN_MAX"};
+	"TOKEN_DOT", "TOKEN_COMA", "TOKEN_ESP", "TOKEN_DASH", "TOKEN_HEREDOC", "TOKEN_HEREDOC_DASH", "SIMPLE_DELIM", "DQUOTED_DELIM", "SQUOTED_DELIM","TOKEN_RRED_APPEND","TOKEN_HEREDOC_STRING", "TOKEN_NL", "TOKEN_QUERY","TOKEN_AROB","TOKEN_TILDE","TOKEN_MAX"};
 	/* POur les niveaux :
 		- Niveau 4 = pipes, &, $
 		- Niveau 3 = redirection ; > >> <
@@ -210,6 +210,7 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 									&& list->infos->get_chr_c[token->data[i]] != CHR_LRED
 										&& list->infos->get_chr_c[token->data[i]] != CHR_EQ
 											&& list->infos->get_chr_c[token->data[i]] != CHR_AROB
+												&& list->infos->get_chr_c[token->data[i]] != CHR_TILDE
 					 )
 				{
 					if (token->data[i] == '\'')
@@ -526,7 +527,7 @@ t_dblist *p_tok(t_dblist *list)
 	//affiche(list);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28
-	 	&& p_list->type != 1 || (p_list->type == 7 && p_list->length > 1))
+	 	&& p_list->type != 1 && p_list->type != 44 || (p_list->type == 7 && p_list->length > 1))
 	{
 		if	(check_if_pathname(p_list) == 0)
 			return (NULL);
@@ -564,9 +565,9 @@ t_dblist *p_tok(t_dblist *list)
 		else if (p_list->type == 11)
 		{
 			if	(p_list->length >= 1 && (p_list->next->type != 5 && p_list->next->type != 6 
-				&& p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33))
+				&& p_list->next->type != 7 && p_list->next->type != 10 && p_list->next->type != 27 && p_list->next->type != 33 && p_list->next->type != 44))
 			{
-				syntax_err(SYNTAX_ERR, p_list->data);
+				syntax_err(SYNTAX_ERR, p_list->next->data);
 				return (NULL);
 			}
 		}
@@ -589,6 +590,14 @@ t_dblist *p_tok(t_dblist *list)
 		else if	(p_list->type == 31)
 		{
 			if (list->first->length == 1)
+			{
+				syntax_err(SYNTAX_ERR, p_list->data);
+				return (NULL);
+			}
+		}
+		else if	(p_list->type == 44)
+		{
+			if (p_list->data[1] != '/')
 			{
 				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
