@@ -708,7 +708,7 @@ t_dblist	*get_tokens(char *entry)
 		j = i;
 	}
 	//printf("new line == %s \n", list->first->data);
-	//affiche(list);
+	affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
