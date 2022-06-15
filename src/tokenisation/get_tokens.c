@@ -658,7 +658,6 @@ t_dblist	*get_tokens(char *entry)
 		{
 			if (entry[i] == '\"')
 			{
-				printf("1 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 				is_dquoted = 1;
 				i++;
 				token_type_cpy = token_type;
@@ -666,14 +665,11 @@ t_dblist	*get_tokens(char *entry)
 				{
 					if (entry[i] == '\"')
 					{
-						//printf("caracteeeere == %c -- %d\n", entry[i], token_type);
 						is_dquoted = 0;
-						printf("2 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 						break ;
 					}
 					i++;
 				}
-				printf("3 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 			}
 			if (entry[i] == '\'')
 			{
@@ -690,21 +686,33 @@ t_dblist	*get_tokens(char *entry)
 					i++;
 				}				
 			}
-			///////  ******************* ca marche avec ci-dessous
 			if (list->infos->get_chr_c[entry[i + 1]] != 1 && list->infos->get_chr_c[entry[i + 1]] != 24)
 			{
 				is_dquoted = 1;
 				is_squoted = 1;
 				i++;
-				// printf("4 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 			}
-			else
+			else 
 			{
 				if (list->infos->get_chr_c[entry[i + 1]] == 24)
 				{
 					i++;
 					break ;
 				}
+				// else if (list->infos->get_chr_c[entry[i + 1]] == 1 && (list->infos->get_chr_c[entry[i + 2]] == 11 
+				// 	|| list->infos->get_chr_c[entry[i + 2]] == 6 && list->infos->get_chr_c[entry[i + 2]] == 7))
+				// {
+				// 	i++;
+				// 	token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+				// 	printf("tokeeen type%d\n", token_type);
+				// }
+				// else if (list->infos->get_chr_c[entry[i + 1]] == 11 || list->infos->get_chr_c[entry[i + 1]] == 6 
+				// 	|| list->infos->get_chr_c[entry[i + 1]] == 7)
+				// {
+				// 	i++;
+				// 	token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+				// 	printf("tokeeen type 2222 %d\n", token_type);
+				// }
 				else
 				{
 					is_squoted = 1;
@@ -722,14 +730,18 @@ t_dblist	*get_tokens(char *entry)
 		{	
 			str = ft_substr(entry, j, (i - j));
 			pos++;
+			printf("strrrr == %s\n", str);
 			create_token_list(list, str, pos, token_type);
 		}
 		// if (is_dquoted == 1 && )
 		// 	i++;
 		// else 
 		// 	is_dquoted = 1;
-		if (entry[i + 1] != '\0' && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
+		if (entry[i] != '\0' && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
+		{
+			printf("str[i] == %d\n", entry[i]);
 			i++;
+		}
 		j = i;
 	}
 	affiche(list);
