@@ -40,6 +40,8 @@ CC = cc
 FLAG = -Wall -Werror -Wextra #-g3 -fsanitize=address 
 
 HEADER = ./includes/minishell.h
+INC = 	-I./includes/	\
+		-I./libft/includes
 
 LIBFT_PATH		=	./libft
 LIBFT			=	$(LIBFT_PATH)/libft.a
@@ -50,10 +52,10 @@ GNL				=	$(GNL_PATH)/gnl.a
 all : $(NAME)
 
 %.o : %.c
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ 
 
 $(NAME) : $(OBJ) $(LIBFT) $(GNL) $(HEADER)
-	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) -lreadline -o $(NAME)
+	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) $(INC) -lreadline -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_PATH)

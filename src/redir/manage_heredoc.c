@@ -108,7 +108,7 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	char	*tmp;
 	int	old_fd;
 
-	manage_signal_hd();
+	//manage_signal_hd();
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
