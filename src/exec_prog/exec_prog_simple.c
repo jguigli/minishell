@@ -17,10 +17,10 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
 		if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 		{
+			if (exec.cmd == NULL)
+				freeing_cmd(exec);
 			if (ft_strcmp(exec.cmd, "KO") == 0)
 				syntax_err_file(FILE, exec.cmd_arg[0]);
-			else
-				freeing_cmd(exec);
 				//cmd not found
 			// printf("strerror %s\n", strerror(errno));
 			// perror("minishell: cmd");
