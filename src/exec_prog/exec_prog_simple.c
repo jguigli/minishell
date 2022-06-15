@@ -15,11 +15,15 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-		if (!exec.cmd)
+		if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 		{
+			if (ft_strcmp(exec.cmd, "KO") == 0)
+				syntax_err_file(FILE, exec.cmd_arg[0]);
+			else
+				freeing_cmd(exec);
+				//cmd not found
 			// printf("strerror %s\n", strerror(errno));
 			// perror("minishell: cmd");
-			freeing_cmd(exec);
 			exit(g.status);
 		}
 		//printf("exec cmd = %s\n", exec.cmd);
@@ -38,15 +42,10 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	int		file;
 	int		wstatus;
 
- 	//affiche(list->process);
 	wstatus = 0;
 	shell_parameter_expansion(list->process, env);
-	//file = manage_redirections(&list);
-	//affiche(list->process);
-	//printf("file == %d \n", file);
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');
-	// arg = list_to_tab(list->process);
 	exec.pid = fork();
 	if (exec.pid == -1)
 	{

@@ -54,9 +54,14 @@ char	*get_command(char **path, char *cmd)
 		return (NULL);
 	if (parse_cmd(cmd) == -1)
 	{
-		printf("cmd = %s\n", cmd);
+		//printf("cmd = %s\n", cmd);
 		if	(access(cmd, F_OK) == 0)
+		{
+			write(1, "OKKK\n", 6);
 			return (cmd);
+		}
+		else
+			return ("KO");
 	}
 	else 
 	{
