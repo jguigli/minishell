@@ -33,6 +33,7 @@
 #define OPT "ERROR OPTIONS"
 #define SYNTAX_ERR "syntax error near unexpected token"
 #define DIR_ERR "Is a directory"
+#define FILE "No such file or directory"
 #define PI  "ERROR PIPE"
 
 
@@ -72,6 +73,7 @@ void			freeing_execution(t_exec_s	exec, int error);
 void			freeing_execution_c(t_exec_c	exec, int error);
 void			freeing_cmd_c(t_exec_c	exec);
 int				manage_signal_hd();
+void			syntax_err_file(char *error, char *data);
 
 
 

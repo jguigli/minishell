@@ -29,6 +29,7 @@ void	freeing_cmd(t_exec_s	exec)
 	// free(cmd);
 	// freeing(paths);
 	cmd_not_found(CMD, exec.cmd_arg[0]);
+	//printf("looooool not FOUUUUND");
 }
 
 void	freeing_execution_c(t_exec_c	exec, int error)

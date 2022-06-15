@@ -29,9 +29,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-		if (!exec.cmd)
+		if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 		{
-			freeing_cmd_c(exec);
+			if (ft_strcmp(exec.cmd, "KO") == 0)
+				syntax_err_file(FILE, exec.cmd_arg[0]);
+			else
+				freeing_cmd_c(exec);
 			exit(g.status);
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
