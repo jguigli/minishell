@@ -628,7 +628,7 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 
 	current = (*head)->process->first;
 	copy_head = *head;
-	// printf("repere%s  \n", repere);
+	//printf("repere%s  \n", repere);
 	// printf("repere%s  \n", repere);
 	// printf("ft strlen de repere %zu  \n", ft_strlen(repere));
 	while (current && (ft_strncmp(current->data, repere, ft_strlen(repere))))
@@ -643,12 +643,14 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	//printf("current data%s  \n", current->data);
 	if (current->next)
 	{
+		//printf("apres lol %s\n", current->next->data);
 		tmp_tonext = current->next;
 		new = my_lstnew(node_toadd);
 		new->previous = current;
 		current->next = new;
 		new->pos = current->pos++;
 		new->next = tmp_tonext;
+		tmp_tonext->previous = new;
 		copy_head->process->number ++;
 		new->type = 39;
 		new->t_token = "TOKEN_HEREDOC_STRING";
@@ -700,7 +702,7 @@ int	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		//printf("there %s\n", list->data);
+		//printf("there %s -- nb_hd = %d\n", list->data, head->nb_heredoc);
 		while (i < head->nb_heredoc && list)
 		{
 			fi = fork();
@@ -733,6 +735,7 @@ int	simple_block_p(t_flist **gr_list)
 			while (tmp != NULL)
 			{
 				node_toadd = ft_strjoin(node_toadd, tmp);
+				//printf("node to add %s\n", node_toadd);
 				free(tmp);
 				tmp = get_next_line(file);		
 			}
@@ -741,6 +744,7 @@ int	simple_block_p(t_flist **gr_list)
 				list = list->next;
 			else
 				break ;
+			//printf("list datataa == %s\n", list->data);
 			insert_node(list->data, node_toadd, &head);
 			node_toadd = NULL;
 			tmp = NULL;
@@ -934,6 +938,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	{
 		if	(simple_block_p(&gr_list) == -200)
 			return (NULL);
+		//affiche(gr_list->process);
 	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{

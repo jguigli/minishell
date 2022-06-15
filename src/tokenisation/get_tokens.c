@@ -365,6 +365,12 @@ t_dblist	*token_tag(t_dblist *list)
 					tag = tag->next;
 				else
 					break ;
+				if (tag->type == 5)
+					tag->t_token = "TOKEN_CMD";
+				if (tag->next != NULL)
+					tag = tag->next;
+				else
+					break ;
 			}
 			else
 			{
@@ -527,7 +533,7 @@ t_dblist *p_tok(t_dblist *list)
 	//affiche(list);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28
-	 	&& p_list->type != 1 && p_list->type != 44 || (p_list->type == 7 && p_list->length > 1))
+	 	&& p_list->type != 1 && p_list->type != 44)
 	{
 		if	(check_if_pathname(p_list) == 0)
 			return (NULL);

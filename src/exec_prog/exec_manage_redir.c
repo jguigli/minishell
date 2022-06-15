@@ -11,8 +11,8 @@ int	output_r(t_datas *output_r)
 		error_msgs(errno, output_r->next->data);
 		return (-5);
 	}
-	g.my_oldfds[0] = dup(1);
-	if (dup2(g.my_fds[0], 1) == -1)
+	g.my_oldfds[0] = dup(STDOUT_FILENO);
+	if (dup2(g.my_fds[0], STDOUT_FILENO) == -1)
 	{
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
@@ -41,6 +41,7 @@ int	input_r(t_datas *input_r)
 		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
+			printf("teest\n");
 			return (-5);
 		}
 		write(g.my_fds[1], input_r->data, ft_strlen(input_r->data));
@@ -51,6 +52,7 @@ int	input_r(t_datas *input_r)
 			error_msgs(errno, input_r->next->data);
 			return (-5);
 		}
+		//close(g.my_fds[1]);
 	}
 	g.my_oldfds[1] = dup(0);
 	if	(dup2(g.my_fds[1], STDIN_FILENO) == -1)
@@ -168,11 +170,11 @@ int	manage_redirections(t_flist **li)
 			j++;
 			if	(j == inp_redir)
 			{
-				//printf(" ---- current ->data %s \n", current->data);
 				if(input_r(current) == -5)
 					return (-5);
 				//printf("fileuuuh = %d \n", file);
 				current->data = ft_strdup("");
+				//printf(" ---- current ->data %s --- current type : %d\n", current->data, current->type);
 				if(current->next && (current->next->type == 21 || current->next->type == 35 
 					|| current->next->type == 36 || current->next->type == 37))
 					current->next->data = ft_strdup("");
@@ -194,6 +196,7 @@ int	manage_redirections(t_flist **li)
 					current->next->data = ft_strdup("");
 				}
 			}
+			//delete_node(&list);
 		}
 		if (current->next)
 		{

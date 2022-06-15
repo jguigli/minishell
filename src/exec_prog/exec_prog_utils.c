@@ -1,5 +1,38 @@
 #include "../../includes/minishell.h"
 
+// static int	count_quote(char *argv)
+// {
+// 	int	i;
+// 	int	count;
+
+// 	i = 0;
+// 	count = 0;
+// 	while (argv[++i])
+// 	{
+// 		if (argv[i] == 39)
+// 			count++;
+// 	}
+// 	return (count);
+// }
+
+char	*ft_strjoin_path(char *s1, char *s2)
+{
+	static char	*cat;
+	int		length;
+
+	if (!s1)
+		s1 = ft_strdup("");
+	length = ft_strlen(s1) + ft_strlen(s2);
+	cat = (char *)malloc(sizeof(char) * length + 1);
+	if (!cat)
+		return (NULL);
+	cat[0] = '\0';
+	cat = ft_strcat(cat, s1);
+	cat = ft_strcat(cat, s2);
+	cat[length] = '\0';
+	return (cat);
+}
+
 int	parse_cmd(char *argument)
 {
 	if (argument[0] == '/')
@@ -21,12 +54,16 @@ char	*get_command(char **path, char *cmd)
 		return (NULL);
 	if (parse_cmd(cmd) == -1)
 	{
-		if (access(cmd, F_OK) == 0)
+		//printf("cmd = %s\n", cmd);
+		if	(access(cmd, F_OK) == 0)
+		{
+			write(1, "OKKK\n", 6);
 			return (cmd);
+		}
 		else
 			return ("KO");
 	}
-	else
+	else 
 	{
 		while (*path)
 		{
@@ -39,6 +76,7 @@ char	*get_command(char **path, char *cmd)
 			free(path_cmd);
 			path++;
 		}
+
 	}
 	return (NULL);
 }
@@ -78,6 +116,7 @@ void	manage_dup2(t_exec_c exec, int first, int second)
 	}
 	if (dup2(second, STDOUT_FILENO) < 0)
 	{
+		//printf("la 2 DUP\n");
 		error_msgs(errno, "Fd's duplication failed");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);

@@ -1,24 +1,24 @@
 #include "../../includes/minishell.h"
 
 
-// static char	*check_home_path(char *data, char **env)
-// {
-// 	char	*temp;
-// 	char	*temp2;
+static char	*check_home_path(char *data, char **env)
+{
+	char	*temp;
+	char	*temp2;
 
-// 	if (!(ft_strncmp(data, "~/", 2)))
-// 	{
-// 		temp = search_in_env_var("HOME", env);
-// 		if (temp)
-// 		{
-// 			temp2 = ft_substr(data, 1, ft_strlen(data));
-// 			temp = ft_strjoin(temp, temp2);
-// 			free(temp2);
-// 			return (temp);
-// 		}
-// 	}
-// 	return (data);
-// }
+	if (!(ft_strncmp(data, "~/", 2)))
+	{
+		temp = search_in_env_var("HOME", env);
+		if (temp)
+		{
+			temp2 = ft_substr(data, 1, ft_strlen(data));
+			temp = ft_strjoin(temp, temp2);
+			free(temp2);
+			return (temp);
+		}
+	}
+	return (data);
+}
 
 static int	change_directory(char *data, char **env)
 {
@@ -41,15 +41,22 @@ static int	change_directory(char *data, char **env)
 	}
 	else
 	{
-		perror("minishell: cd");
+		perror("cd");
 		g.status = 1;
 	}
 	return (0);
 }
 
+static int	set_directory(char *data, char **env)
+{
+	if (change_directory(data, env))
+		return (1);
+	return (0);
+}
+
 static int    cd_home(char **env)
 {
-	if (change_directory(search_in_env_var("HOME", env), env))
+	if (set_directory(search_in_env_var("HOME", env), env))
 		return (1);
 	return (0);
 }
@@ -57,7 +64,7 @@ static int    cd_home(char **env)
 int    ft_cd(char **arg, char **env)
 {
 	g.status = 0;
-    if (!arg[1] || !ft_strcmp(arg[1], "--"))
+    if (!arg[1] || !ft_strcmp(arg[1], "~") || !ft_strcmp(arg[1], "--"))
     {
         if (!search_in_env_var("HOME", env)) //STEP 1
         {
@@ -69,7 +76,7 @@ int    ft_cd(char **arg, char **env)
     }
     else if (arg[1] && !arg[2])
     {
-		if (change_directory(arg[1], env))
+		if (set_directory(check_home_path(arg[1], env), env))
 		{
 			g.status = 1;
 			return (1);
@@ -77,7 +84,7 @@ int    ft_cd(char **arg, char **env)
     }
     else
     {
-        ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+        printf("usage: cd <directory>\n");
 		g.status = 1;
         return (1);
     }
