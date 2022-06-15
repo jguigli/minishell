@@ -158,7 +158,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SP][CHR_DOL] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SEMI] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_BANG] = 0;
-	tok_info->get_chr_rules[TOKEN_SP][CHR_BS] = 0;
+	tok_info->get_chr_rules[TOKEN_SP][CHR_BS] = 0;	
+	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_DOT] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SLASH] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_EOF] = 0;

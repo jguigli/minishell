@@ -718,7 +718,7 @@ t_dblist	*get_tokens(char *entry)
 					is_squoted = 1;
 					is_dquoted = 1;
 					i++;
-					printf("5 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
+					// printf("5 --- entry[i] == %c --- chr = %d\n", entry[i], list->infos->get_chr_c[entry[i]]);
 				}
 			}
 			//**********************************************************************
@@ -728,7 +728,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		if (token_type != 1)
 		{	
-			str = ft_substr(entry, j, (i - j) + 1);
+			str = ft_substr(entry, j, (i - j));
 			pos++;
 			printf("strrrr == %s\n", str);
 			create_token_list(list, str, pos, token_type);
