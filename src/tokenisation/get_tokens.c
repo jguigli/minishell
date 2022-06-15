@@ -715,7 +715,7 @@ t_dblist	*get_tokens(char *entry)
 		{	
 			str = ft_substr(entry, j, (i - j));
 			pos++;
-			printf("strrrr == %s\n", str);
+			//printf("strrrr == %s\n", str);
 			create_token_list(list, str, pos, token_type);
 		}
 		if (entry[i] != '\0' && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
@@ -727,7 +727,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		j = i;
 	}
-	affiche(list);
+	//affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);

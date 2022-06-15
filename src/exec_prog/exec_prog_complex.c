@@ -53,6 +53,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
         shell_parameter_expansion(current->process, env);
 		//affiche(current->process);
 		exec.pid[exec.pid_number] = fork();
+		ft_sig_fork(exec.pid[exec.pid_number]);
 		if (exec.pid[exec.pid_number] == -1)
 		{
 			printf("Fork failed : %s\n", strerror(errno));

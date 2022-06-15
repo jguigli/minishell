@@ -67,13 +67,16 @@ int	            my_lstsize_dblist(t_dblist *lst);
 void			insert_node(char *repere, char *node_toadd, t_flist **head);
 int				check_tot_heredoc(t_flist **list);
 void			freeing_cmd(t_exec_s	exec);
-void				cmd_not_found(char *error, char *cmd);
+void			cmd_not_found(char *error, char *cmd);
 void			error_msgs(int error, char *data);
 void			freeing_execution(t_exec_s	exec, int error);
 void			freeing_execution_c(t_exec_c	exec, int error);
 void			freeing_cmd_c(t_exec_c	exec);
 int				manage_signal_hd();
 void			syntax_err_file(char *error, char *data);
+void			ft_sig_fork_par(int sig);
+void			ft_sig_fork(int pid);
+
 
 
 
