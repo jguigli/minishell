@@ -76,7 +76,7 @@ int				manage_signal_hd();
 void			syntax_err_file(char *error, char *data);
 void			ft_sig_fork_par(int sig);
 void			ft_sig_fork(int pid);
-
+t_datas			*my_lstnew(char *data);
 
 
 
@@ -138,7 +138,7 @@ void    print_export(char **env);
 int	manage_redirections(t_flist **li);
 int	output_r(t_datas *output_r);
 int	input_r(t_datas *input_r);
-void	delete_node(t_flist **li);
+void delete_node(t_flist **li);
 //static char	*ft_strcat(char *dest, char *src);
 char    **manage_env_i(void);
 

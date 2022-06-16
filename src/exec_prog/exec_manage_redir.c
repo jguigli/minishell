@@ -9,6 +9,7 @@ int	output_r(t_datas *output_r)
 	if	(g.my_fds[0] < 0)
 	{
 		error_msgs(errno, output_r->next->data);
+		printf("D --- here\n");
 		return (-5);
 	}
 	g.my_oldfds[0] = dup(STDOUT_FILENO);
@@ -29,6 +30,7 @@ int	input_r(t_datas *input_r)
 		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
+			printf("E --- here\n");
 			return (-5);
 		}
 	}
@@ -37,7 +39,7 @@ int	input_r(t_datas *input_r)
 		if (input_r->next->next && input_r->next->next->type == 39)
 			input_r = input_r->next->next;
 		//printf("data == %s --- heredoooooc %d\n", input_r->data, input_r->type);
-		g.my_fds[1] = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000666);
+		g.my_fds[1] = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000644);
 		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
@@ -50,6 +52,7 @@ int	input_r(t_datas *input_r)
 		if	(g.my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
+			printf("F --- here\n");
 			return (-5);
 		}
 		//close(g.my_fds[1]);
@@ -63,56 +66,159 @@ int	input_r(t_datas *input_r)
 	return (g.my_fds[1]);
 }
 
+// t_datas	*delete_node(t_flist **li)
+// {
+// 	t_flist 	*list;
+// 	t_flist 	*list2;
+// 	t_datas		*stock_prev;
+// 	t_datas		*stock_next;
+// 	t_datas		*current;
+// 	t_datas		*head;
+
+// 	list = *li;
+// 	list2 = *li;
+// 	//affiche(list->process);
+// 	// stock_prev = NULL;
+// 	// stock_next = NULL;
+// 	// while(list)
+// 	// {
+// 	// 	current =  list->process->first;
+// 	// 	head  = list->process->first;
+// 	// 	while(current)
+// 	// 	{
+// 	// 		while(current->data[0] == '\0')
+// 	// 		{
+// 	// 			fprintf(stderr, "Heyyyy --> %d\n", current->type);
+// 	// 			if (current == NULL)
+// 	// 			{
+// 	// 				//affiche(list2->process);
+// 	// 				return (head);
+
+// 	// 			}
+// 	// 			current = current->next;
+// 	// 		}
+// 	// 		head = current;
+// 	// 		list2->process->first = head;
+// 	// 		current = current->next;
+// 	// 		while(current != NULL && current->data[0] != '\0')
+// 	// 		{
+// 	// 			stock_prev = current;
+// 	// 			current = current->next;
+// 	// 			stock_next = current;
+// 	// 		}
+// 	// 		stock_next = current->next;
+// 	// 	}
+// 	// 	if (list->next)
+// 	// 		list = list->next;
+// 	// 	else
+// 	// 		break ;
+// 	// }
+// 		while(list)
+// 	{
+// 		current =  list->process->first;
+// 		while(current)
+// 		{
+// 			if (current->data[0] == '\0')
+// 			{
+// 				if	(current->previous)
+// 					stock_prev = current->previous;
+// 				else
+// 					stock_prev = NULL;
+// 				while(current->data[0] == '\0')
+// 				{
+// 					if (current->next)
+// 						current = current->next;
+// 					else
+// 						break ;
+// 				}
+// 				if	(!current->next)
+// 				{
+// 					stock_prev->next = NULL;
+// 					break ;
+// 				}
+// 				else
+// 				{
+// 					stock_next = current;
+// 					stock_prev->next = stock_next;
+// 					stock_next->previous = stock_prev;
+// 				}
+// 			}
+// 			if (current->next)
+// 				current = current->next;
+// 			else
+// 				break ;
+// 		}
+// 		if (list->next)
+// 			list = list->next;
+// 		else
+// 			break ;
+// 	}
+// }
+
 void	delete_node(t_flist **li)
 {
 	t_flist 	*list;
 	t_datas		*stock_prev;
 	t_datas		*stock_next;
-	t_datas	*current;
+	t_datas		*stock_curr;
+	t_datas		*current;
 
 	list = *li;
-	//affiche(list->process);
+	affiche(list->process);
 	while(list)
 	{
-		current =  list->process->first;
+		current = list->process->first;
+		while(current && current->data[0] == '\0')
+		{
+			stock_curr = current;
+			current = current->next;
+			free(stock_curr);
+		}
+		list->process->first = current;
+		//fprintf(stderr, "A --- current->data %s --- current type == %d\n", current->data, current->type);
+		current = current->next;
 		while(current)
 		{
-			if (current->data[0] == '\0')
+			if (current && current->data[0] != '\0')
 			{
-				if	(current->previous)
+				current = current->next;
+			}
+			else
+			{
+				if (current->next)
+				{
+					//fprintf(stderr, "B -- current->data %s --- current type == %d\n", current->data, current->type);
+					stock_next = current->next;
+					//fprintf(stderr, "C --- current->data %s --- current type == %d\n", stock_next->data, stock_next->type);
+					stock_curr = current;
 					stock_prev = current->previous;
-				else
-					stock_prev = NULL;
-				while(current->data[0] == '\0')
-				{
-					if (current->next)
-						current = current->next;
-					else
-						break ;
-				}
-				if	(!current->next)
-				{
-					stock_prev->next = NULL;
-					break ;
-				}
-				else
-				{
-					stock_next = current;
+					//fprintf(stderr, "D --- current->data %s --- current type == %d\n", stock_prev->data, stock_prev->type);
+					current = current->next;
+					free (stock_curr);
 					stock_prev->next = stock_next;
 					stock_next->previous = stock_prev;
 				}
+				else if (current->next == NULL)
+				{
+					//fprintf(stderr, "E --- current->data %s --- current type == %d\n", current->data, current->type);
+					stock_prev = current->previous;
+					//fprintf(stderr, " F --- current->data %s --- current type == %d\n", stock_prev->data, stock_prev->type);
+					stock_prev->next = NULL;
+					//stock_curr = current;
+					free (current);
+					break ;
+					//stock_next->previous = stock_prev;
+				}
 			}
-			if (current->next)
-				current = current->next;
-			else
-				break ;
 		}
 		if (list->next)
 			list = list->next;
 		else
 			break ;
 	}
+	//affiche(list->process);
 }
+
 
 int	manage_redirections(t_flist **li)
 {
@@ -140,11 +246,18 @@ int	manage_redirections(t_flist **li)
 			i++;
 			if	(i == outp_redir)
 			{
+				//printf("herre i = %d === outp_redir = %d -- data == %s\n", i, outp_redir, current->data);
 				if	(output_r(current) == -5)
+				{
+					printf("C --- here????\n");
 					return (-5);
+				}
 				current->data = ft_strdup("");
 				if (current->next && current->next->type == 21)
+				{
 					current->next->data = ft_strdup("");
+					//current = current->next;
+				}
 			}
 			else
 			{
@@ -164,6 +277,7 @@ int	manage_redirections(t_flist **li)
 				if (open(current->next->data, O_RDONLY) == -1)
 				{
 					error_msgs(errno, current->next->data);
+					printf("A -- here????\n");
 					return(-5) ;
 				}
 			}
@@ -171,15 +285,28 @@ int	manage_redirections(t_flist **li)
 			if	(j == inp_redir)
 			{
 				if(input_r(current) == -5)
+				{
+					printf("B --- here????\n");
 					return (-5);
+				}
+						//printf("current->data %s \n", current->data);
+
 				//printf("fileuuuh = %d \n", file);
+				//printf(" A ---- current ->data %s --- current type : %d\n", current->data, current->type);
 				current->data = ft_strdup("");
-				//printf(" ---- current ->data %s --- current type : %d\n", current->data, current->type);
 				if(current->next && (current->next->type == 21 || current->next->type == 35 
 					|| current->next->type == 36 || current->next->type == 37))
+				{
+					//printf(" B ---- current ->data %s --- current type : %d\n", current->data, current->type);
 					current->next->data = ft_strdup("");
+					//current =  current->next;
+				}
 				if (current->type == 33 && (current->next->next->type == 39))
+				{
 					current->next->next->data = ft_strdup("");
+					//current = current->next->next;
+				}
+				//affiche(list->process);
 			}
 			else
 			{
@@ -198,6 +325,7 @@ int	manage_redirections(t_flist **li)
 			}
 			//delete_node(&list);
 		}
+		//printf("CURRREEENT == %s\n", current->data);
 		if (current->next)
 		{
 			current = current->next;

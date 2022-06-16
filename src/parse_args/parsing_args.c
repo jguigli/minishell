@@ -672,6 +672,23 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	// exit(127);
 }
 
+int	waiting_child_hd(pid_t fi)
+{
+	int	wstatus;
+	int	ret;
+
+	ret = 0;
+	if	(waitpid(fi, &wstatus, 0) == -1)
+			perror("wait() error");
+	if (WIFEXITED (wstatus))
+		ret = (WEXITSTATUS(wstatus));
+	if (WIFSIGNALED (wstatus))
+		ret = (WTERMSIG(wstatus) + 128);
+	if (ret == 130)
+		g.status = 130;
+	return (ret);
+}
+
 int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
@@ -721,9 +738,9 @@ int	simple_block_p(t_flist **gr_list)
 				//printf("prout\n");
 				exit(1);
 				//return (1); // a essayer
-			}	
-			if	(waitpid(fi, &wstatus, 0) == -1)
-				perror("wait() error");
+			}
+			waiting_child_hd(fi);
+			manage_signal();
 			file = open(".hd1", O_RDONLY);
 			if	(file < 0)
 			{
@@ -834,8 +851,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			}
 			exit(1);
 		}	
-		if	(waitpid(fi, &wstatus, 0) == -1)
-			perror("wait() error");
+		
+		manage_signal();
 		file = open(".hd1", O_RDONLY);
 		if	(file < 0)
 		{

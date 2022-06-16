@@ -33,14 +33,14 @@ int affiche(t_dblist *list)
 	printf("\nListe de tokens :\n");
 	while (current)
 	{
-		printf("\tListe numéro %d :\n", i);
-		printf("\t- Valeur token : %s\n", current->data);
-		printf("\t- Position token : %d\n", current->pos);
-		printf("\t- Type de token : %s\n", current->t_token);
-		printf("\t- Numero du token : %d\n", current->type);
-		printf("\t- Level : %d\n", current->level);
-		printf("\t- SPACE : %d\n", current->space);
-		printf("\t- SIIIZE: %zu\n\n", ft_strlen(current->data));
+		fprintf(stderr, "\tListe numéro %d :\n", i);
+		fprintf(stderr, "\t- Valeur token : %s\n", current->data);
+		fprintf(stderr, "\t- Position token : %d\n", current->pos);
+		fprintf(stderr, "\t- Type de token : %s\n", current->t_token);
+		fprintf(stderr, "\t- Numero du token : %d\n", current->type);
+		fprintf(stderr, "\t- Level : %d\n", current->level);
+		fprintf(stderr, "\t- SPACE : %d\n", current->space);
+		fprintf(stderr, "\t- SIIIZE: %zu\n\n", ft_strlen(current->data));
 		current = current->next;
 		i++;
 	}
@@ -440,6 +440,7 @@ t_dblist	*token_tag(t_dblist *list)
 					aft_p = 0;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
+					tag->type = 21;
 				}
 			}
 			else if (tag->type == 11)

@@ -39,6 +39,13 @@ void	ft_sigquit(int sig)
 	return ;
 }
 
+void	ft_sig_child(int sig)
+{
+	close(0);
+	g.status = 1;
+	return ;
+}
+
 int	manage_signal(void)
 {
 	signal(SIGINT, ft_sigint);
@@ -65,8 +72,8 @@ void	ft_sig_fork(int pid)
 {
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, ft_sig_child);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (pid > 0)
 	{
