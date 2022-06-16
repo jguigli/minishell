@@ -260,7 +260,10 @@ t_dblist	*token_tag(t_dblist *list)
 		{
 			aft_p = 1;
 			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7 || tag->previous->type == 33))
+			{
 				tag->t_token = "TOKEN_FILE";
+				tag->type = 21;
+			}
 			else if (!tag->previous || tag->previous->type == 11)
 				tag->t_token = "TOKEN_CMD";
 			else
@@ -337,7 +340,7 @@ t_dblist	*token_tag(t_dblist *list)
 		else if (tag->type == 7)
 		{
 			aft_p = 1;
-			if (tag->length == 2 || tag->length == 3)
+			if (tag->length == 2)
 			{
 				if (tag->length == 2)
 				{
@@ -366,11 +369,13 @@ t_dblist	*token_tag(t_dblist *list)
 				else
 					break ;
 				if (tag->type == 5)
+				{
 					tag->t_token = "TOKEN_CMD";
-				if (tag->next != NULL)
-					tag = tag->next;
-				else
-					break ;
+					if (tag->next != NULL)
+						tag = tag->next;
+					else
+						break ;
+				}
 			}
 			else
 			{
@@ -434,6 +439,7 @@ t_dblist	*token_tag(t_dblist *list)
 					tag->type = 38;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
+					tag->type = 21;
 				}
 				else 
 				{

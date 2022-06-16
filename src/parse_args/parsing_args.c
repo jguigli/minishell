@@ -565,7 +565,7 @@ void counting(t_flist **gr_list)
 	while(head)
 	{
 		list = head->process->first;
-		//printf("list data ==> %s\n", head->process->first->data);
+		printf("list data ==> %s\n", head->process->first->data);
 		while(list)
 		{
 			if	(list->type == 6)
@@ -710,6 +710,7 @@ int	simple_block_p(t_flist **gr_list)
 	j = 0;
 	node_toadd = NULL;
 	tmp = NULL;
+	//printf("nb of heredoc %d\n", head->nb_heredoc);
 	if	(head->nb_heredoc >= 1)
 	{
 		while (list && list->type != 33)

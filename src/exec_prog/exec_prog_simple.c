@@ -8,9 +8,9 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		return ;
 	}
 	//printf("loullllll\n");
-	affiche(list->process);
+	//affiche(list->process);
 	exec.cmd_arg = list_to_tab(list->process);
-	printf("exec cmd = %s\n", exec.cmd_arg[0]);
+	//printf("exec cmd = %s\n", exec.cmd_arg[0]);
 	if (!exec.cmd_arg)
 	{
 
