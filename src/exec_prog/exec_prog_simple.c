@@ -7,6 +7,7 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 	//printf("loullllll\n");
 	//affiche(list->process);
 	exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
+	printf("cmd %s\n", exec.cmd[0]);
 	if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 	{
 		if (ft_strncmp(exec.cmd, "KO", ft_strlen(exec.cmd)) == 0)
@@ -53,8 +54,8 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 
 	//affiche(list->process);
 	shell_parameter_expansion(list->process, env);
-	affiche(list->process);
 	delete_nodes_after_expansion(list->process);
+	//affiche(list->process);
 	exec.path = search_in_env_var("PATH", env);
 	exec.cmd_path = ft_split(exec.path, ':');
 	//ft_sig_fork(exec.pid);

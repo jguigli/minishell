@@ -712,21 +712,17 @@ int	waiting_child_hd(pid_t fi)
 int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
-	t_datas	*list2;
 	t_flist	*head;
 	int		i;
-	int		j;
 	pid_t		fi;
 	char	*node_toadd;
 	char	*tmp;
 	int		file;
 
 	list = (*gr_list)->process->first;
-	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	//affiche(head->process);
 	i = 0;
-	j = 0;
 	node_toadd = NULL;
 	tmp = NULL;
 	//printf("nb of heredoc %d\n", head->nb_heredoc);
@@ -810,7 +806,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	// t_datas	*list2;
 	t_flist	*head;
 	int		i;
-	int		j;
 	int		k;
 	int		fi;
 	char	*node_toadd;
@@ -821,7 +816,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	// list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	j = 0;
 	k = 0;
 	node_toadd = NULL;
 	tmp = NULL;
