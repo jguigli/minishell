@@ -82,7 +82,7 @@ static char	**export_var_env(char *arg, char **env)
 	return (env);
 }
 
-void	ft_export(char **arg, char **env)
+void	ft_export(char **arg, char ***env)
 {
 	int	i;
 	int	pos;
@@ -91,11 +91,11 @@ void	ft_export(char **arg, char **env)
 	pos = 0;
 	g.status = 0;
 	if (!arg[1])
-		print_export(env);
+		print_export(*env);
 	while (arg[i])
 	{
 		if (check_arg_export(arg[i]))
-			env = export_var_env(arg[i], env);
+			*env = export_var_env(arg[i], *env);
 		else
 			g.status = 1;
 		i++;

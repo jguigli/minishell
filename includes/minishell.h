@@ -124,7 +124,7 @@ int    ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
 void    ft_exit(char **arg);
 void	ft_export(char **arg, char ***env);
-void    ft_pwd(void);
+int    ft_pwd(void);
 void	ft_unset(char **arg, char ***env);
 
 
