@@ -19,6 +19,7 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	char	*prompt;
 	char	*temp;
 
+	(void)**env;
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[32m");
 	name = ft_strdup("minishell");

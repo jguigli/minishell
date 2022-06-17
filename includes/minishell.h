@@ -74,7 +74,7 @@ void			freeing_execution_c(t_exec_c	exec, int error);
 void			freeing_cmd_c(t_exec_c	exec);
 int				manage_signal_hd();
 void			syntax_err_file(char *error, char *data);
-void			ft_sig_fork_par(int sig);
+void				ft_sig_fork_par(int sig);
 void			ft_sig_fork(int pid);
 t_datas			*my_lstnew(char *data);
 

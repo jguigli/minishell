@@ -14,8 +14,8 @@
 
 char	*search_in_env_var(char *var, char **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -41,7 +41,7 @@ char	**set_var_in_env(char *var, char *path, char **env)
 	int		i;
 	int		j;
 	char	*str;
-	char	*temp;
+	//char	*temp;
 	char	**tab;
 
 	i = 0;

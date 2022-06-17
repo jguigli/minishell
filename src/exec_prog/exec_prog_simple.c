@@ -4,7 +4,7 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 {
 	if	(manage_redirections(&list) == -5)
 	{
-		printf("loul\n");
+		//printf("loul\n");
 		return ;
 	}
 	//printf("loullllll\n");
@@ -53,8 +53,8 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec le process classique (pid, execve, etc..)
 {
 	t_exec_s	exec;
-	char	**arg;
-	int		file;
+	//char	**arg;
+	//int		file;
 	int		wstatus;
 
 	wstatus = 0;

@@ -198,26 +198,26 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 	i = 0;
 	while (token->data[i])
 	{
-		if (list->infos->get_chr_c[token->data[i]] != CHR_WORD 
-			&& list->infos->get_chr_c[token->data[i]] != CHR_DIGIT
-				 && list->infos->get_chr_c[token->data[i]] != CHR_DASH
-				 	&& list->infos->get_chr_c[token->data[i]] != CHR_DOL
-					 && list->infos->get_chr_c[token->data[i]] != CHR_QUERY
-					 	&& list->infos->get_chr_c[token->data[i]] != CHR_SLASH
-					 		&& list->infos->get_chr_c[token->data[i]] != CHR_DOT
-						 		&& list->infos->get_chr_c[token->data[i]] != CHR_UNDS
-								&& list->infos->get_chr_c[token->data[i]] != CHR_RRED
-									&& list->infos->get_chr_c[token->data[i]] != CHR_LRED
-										&& list->infos->get_chr_c[token->data[i]] != CHR_EQ
-											&& list->infos->get_chr_c[token->data[i]] != CHR_AROB
-												&& list->infos->get_chr_c[token->data[i]] != CHR_TILDE
+		if (list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_WORD 
+			&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_DIGIT
+				 && list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_DASH
+				 	&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_DOL
+					 && list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_QUERY
+					 	&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_SLASH
+					 		&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_DOT
+						 		&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_UNDS
+								&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_RRED
+									&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_LRED
+										&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_EQ
+											&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_AROB
+												&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_TILDE
 					 )
 				{
 					if (token->data[i] == '\'')
 					{
 						if	(check_squotes_dol(token) == -100)
 						{
-							printf("ici1\n");
+							//printf("ici1\n");
 							syntax_err(SYNTAX_ERR, token->data);
 							return (0);
 						}
@@ -227,7 +227,7 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 					{
 						if	(check_dquotes_dol(token) == -50)
 						{
-							printf("ici2\n");
+							//printf("ici2\n");
 							syntax_err(SYNTAX_ERR, token->data);
 							return (0);
 						}
@@ -302,7 +302,7 @@ t_dblist	*token_tag(t_dblist *list)
 					if	(tag->next == NULL)
 						break ;
 					tag = tag->next;
-					if (tag->previous->t_token != "TOKEN_HEREDOC")
+					if (ft_strcmp(tag->previous->t_token, "TOKEN_HEREDOC"))
 					{
 						tag->type = 21;
 						tag->t_token = "TOKEN_FILE";
@@ -641,7 +641,6 @@ t_dblist *p_tok(t_dblist *list)
 
 t_dblist	*get_tokens(char *entry)
 {
-	int	counter;
 	unsigned int token_type;
 	unsigned int token_type_cpy;
 	unsigned int i;
@@ -649,7 +648,6 @@ t_dblist	*get_tokens(char *entry)
 	int			is_dquoted;
 	int			is_squoted;
 	t_dblist	*list;
-	t_dblist	*gr_list;
 	int pos;
 	char *str;
 	int		k;
@@ -662,13 +660,13 @@ t_dblist	*get_tokens(char *entry)
 	is_squoted = 1;
 	list = init_linked_list();
 	str = NULL;
-	if (entry[0] == '\0' || list->infos->get_chr_c[entry[i]] == CHR_SP)
+	if (entry[0] == '\0' || list->infos->get_chr_c[(unsigned int)entry[i]] == CHR_SP)
 			return (NULL);
 	while (entry[i])
 	{
-		token_type = list->infos->get_tok_type[list->infos->get_chr_c[entry[i]]];
+		token_type = list->infos->get_tok_type[list->infos->get_chr_c[(unsigned int)entry[i]]];
 		//printf("tokeeen type%d\n", token_type);
-		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[entry[i]]] && (is_dquoted == 1 && is_squoted == 1))
+		while (list->infos->get_chr_rules[token_type][list->infos->get_chr_c[(unsigned int)entry[i]]] && (is_dquoted == 1 && is_squoted == 1))
 		{
 			if (entry[i] == '\"')
 			{
@@ -706,7 +704,7 @@ t_dblist	*get_tokens(char *entry)
 			}
 			if (is_squoted == 0 || is_dquoted == 0)
 			{
-				if (list->infos->get_chr_c[entry[i + 1]] != 1)
+				if (list->infos->get_chr_c[(unsigned int)entry[i + 1]] != 1)
 				{
 					is_dquoted = 1;
 					is_squoted = 1;
@@ -731,7 +729,7 @@ t_dblist	*get_tokens(char *entry)
 			//printf("strrrr == %s\n", str);
 			create_token_list(list, str, pos, token_type);
 		}
-		if (entry[i] != '\0' && list->infos->get_chr_c[entry[i]] != 24 && token_type != 6 && token_type != 7)
+		if (entry[i] != '\0' && list->infos->get_chr_c[(unsigned int)entry[i]] != 24 && token_type != 6 && token_type != 7)
 		{
 			//printf("str[i] == %d\n", entry[i]);
 			i++;
@@ -740,7 +738,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		j = i;
 	}
-	//affiche(list);
+	affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);

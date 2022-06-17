@@ -3,7 +3,7 @@
 char	*case_no$_noquote(char *data, int *i, char *str)
 {
 	char	*temp;
-    char    *rep;
+    //char    *rep;
 	int		j;
 
 	j = *i;
@@ -53,8 +53,9 @@ char	*case_$bracket_noquote(char *data, char **env, int *i, char *str)
     temp = ft_substr(data, j, *i - j);
     temp = search_in_env_var(temp, env);
     if (temp)
-        str = ft_strjoin(str, temp);
-	//printf(" 3 ---- str == %s - taille = %zu\n", str, ft_strlen(str));
+    {
+		str = ft_strjoin(str, temp);
+	}
 	return (str);
 }
 

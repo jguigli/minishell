@@ -42,7 +42,7 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 
 void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 {
-	char		**arg;
+	//char		**arg;
 	t_flist		*current;
 
 	current = list;

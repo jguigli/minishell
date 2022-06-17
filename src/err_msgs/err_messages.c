@@ -5,7 +5,7 @@ void	error_msgs(int error, char *data)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(data, 2);
 	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd(strerror(error), 2);
 	ft_putstr_fd("\n", 2);
 	g.status = 1;
 	return ;

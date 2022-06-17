@@ -1,20 +1,5 @@
 #include "../../includes/minishell.h"
 
-// static int	count_quote(char *argv)
-// {
-// 	int	i;
-// 	int	count;
-
-// 	i = 0;
-// 	count = 0;
-// 	while (argv[++i])
-// 	{
-// 		if (argv[i] == 39)
-// 			count++;
-// 	}
-// 	return (count);
-// }
-
 char	*ft_strjoin_path(char *s1, char *s2)
 {
 	static char	*cat;
@@ -108,6 +93,7 @@ void	close_pipes(t_exec_c *exec)
 
 void	manage_dup2(t_exec_c exec, int first, int second)
 {
+	(void)exec;
 	if (dup2(first, STDIN_FILENO) < 0)
 	{
 		error_msgs(errno, "Fd's duplication failed");

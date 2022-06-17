@@ -42,7 +42,9 @@ char	*case_$_quote(char *data, char **env, int *i, char *str)
     temp = ft_substr(data, j, *i - j);
     temp = search_in_env_var(temp, env);
     if (temp)
+	{
         str = ft_strjoin(str, temp);
+	}
 	return (str);	
 }
 
