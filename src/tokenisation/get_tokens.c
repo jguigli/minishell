@@ -213,31 +213,31 @@ int	check_spec_char(t_datas *token, t_dblist *list)
 												&& list->infos->get_chr_c[(unsigned int)token->data[i]] != CHR_TILDE
 					 )
 				{
-					if (token->data[i] == '\'')
-					{
-						if	(check_squotes_dol(token) == -100)
-						{
-							//printf("ici1\n");
-							syntax_err(SYNTAX_ERR, token->data);
-							return (0);
-						}
-						return(1);
-					}
-					else if (token->data[i] == '\"')
-					{
-						if	(check_dquotes_dol(token) == -50)
-						{
-							//printf("ici2\n");
-							syntax_err(SYNTAX_ERR, token->data);
-							return (0);
-						}
-						return (1);
-					}
-					else
-					{
-						syntax_err(SYNTAX_ERR, token->data);
-						return (0);
-					}
+					// if (token->data[i] == '\'')
+					// {
+					// 	if	(check_squotes_dol(token) == -100)
+					// 	{
+					// 		//printf("ici1\n");
+					// 		syntax_err(SYNTAX_ERR, token->data);
+					// 		return (0);
+					// 	}
+					// 	return(1);
+					// }
+					// else if (token->data[i] == '\"')
+					// {
+					// 	if	(check_dquotes_dol(token) == -50)
+					// 	{
+					// 		//printf("ici2\n");
+					// 		syntax_err(SYNTAX_ERR, token->data);
+					// 		return (0);
+					// 	}
+					// 	return (1);
+					// }
+					// else
+					// {
+					// 	syntax_err(SYNTAX_ERR, token->data);
+					// 	return (0);
+					// }
 					//return(0);
 				}
 			i ++;
@@ -551,7 +551,7 @@ t_dblist *p_tok(t_dblist *list)
 
 	p_list = list->first;
 	p_list->length = ft_strlen(p_list->data);
-	//affiche(list);
+	affiche(list);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28
 	 	&& p_list->type != 1 && p_list->type != 44 && p_list->type != 6)
@@ -559,28 +559,20 @@ t_dblist *p_tok(t_dblist *list)
 		if	(check_if_pathname(p_list) == 0)
 			return (NULL);
 		syntax_err(SYNTAX_ERR, p_list->data);
-			return (NULL);
+		return (NULL);
 	}
 	while(p_list)
 	{
 		p_list->length = ft_strlen(p_list->data);
 		if	(p_list->type == 13)
 		{
-			if	(check_dquotes_dol(p_list) == -50)
-			{
-				syntax_err(SYNTAX_ERR, p_list->data);
-				return (NULL);
-			}
+			printf("OK\n");
 		}
 		else if	(p_list->type == 12)
 		{
-			if	(check_squotes_dol(p_list) == -100)
-			{
-				syntax_err(SYNTAX_ERR, p_list->data);
-				return (NULL);
-			}
+			printf("Kikou\n");
 		}
-		else if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
+		if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
 			// if	(check_if_pathname(p_list) == 0)
@@ -689,12 +681,16 @@ t_dblist	*get_tokens(char *entry)
 				token_type_cpy = token_type;
 				while (is_dquoted == 1 && entry[i])
 				{
-					if (entry[i] == '\0')
-						syntax_err(SYNTAX_ERR, "\"");
 					if (entry[i] == '\"')
 					{
 						is_dquoted = 0;
+						//syntax_err(SYNTAX_ERR, '\"');
 						break ;
+					}
+					if (entry[i] == '\0')
+					{
+						syntax_err(SYNTAX_ERR, "\"");
+						return (NULL);
 					}
 					i++;
 				}
@@ -706,12 +702,16 @@ t_dblist	*get_tokens(char *entry)
 				token_type_cpy = token_type;
 				while (is_squoted == 1 && entry[i])
 				{
-					if (entry[i] == '\0')
-							syntax_err(SYNTAX_ERR, "\'");
 					if (entry[i] == '\'')
 					{
 						is_squoted = 0;
 						break ;
+					}
+					if (entry[i] == '\0')
+					{
+						//printf("TTTTEEESSST\n");
+						syntax_err(SYNTAX_ERR, "\'");
+						return (NULL);
 					}
 					i++;
 				}				
