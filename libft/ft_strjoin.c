@@ -34,9 +34,11 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	length = 0;
 	catech = NULL;
-	if (!s1 || !s2)
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s2)
 	{
-		write(2, "LOL\n", 4);
+		//write(2, "LOL\n", 4);
 		return (NULL);
 	}
 	length = myyy_strlen(s1) + myyy_strlen(s2);

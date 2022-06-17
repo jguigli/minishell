@@ -76,7 +76,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 	char	*str;
 
 	list = gr_list->first;
-	//affiche(gr_list);
+	affiche(gr_list);
 	while (list)
 	{
 		i = 0;
@@ -91,8 +91,8 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 			str = manage_expansion(list, env);
 		free(list->data);
 		list->data = ft_strdup(str);
-		free(str);
+		//free(str); Vu Joel et Amina : ok pour enlever pour les noeuds.
 		list = list->next;
 	}
-	affiche(gr_list);
+	//affiche(gr_list);
 }

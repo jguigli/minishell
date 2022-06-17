@@ -66,95 +66,6 @@ int	input_r(t_datas *input_r)
 	return (g.my_fds[1]);
 }
 
-// t_datas	*delete_node(t_flist **li)
-// {
-// 	t_flist 	*list;
-// 	t_flist 	*list2;
-// 	t_datas		*stock_prev;
-// 	t_datas		*stock_next;
-// 	t_datas		*current;
-// 	t_datas		*head;
-
-// 	list = *li;
-// 	list2 = *li;
-// 	//affiche(list->process);
-// 	// stock_prev = NULL;
-// 	// stock_next = NULL;
-// 	// while(list)
-// 	// {
-// 	// 	current =  list->process->first;
-// 	// 	head  = list->process->first;
-// 	// 	while(current)
-// 	// 	{
-// 	// 		while(current->data[0] == '\0')
-// 	// 		{
-// 	// 			fprintf(stderr, "Heyyyy --> %d\n", current->type);
-// 	// 			if (current == NULL)
-// 	// 			{
-// 	// 				//affiche(list2->process);
-// 	// 				return (head);
-
-// 	// 			}
-// 	// 			current = current->next;
-// 	// 		}
-// 	// 		head = current;
-// 	// 		list2->process->first = head;
-// 	// 		current = current->next;
-// 	// 		while(current != NULL && current->data[0] != '\0')
-// 	// 		{
-// 	// 			stock_prev = current;
-// 	// 			current = current->next;
-// 	// 			stock_next = current;
-// 	// 		}
-// 	// 		stock_next = current->next;
-// 	// 	}
-// 	// 	if (list->next)
-// 	// 		list = list->next;
-// 	// 	else
-// 	// 		break ;
-// 	// }
-// 		while(list)
-// 	{
-// 		current =  list->process->first;
-// 		while(current)
-// 		{
-// 			if (current->data[0] == '\0')
-// 			{
-// 				if	(current->previous)
-// 					stock_prev = current->previous;
-// 				else
-// 					stock_prev = NULL;
-// 				while(current->data[0] == '\0')
-// 				{
-// 					if (current->next)
-// 						current = current->next;
-// 					else
-// 						break ;
-// 				}
-// 				if	(!current->next)
-// 				{
-// 					stock_prev->next = NULL;
-// 					break ;
-// 				}
-// 				else
-// 				{
-// 					stock_next = current;
-// 					stock_prev->next = stock_next;
-// 					stock_next->previous = stock_prev;
-// 				}
-// 			}
-// 			if (current->next)
-// 				current = current->next;
-// 			else
-// 				break ;
-// 		}
-// 		if (list->next)
-// 			list = list->next;
-// 		else
-// 			break ;
-// 	}
-// }
-
 void	delete_node(t_flist **li)
 {
 	t_flist 	*list;
@@ -175,8 +86,11 @@ void	delete_node(t_flist **li)
 			free(stock_curr);
 		}
 		list->process->first = current;
-		//fprintf(stderr, "A --- current->data %s --- current type == %d\n", current->data, current->type);
-		current = current->next;
+		//fprintf(stderr, "A --- current->data %s --- \n", list->process->first->data);
+		if	(current->next)
+			current = current->next;
+		else
+			break ;
 		while(current)
 		{
 			if (current && current->data[0] != '\0')
@@ -236,7 +150,7 @@ int	manage_redirections(t_flist **li)
 	file = 0;
 	inp_redir = list->nb_heredoc + list->nb_lred;
 	//printf("inp redir --> %d \n", inp_redir);
-	//affiche(list->process);
+	affiche(list->process);
 	outp_redir = list->nb_rred_app + list->nb_rred;
 	current = list->process->first;
 	while(current)
@@ -263,7 +177,6 @@ int	manage_redirections(t_flist **li)
 			}
 			else
 			{
-	
 				current->data = ft_strdup("");
 				if (current->next && current->next->type == 21)
 					current->next->data = ft_strdup("");

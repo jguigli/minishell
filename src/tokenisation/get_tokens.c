@@ -264,7 +264,7 @@ t_dblist	*token_tag(t_dblist *list)
 				tag->t_token = "TOKEN_FILE";
 				tag->type = 21;
 			}
-			else if (!tag->previous || tag->previous->type == 11)
+			else if (!tag->previous || tag->previous->type == 11 || head->type == 6 || head->type == 38)
 				tag->t_token = "TOKEN_CMD";
 			else
 				tag->t_token = "TOKEN_OPT";
@@ -456,6 +456,20 @@ t_dblist	*token_tag(t_dblist *list)
 				aft_p = 0;
 			}
 		}
+		else if (tag->type == 6)
+		{
+			if (tag->length == 2)
+			{
+				tag->t_token = "TOKEN_RRED_APPEND";
+				tag->type = 38;
+			}
+			if (tag->next)
+				tag = tag->next;
+			else
+				break ;
+			tag->t_token = "TOKEN_FILE";
+			tag->type = 21;
+		}
 		if	(tag->next != NULL)
 			tag = tag->next;
 		else
@@ -540,7 +554,7 @@ t_dblist *p_tok(t_dblist *list)
 	//affiche(list);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28
-	 	&& p_list->type != 1 && p_list->type != 44)
+	 	&& p_list->type != 1 && p_list->type != 44 && p_list->type != 6)
 	{
 		if	(check_if_pathname(p_list) == 0)
 			return (NULL);

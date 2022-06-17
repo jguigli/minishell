@@ -1,0 +1,13 @@
+gnl
+includes
+libft
+lol
+Makefile
+minishell
+minishell.c
+minishell.o
+mybash.sh
+notes
+ok
+realbash.sh
+src

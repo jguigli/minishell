@@ -755,8 +755,8 @@ int	simple_block_p(t_flist **gr_list)
 			else
 			{
 				waiting_child_hd(fi);
-				if (g.status == 130)
-					break ;
+				// if (g.status == 130)
+				// 	break ;
 				//manage_signal();
 				file = open(".hd1", O_RDONLY);
 				if	(file < 0)
@@ -970,7 +970,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	{
 		if	(simple_block_p(&gr_list) == -200)
 			return (NULL);
-		//affiche(gr_list->process);
+		// affiche(gr_list->process);
 	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{
