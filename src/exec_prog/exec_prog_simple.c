@@ -43,7 +43,7 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
 		{
-			printf("hihoo ici1\n");
+			//printf("hihoo ici1\n");
 			freeing_execution(exec, errno);
 			exit(g.status);
 		}
@@ -62,7 +62,7 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');
 	exec.pid = fork();
-	ft_sig_fork(exec.pid);
+	//ft_sig_fork(exec.pid);
 	if (exec.pid == -1)
 	{
 		printf("Fork failed : %s\n", strerror(errno));

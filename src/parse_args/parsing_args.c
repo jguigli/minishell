@@ -631,7 +631,7 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	//printf("repere%s  \n", repere);
 	// printf("repere%s  \n", repere);
 	// printf("ft strlen de repere %zu  \n", ft_strlen(repere));
-	while (current && (ft_strncmp(current->data, repere, ft_strlen(repere))))
+	while (current && (ft_strcmp(current->data, repere)))
 	{
 
 		//printf("current data %s  --- ft srlen : %zu\n", current->data, ft_strlen(current->data));
@@ -678,12 +678,26 @@ int	waiting_child_hd(pid_t fi)
 	int	ret;
 
 	ret = 0;
+	//kill(fi, SIGINT);
+	//sleep(60);
 	if	(waitpid(fi, &wstatus, 0) == -1)
 			perror("wait() error");
-	if (WIFEXITED (wstatus))
+	printf("wstatus == %d\n", wstatus);
+	if (WIFEXITED(wstatus) > 0)
+	{
 		ret = (WEXITSTATUS(wstatus));
-	if (WIFSIGNALED (wstatus))
+		printf("testouille -- %d\n", wstatus);
+	}
+	if (WIFSIGNALED(wstatus))
+	{
+		printf("hehe\n");
 		ret = (WTERMSIG(wstatus) + 128);
+	}
+	if (WIFSTOPPED(wstatus))
+	{
+		printf("hoho\n");
+		ret = (WSTOPSIG(wstatus) + 128);
+	}
 	if (ret == 130)
 		g.status = 130;
 	return (ret);
@@ -696,7 +710,7 @@ int	simple_block_p(t_flist **gr_list)
 	t_flist	*head;
 	int		i;
 	int		j;
-	int		fi;
+	pid_t		fi;
 	int		wstatus;
 	char	*node_toadd;
 	char	*tmp;
@@ -736,8 +750,9 @@ int	simple_block_p(t_flist **gr_list)
 			{
 				//printf("list data %s \n", list->next->data);
 				manage_one_redir(list->next, head);
-				//printf("prout\n");
+				//if	(g.sigintos == 2)
 				exit(1);
+				//printf("prout\n");
 				//return (1); // a essayer
 			}
 			waiting_child_hd(fi);
@@ -852,7 +867,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			}
 			exit(1);
 		}	
-		
+		waiting_child_hd(fi);
 		manage_signal();
 		file = open(".hd1", O_RDONLY);
 		if	(file < 0)

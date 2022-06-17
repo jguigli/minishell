@@ -42,4 +42,5 @@ void	init_global(void)
 	g.my_fds[1] = -1000;
 	g.my_oldfds[0] = -200;
 	g.my_oldfds[1] = -200;
+	g.sigintos = 0;
 }

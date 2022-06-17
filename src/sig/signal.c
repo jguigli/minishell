@@ -42,6 +42,8 @@ void	ft_sigquit(int sig)
 void	ft_sig_child(int sig)
 {
 	close(0);
+	printf("loull\n");
+	g.sigintos = 2;
 	g.status = 1;
 	return ;
 }
@@ -68,15 +70,18 @@ void	ft_sig_fork_par(int sig)
 	}
 }
 
-void	ft_sig_fork(int pid)
+void	ft_sig_fork(pid_t pid)
 {
+	printf("pid t %d\n", pid);
 	if (pid == 0)
 	{
 		signal(SIGINT, ft_sig_child);
+		printf("hello\n");
 		signal(SIGQUIT, SIG_IGN);
 	}
 	else if (pid > 0)
 	{
+		printf("wesho\n");
 		signal(SIGINT, ft_sig_fork_par);
 		signal(SIGQUIT, ft_sig_fork_par);
 	}
