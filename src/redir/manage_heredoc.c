@@ -141,8 +141,9 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	}
 	while (1)
     {
-        write(1, "> ", 3);
+       	write(1, "> ", 3);
 		buf = get_next_line(0);
+		//printf("hiho\n");
         if (buf == NULL)
             break ;
 		if (copy->expansion)

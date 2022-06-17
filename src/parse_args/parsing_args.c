@@ -682,20 +682,20 @@ int	waiting_child_hd(pid_t fi)
 	//sleep(60);
 	if	(waitpid(fi, &wstatus, 0) == -1)
 			perror("wait() error");
-	printf("wstatus == %d\n", wstatus);
+	//printf("wstatus == %d\n", wstatus);
 	if (WIFEXITED(wstatus) > 0)
 	{
 		ret = (WEXITSTATUS(wstatus));
-		printf("testouille -- %d\n", wstatus);
+		//printf("testouille -- %d\n", wstatus);
 	}
 	if (WIFSIGNALED(wstatus))
 	{
-		printf("hehe\n");
+		//printf("hehe\n");
 		ret = (WTERMSIG(wstatus) + 128);
 	}
 	if (WIFSTOPPED(wstatus))
 	{
-		printf("hoho\n");
+		//printf("hoho\n");
 		ret = (WSTOPSIG(wstatus) + 128);
 	}
 	if (ret == 130)
