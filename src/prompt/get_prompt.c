@@ -41,7 +41,7 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	return (prompt);
 }
 
-void	get_prompt(void)
+void	get_prompt(char **env)
 {
 	char	*entry;
 	int		int_mode;
@@ -54,7 +54,7 @@ void	get_prompt(void)
 	while (int_mode)
 	{
 		get_p = 1;
-		my_prompt = get_prompt_env(g.env);
+		my_prompt = get_prompt_env(env);
 		if (!my_prompt)
 			my_prompt = "~$ ";
 		int_mode = isatty(STDIN_FILENO);
@@ -68,14 +68,14 @@ void	get_prompt(void)
 			}
 			add_history(entry);
 			//printf("entryyyyyy %s\n", entry);
-			gr_list = parse_args(entry, g.env);
+			gr_list = parse_args(entry, env);
 			//affiche(gr_list->process);
 			if	(!gr_list)
 				get_p = 0;
 			if	(get_p == 1)
 			{
 				//affiche(gr_list->process);
-				exec_launcher(&gr_list, g.env);
+				exec_launcher(&gr_list, env);
 			}
 		}
 	}

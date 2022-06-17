@@ -6,12 +6,15 @@ int	main(int argc, char *argv[], char *env[])
 {
 	(void)argc;
 	(void)argv;
+	char **envp;
+
+	envp = NULL;
 	manage_signal();
 	init_global();
 	if (!search_in_env_var("PATH", env))
-		g.env = manage_env_i();
+		envp = manage_env_i();
 	else
-		g.env = get_copy(env); //A FREE A LA FIN
-	get_prompt();
+		envp = get_copy(env); //A FREE A LA FIN
+	get_prompt(envp);
 	return (0);
 }

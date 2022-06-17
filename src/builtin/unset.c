@@ -13,34 +13,34 @@ char	**unset_var(int position, char **env)
 		i++;
 	}
 	tab[i] = 0;
+	free_char_tab(env);
 	return (tab);
 }
 
-int	ft_unset(char **arg, char **env)
+void	ft_unset(char **arg, char ***env)
 {
 	size_t		i;
 	size_t		j;
 	size_t		z;
 
 	i = 1;
-	if (!arg || !env)
-		return (0);
+	if (!arg || !*env)
+		return ;
 	while (arg[i])
 	{
 		j = 0;
-		while (env[j])
+		while ((*env)[j])
 		{
 			z = 0;
-			while (env[j][z] != '=')
+			while ((*env)[j][z] != '=')
 				z++;
 			if (z == ft_strlen(arg[i]))
 			{
-				if (!ft_strncmp(arg[i], env[j], z))
-					g.env = unset_var(j, env);
+				if (!ft_strncmp(arg[i], (*env)[j], z))
+					(*env) = unset_var(j, (*env));
 			}
 			j++;
 		}
 		i++;
 	}
-	return (0);
 }

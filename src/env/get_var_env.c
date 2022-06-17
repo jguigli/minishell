@@ -12,6 +12,16 @@
 
 #include "../../includes/minishell.h"
 
+void	free_char_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		free (tab[i++]);
+	free (tab);
+}
+
 char	*search_in_env_var(char *var, char **env)
 {
 	int		i;
@@ -41,7 +51,6 @@ char	**set_var_in_env(char *var, char *path, char **env)
 	int		i;
 	int		j;
 	char	*str;
-	//char	*temp;
 	char	**tab;
 
 	i = 0;
@@ -63,5 +72,6 @@ char	**set_var_in_env(char *var, char *path, char **env)
 		}
 		i++;
 	}
+	free_char_tab(env);
 	return (tab);
 }
