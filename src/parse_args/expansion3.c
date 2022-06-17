@@ -35,6 +35,8 @@ char	*case_dol_quote(char *data, char **env, int *i, char *str)
 
     (*i)++;
     j = *i;
+    if (!ft_isalnum(data[*i]))
+        str = ft_strjoin(str, "$");
     while (ft_isalnum(data[*i]) && data[*i])
         (*i)++;
     temp = ft_substr(data, j, *i - j);

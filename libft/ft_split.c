@@ -85,6 +85,8 @@ char	**ft_split(char const *str, char c)
 
 	i = 0;
 	p = 0;
+	if (!str)
+		return (NULL);
 	liste = (char **)malloc(sizeof(char *) * (size_list(str, c) + 1));
 	if (!liste)
 		return (NULL);

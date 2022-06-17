@@ -88,6 +88,8 @@ char	*case_nodol_quote(char *data, int *i, char *str);
 char	*case_dol_quote(char *data, char **env, int *i, char *str);
 char	*case_single_quote(char *data, int *i, char *str);
 char	*manage_dquote(char *data, char **env, int *i, char *str);
+char    *case_status(char *data, int *i, char *str);
+char	*case_dolafterdol(char *data, int *i, char *str);
 
 
 
@@ -120,8 +122,6 @@ int    ft_unset(char **arg, char **env);
 
 
 int		export_appreciate_symbol(char arg);
-int		check_arg_export(char *arg);
-char	**export_var_env(char *arg, char **env);
 void    ft_export(char **arg, char **env);
 char	**dup_env_tab(char **env);
 char	**env_sorted_export(char **env);
@@ -134,6 +134,7 @@ int	input_r(t_datas *input_r);
 void	delete_node(t_flist **li);
 //static char	*ft_strcat(char *dest, char *src);
 char    **manage_env_i(void);
+char	*ft_strjoin_path(char *s1, char *s2);
 
 
 #endif

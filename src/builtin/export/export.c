@@ -2,13 +2,13 @@
 
 char	**dup_env_tab_export(char **env)
 {
-	int	i;
+	int		i;
 	char	**tab;
 
 	i = 0;
 	while (env[i])
 		i++;
-	tab = (char**)malloc(sizeof(char *) * (i + 1));
+	tab = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;
@@ -22,17 +22,35 @@ char	**dup_env_tab_export(char **env)
 	return (tab);
 }
 
-int		export_appreciate_symbol(char arg)
+static int	check_each_arg(char *arg, int *i)
 {
-	if (arg == '-' || arg == '+' || arg == '*' || arg == '#' || arg == ':'
-		|| arg == '$' || arg == '/' || arg == '\\' || arg == ':'
-			|| arg == '=' || arg == '[' || arg == ']' || arg == '{'
-				|| arg == '}' || arg == ',')
-				return (1);
-	return (0);
+	int	j;
+
+	j = 0;
+	while (arg[*i] != '=' && arg[*i])
+	{
+		if (!ft_isalnum(arg[*i]))
+		{
+			printf("minishell: '%s': not a valid identifier\n", arg);
+			return (0);
+		}
+		(*i)++;
+	}
+	if (arg[*i + 1] != '\0')
+		(*i)++;
+	while (arg[*i])
+	{
+		if (!ft_isalnum(arg[*i]) && !export_appreciate_symbol(arg[*i]))
+		{
+			printf("minishell: '%s': not a valid identifier\n", arg);
+			return (0);
+		}
+		(*i)++;
+	}
+	return (1);
 }
 
-int		check_arg_export(char *arg)
+static int	check_arg_export(char *arg)
 {
 	int	i;
 	int	pos;
@@ -44,33 +62,13 @@ int		check_arg_export(char *arg)
 		printf("minishell: '%s': not a valid identifier\n", arg);
 		return (0);
 	}
-	while (arg[i] != '=' && arg[i])
-	{
-		if (!ft_isalnum(arg[i]))
-		{
-			printf("minishell: '%s': not a valid identifier\n", arg);
-			return (0);
-		}
-		i++;
-	}
-	if (arg[i + 1] != '\0')
-		i++;
-	while (arg[i])
-	{
-		printf("arg = %c\n", arg[i]);
-		if (!ft_isalnum(arg[i]) && !export_appreciate_symbol(arg[i]))
-		{
-			printf("minishell: '%s': not a valid identifier\n", arg);
-			return (0);
-		}
-		i++;
-	}	
+	check_each_arg(arg, &i);
 	if (!ft_strchr(arg, '='))
 		return (0);
 	return (1);
 }
 
-char	**export_var_env(char *arg, char **env)
+static char	**export_var_env(char *arg, char **env)
 {
 	int	i;
 
@@ -80,13 +78,10 @@ char	**export_var_env(char *arg, char **env)
 		i++;
 	env[i] = ft_strdup(arg);
 	env[++i] = 0;
-	i = 0;
-	while (env[i])
-		printf("env = %s\n", env[i++]);
 	return (env);
 }
 
-void    ft_export(char **arg, char **env)
+void	ft_export(char **arg, char **env)
 {
 	int	i;
 	int	pos;

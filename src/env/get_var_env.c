@@ -46,13 +46,13 @@ char	**set_var_in_env(char *var, char *path, char **env)
 
 	i = 0;
 	j = 0;
-	if (!var || !*env || !path)
+	if (!var || !env || !path)
 		return (NULL);
-	tab = dup_env_tab(g.env);
+	tab = dup_env_tab(env);
 	while (tab[i])
 	{
 		j = 0;
-		while (tab[i][j] != '=')
+		while (tab[i][j] != '=' && tab[i][j])
 			j++;
 		if (!ft_strncmp(var, tab[i], j))
 		{
@@ -63,6 +63,5 @@ char	**set_var_in_env(char *var, char *path, char **env)
 		}
 		i++;
 	}
-	free(str);
 	return (tab);
 }

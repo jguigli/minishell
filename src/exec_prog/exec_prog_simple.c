@@ -36,17 +36,17 @@ void	manage_child_simple(t_exec_s exec, t_flist *list, char **env)
 int	exec_simple_cmd(t_flist *list, char **env)
 {
 	t_exec_s	exec;
-	char		**arg;
 	int			file;
 	int			wstatus;
 
 	//affiche(list->process);
 	wstatus = 0;
+	exec.cmd_path = NULL;
 	shell_parameter_expansion(list->process, env);
 	//file = manage_redirections(&list);
 	//affiche(list->process);
 	//printf("file == %d \n", file);
-	exec.path = search_in_env_var("PATH", env); // plantage
+	exec.path = search_in_env_var("PATH", env);
 	exec.cmd_path = ft_split(exec.path, ':');
 	exec.cmd_arg = list_to_tab(list->process);
 	if (!exec.cmd_arg)

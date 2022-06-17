@@ -3,7 +3,7 @@
 int	is_builtin(char *cmd)
 {
 	int		i;
-	char	*builtin[7];
+	char	*builtin[8];
 
 	i = 0;
 	builtin[0] = "cd";
@@ -13,9 +13,10 @@ int	is_builtin(char *cmd)
 	builtin[4] = "export";
 	builtin[5] = "pwd";
 	builtin[6] = "unset";
+	builtin[7] = 0;
 	while (builtin[i])
 	{
-		if (!strcmp(builtin[i], cmd))
+		if (!ft_strcmp(builtin[i], cmd))
 			return (1);
 		i++;
 	}
@@ -53,7 +54,7 @@ char	**list_to_tab(t_dblist *list)
 	size = my_lstsize_dblist(list);
 	tab = malloc(sizeof(char *) * (size + 1));
 	if (!tab)
-		exit(0);
+		return (NULL);
 	while (current)
 	{
 		tab[i] = ft_strdup(current->data);

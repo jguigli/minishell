@@ -1,14 +1,24 @@
 #include "../../../includes/minishell.h"
 
+int	export_appreciate_symbol(char arg)
+{
+	if (arg == '-' || arg == '+' || arg == '*' || arg == '#' || arg == ':'
+		|| arg == '$' || arg == '/' || arg == '\\' || arg == ':'
+		|| arg == '=' || arg == '[' || arg == ']' || arg == '{'
+		|| arg == '}' || arg == ',')
+		return (1);
+	return (0);
+}
+
 char	**dup_env_tab(char **env)
 {
-	int	i;
+	int		i;
 	char	**tab;
 
 	i = 0;
 	while (env[i])
 		i++;
-	tab = (char**)malloc(sizeof(char *) * (i + 1));
+	tab = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;
@@ -23,8 +33,8 @@ char	**dup_env_tab(char **env)
 
 char	**env_sorted_export(char **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	**tab;
 	char	*temp;
 
@@ -48,7 +58,24 @@ char	**env_sorted_export(char **env)
 	return (tab);
 }
 
-void    print_export(char **env)
+void	print_tab_export(char **tab, int *i, int *j, int *lim)
+{
+	printf("declare -x ");
+	while (tab[*i][*j])
+	{
+		printf("%c", tab[*i][*j]);
+		if (tab[*i][*j] == '=' && *lim == 0)
+		{
+			printf("\"");
+			*lim = 1;
+		}
+		(*j)++;
+	}
+	printf("\"\n");
+	(*i)++;
+}
+
+void	print_export(char **env)
 {
 	int		i;
 	int		j;
@@ -63,19 +90,7 @@ void    print_export(char **env)
 	{
 		j = 0;
 		lim = 0;
-		printf("declare -x ");
-		while (tab[i][j])
-		{
-			printf("%c", tab[i][j]);
-			if (tab[i][j] == '=' && lim == 0)
-			{
-				printf("\"");
-				lim = 1;
-			}
-			j++;
-		}
-		printf("\"\n");
-		i++;
+		print_tab_export(tab, &i, &j, &lim);
 	}
 	while (tab[i])
 		free(tab[i++]);

@@ -36,13 +36,22 @@ char	*case_nodol_noquote(char *data, int *i, char *str)
     return (str);
 }
 
-char	*case_dol_noquote(char *data, char **env, int *i, char *str) // RAJOUTER FREE TEMP	
+char	*case_dol_noquote(char *data, char **env, int *i, char *str)	
 {
 	char	*temp;
 	int		j;
 
 	(*i)++;
     j = *i;
+	if (!ft_isalnum(data[*i]) && data[*i] != 34 && data[*i] != 39)
+	{
+		while (!ft_isalnum(data[*i]) && data[*i] != 34 && data[*i] != 39 && data[*i] != '$')
+			(*i)++;
+   		temp = ft_substr(data, j, *i - j);
+		str = ft_strjoin(str, "$");
+        str = ft_strjoin(str, temp);
+		return (str);
+	}
     while (ft_isalnum(data[*i]) && data[*i])
         (*i)++;
     temp = ft_substr(data, j, *i - j);
