@@ -19,7 +19,7 @@
 // 	return (data);
 // }
 
-static int	change_directory(char *data)
+static int	change_directory(char *data, char **env)
 {
 	char	*temp;
 
@@ -28,12 +28,12 @@ static int	change_directory(char *data)
 		return (0);
 	if (!chdir(data))
 	{
-		g.env = set_var_in_env("OLDPWD", temp, g.env);
+		env = set_var_in_env("OLDPWD", temp, env);
 		free (temp);
 		temp = getcwd(NULL, 0);
 		if (!temp)
 			return (0);
-		g.env = set_var_in_env("PWD", temp, g.env);
+		env = set_var_in_env("PWD", temp, env);
 		free (temp);
 		return (1);
 	}
@@ -53,7 +53,7 @@ static int	cd_home(char **env)
 		g.status = 1;
 		return (0);
 	}
-	return (change_directory(search_in_env_var("HOME", env)));
+	return (change_directory(search_in_env_var("HOME", env), env));
 }
 
 static int	cd_oldpwd(char **env)
@@ -64,7 +64,7 @@ static int	cd_oldpwd(char **env)
 		g.status = 1;
 		return (0);
 	}
-	return (change_directory(search_in_env_var("OLDPWD", env)));
+	return (change_directory(search_in_env_var("OLDPWD", env), env));
 }
 
 int	ft_cd(char **arg, char **env)
@@ -76,7 +76,7 @@ int	ft_cd(char **arg, char **env)
 		return (cd_oldpwd(env));
 	else if (arg[1] && !arg[2])
 	{
-		if (change_directory(arg[1]))
+		if (change_directory(arg[1], env))
 		{
 			g.status = 1;
 			return (1);

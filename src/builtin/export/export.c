@@ -19,6 +19,7 @@ char	**dup_env_tab_export(char **env)
 	}
 	tab[i++] = 0;
 	tab[i] = 0;
+	free_char_tab(env);
 	return (tab);
 }
 
@@ -94,7 +95,7 @@ void	ft_export(char **arg, char **env)
 	while (arg[i])
 	{
 		if (check_arg_export(arg[i]))
-			g.env = export_var_env(arg[i], env);
+			env = export_var_env(arg[i], env);
 		else
 			g.status = 1;
 		i++;

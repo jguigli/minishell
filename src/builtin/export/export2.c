@@ -55,6 +55,7 @@ char	**env_sorted_export(char **env)
 		}
 		i++;
 	}
+	free_char_tab(env);
 	return (tab);
 }
 

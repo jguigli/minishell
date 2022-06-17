@@ -40,7 +40,7 @@
 extern t_glob g;
 
 //Main functions
-void			get_prompt(void);
+void			get_prompt(char **env);
 char			**get_copy(char **d_tab);
 t_flist			*parse_args(char	*str, char **env);
 void			*get_ll(char **args);
@@ -123,13 +123,12 @@ int    ft_cd(char **arg, char **env);
 int    ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
 void    ft_exit(char **arg);
-void    ft_export(char **arg, char **env);
-int    ft_pwd(void);
-int    ft_unset(char **arg, char **env);
+void	ft_export(char **arg, char ***env);
+void    ft_pwd(void);
+void	ft_unset(char **arg, char ***env);
 
 
 int		export_appreciate_symbol(char arg);
-void    ft_export(char **arg, char **env);
 char	**dup_env_tab(char **env);
 char	**env_sorted_export(char **env);
 void    print_export(char **env);
@@ -142,6 +141,9 @@ void delete_node(t_flist **li);
 //static char	*ft_strcat(char *dest, char *src);
 char    **manage_env_i(void);
 char	*ft_strjoin_path(char *s1, char *s2);
+
+void	delete_nodes_after_expansion(t_dblist *list);
+void	free_char_tab(char **tab);
 
 
 #endif
