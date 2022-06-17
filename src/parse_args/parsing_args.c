@@ -765,7 +765,7 @@ int	simple_block_p(t_flist **gr_list)
 					return (-200);
 				}
 				tmp = get_next_line(file);
-				printf("tmp ==> %s\n", tmp);
+				//printf("tmp ==> %s\n", tmp);
 				while (tmp != NULL)
 				{
 					node_toadd = ft_strjoin(node_toadd, tmp);
