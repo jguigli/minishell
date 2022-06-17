@@ -14,11 +14,11 @@
 
 int    ft_strchr(const char *s, int c)
 {
-    char            sent;
+    char            *sent;
     unsigned char    character;
     size_t            i;
 
-    sent = (char)s;
+    sent = (char *)s;
     character = (unsigned char)c;
     i = 1;
     while (i <= ft_strlen(s))

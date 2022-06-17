@@ -18,6 +18,7 @@ SRC = minishell.c \
 		./src/exec_prog/exec_prog.c \
 		./src/exec_prog/exec_manage_redir.c \
 		./src/exec_prog/exec_prog_utils.c \
+		./src/exec_prog/exec_prog_utils2.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/exec_prog/exec_prog_complex.c \
 		./src/env/get_var_env.c \

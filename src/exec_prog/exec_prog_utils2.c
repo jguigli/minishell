@@ -45,6 +45,7 @@ void	close_pipes(t_exec_c *exec)
 
 void	manage_dup2(t_exec_c exec, int first, int second)
 {
+	(void)exec;
 	if (dup2(first, STDIN_FILENO) < 0)
 	{
 		error_msgs(errno, "Fd's duplication failed");

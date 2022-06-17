@@ -16,8 +16,8 @@ static int	check_digit_exit(char *arg)
 
 static void	exit_one_arg(char *arg)
 {
-	if (check_digit_exit(arg[1]))
-		g.status = ft_atoi(arg[1]);
+	if (check_digit_exit(arg))
+		g.status = ft_atoi(arg);
 	else
 	{
 		printf("minishell: exit: numeric argument required\n");
@@ -28,7 +28,7 @@ static void	exit_one_arg(char *arg)
 
 static void	exit_multi_arg(char *arg)
 {
-	if (!check_digit_exit(arg[1]))
+	if (!check_digit_exit(arg))
 	{
 		printf("minishell: exit: numeric argument required\n");
 		g.status = 2;

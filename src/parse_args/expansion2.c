@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char    *case_status(char *data, int *i, char *str)
+char    *case_status(int *i, char *str)
 {
 	char	*temp;
 
@@ -11,7 +11,7 @@ char    *case_status(char *data, int *i, char *str)
 	return (str);
 }
 
-char	*case_dolafterdol(char *data, int *i, char *str)
+char	*case_dolafterdol(int *i, char *str)
 {
 	str = ft_strjoin(str, "$");
 	(*i)++;
@@ -21,7 +21,6 @@ char	*case_dolafterdol(char *data, int *i, char *str)
 char	*case_nodol_noquote(char *data, int *i, char *str)
 {
 	char	*temp;
-    char    *rep;
 	int		j;
 
 	j = *i;

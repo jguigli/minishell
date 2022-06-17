@@ -2,8 +2,8 @@
 
 char	**unset_var(int position, char **env)
 {
-	int		i;
-	char	**tab;
+	size_t		i;
+	char		**tab;
 
 	i = position;
 	tab = dup_env_tab(env);
@@ -18,9 +18,9 @@ char	**unset_var(int position, char **env)
 
 int	ft_unset(char **arg, char **env)
 {
-	int		i;
-	int		j;
-	int		z;
+	size_t		i;
+	size_t		j;
+	size_t		z;
 
 	i = 1;
 	if (!arg || !env)

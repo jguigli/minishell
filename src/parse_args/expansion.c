@@ -11,9 +11,9 @@ char	*manage_expansion(t_datas *list, char **env)
 	{
 		str = case_nodol_noquote(list->data, &i, str);
 		if (list->data[i] == '$' && list->data[i + 1] == '?')
-			str = case_status(list->data, &i, str);
+			str = case_status(&i, str);
 		else if (list->data[i] == '$' && list->data[i + 1] == '\0')
-			str = case_dolafterdol(list->data, &i, str);
+			str = case_dolafterdol(&i, str);
 		else if (list->data[i] == '$')
 			str = case_dol_noquote(list->data, env, &i, str);
 		else if (list->data[i] == 34)

@@ -87,16 +87,16 @@ t_datas			*my_lstnew(char *data);
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	*search_in_env_var(char *str, char **env);
 char	**set_var_in_env(char *var, char *path, char **env);
-char	*case_no$_noquote(char *data, int *i, char *str);
-char	*case_$_noquote(char *data, char **env, int *i, char *str);
-char	*case_$bracket_noquote(char *data, char **env, int *i, char *str);
-char	*case_no$_quote(char *data, int *i, char *str);
-char	*case_$_quote(char *data, char **env, int *i, char *str);
-char	*case_$bracket_quote(char *data, char **env, int *i, char *str);
+char	*case_nodol_noquote(char *data, int *i, char *str);
+char	*case_dol_noquote(char *data, char **env, int *i, char *str);
+char	*case_dolbracket_noquote(char *data, char **env, int *i, char *str);
+char	*case_nodol_quote(char *data, int *i, char *str);
+char	*case_dol_quote(char *data, char **env, int *i, char *str);
+char	*case_dolbracket_quote(char *data, char **env, int *i, char *str);
 char	*case_single_quote(char *data, int *i, char *str);
 char	*manage_dquote(char *data, char **env, int *i, char *str);
-char    *case_status(char *data, int *i, char *str);
-char	*case_dolafterdol(char *data, int *i, char *str);
+char    *case_status(int *i, char *str);
+char	*case_dolafterdol(int *i, char *str);
 
 
 
@@ -124,7 +124,7 @@ int    ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
 void    ft_exit(char **arg);
 void    ft_export(char **arg, char **env);
-int    ft_pwd(char **arg);
+int    ft_pwd(void);
 int    ft_unset(char **arg, char **env);
 
 

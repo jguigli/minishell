@@ -36,7 +36,7 @@ void	exec_builtin(char **arg, char **env)
 	else if (!strcmp(arg[0], "export"))
 		ft_export(arg, env);
 	else if (!strcmp(arg[0], "pwd"))
-		ft_pwd(arg);
+		ft_pwd();
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, env);
 	return ;

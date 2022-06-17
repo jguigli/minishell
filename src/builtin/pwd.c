@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	ft_pwd(char **arg)
+int	ft_pwd(void)
 {
 	char	*str;
 
