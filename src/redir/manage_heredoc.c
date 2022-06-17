@@ -142,11 +142,11 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
     {
 		write(1, "> ", 3);
 		buf = get_next_line(0);
-		//printf("hiho\n");
 		if (buf == NULL)
 			break ;
 		if (copy->expansion)
 			buf = hd_expansion(buf);
+		//printf("buuuuuf == %s\n", buf);
 		if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
 			break ;
 		write(file, buf, ft_strlen(buf));

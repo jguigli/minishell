@@ -38,7 +38,7 @@ OBJ = $(SRC:.c=.o)
 
 CC = cc
 
-FLAG = -g3 -Wall -Werror -Wextra #-g3 -fsanitize=address 
+FLAG = -g3 -Wall -Werror -Wextra -fsanitize=address 
 
 HEADER = ./includes/minishell.h
 INC = 	-I./includes/	\

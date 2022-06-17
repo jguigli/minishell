@@ -755,8 +755,8 @@ int	simple_block_p(t_flist **gr_list)
 			else
 			{
 				waiting_child_hd(fi);
-				if (g.status == 130)
-					break ;
+				// if (g.status == 130)
+				// 	break ;
 				//manage_signal();
 				file = open(".hd1", O_RDONLY);
 				if	(file < 0)
@@ -765,7 +765,7 @@ int	simple_block_p(t_flist **gr_list)
 					return (-200);
 				}
 				tmp = get_next_line(file);
-				//printf("tmp ==> %s\n", tmp);
+				printf("tmp ==> %s\n", tmp);
 				while (tmp != NULL)
 				{
 					node_toadd = ft_strjoin(node_toadd, tmp);
@@ -970,7 +970,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	{
 		if	(simple_block_p(&gr_list) == -200)
 			return (NULL);
-		//affiche(gr_list->process);
+		// affiche(gr_list->process);
 	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{

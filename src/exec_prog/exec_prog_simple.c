@@ -59,6 +59,7 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 
 	wstatus = 0;
 	exec.cmd_path = NULL;
+	//affiche(list->process);
 	shell_parameter_expansion(list->process, env);
 	exec.path = search_in_env_var("PATH", env); // plantage
 	exec.cmd_path = ft_split(exec.path, ':');
