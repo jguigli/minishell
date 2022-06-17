@@ -14,8 +14,8 @@
 
 char	*search_in_env_var(char *var, char **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -41,7 +41,7 @@ char	**set_var_in_env(char *var, char *path, char **env)
 	int		i;
 	int		j;
 	char	*str;
-	char	*temp;
+	//char	*temp;
 	char	**tab;
 
 	i = 0;
@@ -54,9 +54,9 @@ char	**set_var_in_env(char *var, char *path, char **env)
 		j = 0;
 		while (tab[i][j] != '=' && tab[i][j])
 			j++;
-		if (!ft_strncmp(var, tab[i], j))
+		if (!ft_strncmp(var, env[i], j))
 		{
-			str = ft_substr(tab[i], 0, j + 1);
+			str = ft_substr(env[i], 0, j + 1);
 			str = ft_strjoin(str, path);
 			free(tab[i]);
 			tab[i] = ft_strdup(str);

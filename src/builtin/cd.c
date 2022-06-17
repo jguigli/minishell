@@ -4,7 +4,7 @@
 // {
 // 	char	*temp;
 // 	char	*temp2;
-
+//
 // 	if (!(ft_strncmp(data, "~/", 2)))
 // 	{
 // 		temp = search_in_env_var("HOME", env);
@@ -40,7 +40,7 @@ static int	change_directory(char *data, char **env)
 	}
 	else
 	{
-		perror("minishell: cd");
+		perror("cd");
 		g.status = 1;
 	}
 	return (0);

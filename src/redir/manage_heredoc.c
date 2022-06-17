@@ -90,7 +90,7 @@ char	*hd_expansion(char *str)
 				i++;
 			temp = ft_substr(str, j, i - j);
 			temp = search_in_env_var(temp, g.env);
-			printf("TEMP = %s\n", temp);
+			//printf("TEMP = %s\n", temp);
 			if (temp)
 				rep = ft_strjoin(rep, temp);
 		}
@@ -102,13 +102,12 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 {
 	t_datas	*copy;
 	int		file;
-	int		quote;
 	char	*buf;
 	char	*str_to_get;
 	char	*tmp;
-	int	old_fd;
 
 	//manage_signal_hd();
+	(void)*gr_list;
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
@@ -141,16 +140,18 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	}
 	while (1)
     {
-        write(1, "> ", 3);
+		write(1, "> ", 3);
 		buf = get_next_line(0);
-        if (buf == NULL)
-            break ;
+		//printf("hiho\n");
+		if (buf == NULL)
+			break ;
 		if (copy->expansion)
 			buf = hd_expansion(buf);
-        if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
-            break ;
-        write(file, buf, ft_strlen(buf));
-        free(buf);
+		if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
+			break ;
+		write(file, buf, ft_strlen(buf));
+		free(buf);
+		
 	}
 	close(file);
 	exit(g.status);

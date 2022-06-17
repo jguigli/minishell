@@ -33,6 +33,7 @@
 #define OPT "ERROR OPTIONS"
 #define SYNTAX_ERR "syntax error near unexpected token"
 #define DIR_ERR "Is a directory"
+#define FILE "No such file or directory"
 #define PI  "ERROR PIPE"
 
 
@@ -72,6 +73,10 @@ void			freeing_execution(t_exec_s	exec, int error);
 void			freeing_execution_c(t_exec_c	exec, int error);
 void			freeing_cmd_c(t_exec_c	exec);
 int				manage_signal_hd();
+void			syntax_err_file(char *error, char *data);
+void				ft_sig_fork_par(int sig);
+void			ft_sig_fork(int pid);
+t_datas			*my_lstnew(char *data);
 
 
 
@@ -82,10 +87,12 @@ int				manage_signal_hd();
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	*search_in_env_var(char *str, char **env);
 char	**set_var_in_env(char *var, char *path, char **env);
-char	*case_nodol_noquote(char *data, int *i, char *str);
-char	*case_dol_noquote(char *data, char **env, int *i, char *str);
-char	*case_nodol_quote(char *data, int *i, char *str);
-char	*case_dol_quote(char *data, char **env, int *i, char *str);
+char	*case_no$_noquote(char *data, int *i, char *str);
+char	*case_$_noquote(char *data, char **env, int *i, char *str);
+char	*case_$bracket_noquote(char *data, char **env, int *i, char *str);
+char	*case_no$_quote(char *data, int *i, char *str);
+char	*case_$_quote(char *data, char **env, int *i, char *str);
+char	*case_$bracket_quote(char *data, char **env, int *i, char *str);
 char	*case_single_quote(char *data, int *i, char *str);
 char	*manage_dquote(char *data, char **env, int *i, char *str);
 char    *case_status(char *data, int *i, char *str);
@@ -131,7 +138,7 @@ void    print_export(char **env);
 int	manage_redirections(t_flist **li);
 int	output_r(t_datas *output_r);
 int	input_r(t_datas *input_r);
-void	delete_node(t_flist **li);
+void delete_node(t_flist **li);
 //static char	*ft_strcat(char *dest, char *src);
 char    **manage_env_i(void);
 char	*ft_strjoin_path(char *s1, char *s2);

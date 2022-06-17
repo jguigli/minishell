@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	manage_dup(t_exec_c exec)
+void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 {
 	if (exec.pid_number == 0)
 		manage_dup2(exec, 0, exec.pipe[1]);
@@ -10,12 +10,7 @@ void	manage_dup(t_exec_c exec)
 	{
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
 			exec.pipe[2 * exec.pid_number + 1]);
-	}	
-}
-
-void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
-{
-	manage_dup(exec);
+	}
 	close_pipes(&exec);
 	manage_redirections(&list);
 	exec.cmd_arg = list_to_tab(list->process);
@@ -29,9 +24,12 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	else
 	{
 		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-		if (!exec.cmd)
+		if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 		{
-			freeing_cmd_c(exec);
+			if (ft_strcmp(exec.cmd, "KO") == 0)
+				syntax_err_file(FILE, exec.cmd_arg[0]);
+			else
+				freeing_cmd_c(exec);
 			exit(g.status);
 		}
 		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
@@ -42,21 +40,9 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 	}
 }
 
-void	manage_child_complex(t_exec_c exec, t_flist *list, char **env)
-{
-	t_flist		*current;
-
-	current = list;
-	if (g.my_fds[0] != -1000)
-		close(g.my_fds[0]);
-	if (g.my_fds[1] != -1000)
-		close(g.my_fds[1]);
-	child_process_complex(exec, current, env);
-}
-
 void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 {
-	char		**arg;
+	//char		**arg;
 	t_flist		*current;
 
 	current = list;
@@ -64,17 +50,26 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 	create_pipes(&exec);
 	while (current)
 	{
-		shell_parameter_expansion(current->process, env);
+        shell_parameter_expansion(current->process, env);
+		//affiche(current->process);
 		exec.pid[exec.pid_number] = fork();
+		ft_sig_fork(exec.pid[exec.pid_number]);
 		if (exec.pid[exec.pid_number] == -1)
 		{
 			printf("Fork failed : %s\n", strerror(errno));
 			exit(0);
 		}
 		else if (!exec.pid[exec.pid_number])
-			manage_child_complex(exec, current, env);
+		{
+			if (g.my_fds[0] != -1000)
+				close(g.my_fds[0]);
+			if (g.my_fds[1] != -1000)
+				close(g.my_fds[1]);
+			child_process_complex(exec, current, env);
+		}
 		exec.pid_number++;
 		current = current->next;
+		//fprintf(stderr, "WAOUUUH\n");
 	}
 	close_pipes(&exec);
 	exec.pid_number = -1;
@@ -82,17 +77,20 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
 }
 
-void	exec_complex_cmd(t_flist *list, char **env)
+void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec l'ast => gestion des pipes
 {
 	t_exec_c	exec;
-	int			pipe;
+	int		pipe;
 
 	pipe = my_lstsize(&list) - 1;
 	exec.pipe_number = 2 *(my_lstsize(&list) - 1);
 	exec.cmd_number = my_lstsize(&list);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);
 	if (!exec.pipe)
+	{
+		//printf("heeeeeeeeeeeeeeeere");
 		exit(0);
+	}
 	exec.pid = (pid_t *)malloc(sizeof(pid_t) * exec.cmd_number);
 	if (!exec.pid)
 	{
@@ -101,5 +99,6 @@ void	exec_complex_cmd(t_flist *list, char **env)
 	}
 	exec.path = search_in_env_var("PATH", env);
 	exec.cmd_path = ft_split(exec.path, ':');
+	//printf("cmd path %s \n", exec.cmd_path[0]);
 	manage_exec(exec, list, env);
 }

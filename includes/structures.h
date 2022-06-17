@@ -100,6 +100,7 @@ typedef struct s_glob
 	char	**env;
 	int		my_fds[2];
 	int		my_oldfds[2];
+	int		sigintos;
 }	t_glob;
 
 

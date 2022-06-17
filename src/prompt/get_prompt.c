@@ -19,6 +19,7 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	char	*prompt;
 	char	*temp;
 
+	(void)**env;
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[32m");
 	name = ft_strdup("minishell");
@@ -68,6 +69,7 @@ void	get_prompt(void)
 			add_history(entry);
 			//printf("entryyyyyy %s\n", entry);
 			gr_list = parse_args(entry, g.env);
+			//affiche(gr_list->process);
 			if	(!gr_list)
 				get_p = 0;
 			if	(get_p == 1)

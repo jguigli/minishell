@@ -12,18 +12,20 @@
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int    ft_strchr(const char *s, int c)
 {
-	int	i;
+    char            sent;
+    unsigned char    character;
+    size_t            i;
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
-		i++;
-	}
-	if (s[i] == (char)c)
-		return ((char *)&s[i]);
-	return (NULL);
+    sent = (char)s;
+    character = (unsigned char)c;
+    i = 1;
+    while (i <= ft_strlen(s))
+    {
+        if (sent[i] == character)
+            return (2);
+        i ++;
+    }
+    return (0);
 }

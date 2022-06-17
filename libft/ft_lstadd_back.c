@@ -16,7 +16,7 @@ void	ft_lstadd_back(t_flist **alst, t_flist *new)
 {
 	t_flist	*lstnew;
 
-	printf("%s \n", (*alst)->process->first->data);
+	//printf("%s \n", (*alst)->process->first->data);
 	if (*alst && alst)
 	{
 		lstnew = *alst;

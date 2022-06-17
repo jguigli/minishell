@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	is_builtin(char *cmd)
+int		is_builtin(char *cmd)
 {
 	int		i;
 	char	*builtin[8];
@@ -47,7 +47,7 @@ char	**list_to_tab(t_dblist *list)
 	char	**tab;
 	int		size;
 	int		i;
-	t_datas	*current;
+	t_datas *current;
 
 	i = 0;
 	current = list->first;
@@ -67,7 +67,7 @@ char	**list_to_tab(t_dblist *list)
 
 int	exec_launcher(t_flist **li, char **env)
 {
-	int		pipe;
+	int	pipe;
 	t_flist	*list;
 	t_flist	*list2;
 
@@ -75,13 +75,18 @@ int	exec_launcher(t_flist **li, char **env)
 	list2 = *li;
 	pipe = my_lstsize(&list) - 1;
 	if (pipe > 0)
+	{
+		//printf("OKKKKK geuuuurl \n");
 		exec_complex_cmd(list, env);
-	else if (pipe == 0)
+	}
+	else if	(pipe == 0)
 	{
 		if (exec_simple_cmd(list, env) == 10)
 		{
 			exit(g.status);
+
 		}
 	}
+
 	return (1);
 }

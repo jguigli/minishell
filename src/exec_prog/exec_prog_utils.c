@@ -44,10 +44,16 @@ char	*get_command(char **path, char *cmd)
 		return (cmd);
 	if (parse_cmd(cmd) == -1)
 	{
-		if (access(cmd, F_OK) == 0)
+		//printf("cmd = %s\n", cmd);
+		if	(access(cmd, F_OK) == 0)
+		{
+			write(1, "OKKK\n", 6);
 			return (cmd);
+		}
+		else
+			return ("KO");
 	}
-	else
+	else 
 	{
 		while (path[i])
 		{
@@ -60,6 +66,7 @@ char	*get_command(char **path, char *cmd)
 			free(path_cmd);
 			i++;
 		}
+
 	}
 	return (NULL);
 }

@@ -2,8 +2,7 @@
 
 void	init_classes(t_glob_infos *tok_info)
 {
-	tok_info->get_chr_c[255];
-
+	//tok_info->get_chr_c[255];
 	tok_info->get_chr_c[' '] = CHR_SP;
 	tok_info->get_chr_c['\t'] = CHR_SP;
 	tok_info->get_chr_c[';'] = CHR_SEMI;
@@ -102,8 +101,7 @@ void	init_classes(t_glob_infos *tok_info)
 
 void	init_tokens(t_glob_infos *tok_info)
 {
-	tok_info->get_tok_type[255];
-
+	//tok_info->get_tok_type[255];
 	tok_info->get_tok_type[CHR_SP] = TOKEN_SP;
 	tok_info->get_tok_type[CHR_AND] = TOKEN_AND;
 	tok_info->get_tok_type[CHR_PIPE] = TOKEN_PIPE;
@@ -143,8 +141,7 @@ void	init_tokens(t_glob_infos *tok_info)
 
 void	init_rules(t_glob_infos *tok_info)
 {
-	tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
-
+	//tok_info->get_chr_rules[TOKEN_MAX][CHR_MAX];
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SP] = 1;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_DIGIT] = 0;
 	tok_info->get_chr_rules[TOKEN_SP][CHR_SQUOTE] = 0;
@@ -278,7 +275,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_COMA] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOL] = 1;
-	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOT] = 1;
@@ -300,7 +297,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DOL] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_PIPE] = 1;
-	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SP] = 1;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DOT] = 1;
@@ -628,10 +625,10 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 
 	current = (*head)->process->first;
 	copy_head = *head;
-	// printf("repere%s  \n", repere);
+	//printf("repere%s  \n", repere);
 	// printf("repere%s  \n", repere);
 	// printf("ft strlen de repere %zu  \n", ft_strlen(repere));
-	while (current && (ft_strncmp(current->data, repere, ft_strlen(repere))))
+	while (current && (ft_strcmp(current->data, repere)))
 	{
 
 		//printf("current data %s  --- ft srlen : %zu\n", current->data, ft_strlen(current->data));
@@ -643,12 +640,14 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	//printf("current data%s  \n", current->data);
 	if (current->next)
 	{
+		//printf("apres lol %s\n", current->next->data);
 		tmp_tonext = current->next;
 		new = my_lstnew(node_toadd);
 		new->previous = current;
 		current->next = new;
 		new->pos = current->pos++;
 		new->next = tmp_tonext;
+		tmp_tonext->previous = new;
 		copy_head->process->number ++;
 		new->type = 39;
 		new->t_token = "TOKEN_HEREDOC_STRING";
@@ -670,6 +669,38 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	// exit(127);
 }
 
+int	waiting_child_hd(pid_t fi)
+{
+	int	wstatus;
+	int	ret;
+
+	ret = 0;
+	//kill(fi, SIGINT);
+	//sleep(60);
+	wstatus = 0;
+	if	(waitpid(fi, &wstatus, 0) == -1)
+			perror("wait() error");
+	//printf("wstatus == %d\n", wstatus);
+	if (WIFSIGNALED(wstatus) > 0)
+	{
+		//printf("hehe\n");
+		ret = (WTERMSIG(wstatus) + 128);
+	}
+	if (WIFEXITED(wstatus) > 0)
+	{
+		//printf("testouille -- %d\n", wstatus);
+		ret = (WEXITSTATUS(wstatus));
+	}
+	if (WIFSTOPPED(wstatus))
+	{
+		//printf("hoho\n");
+		ret = (WSTOPSIG(wstatus) + 128);
+	}
+	if (ret == 130)
+		g.status = 130;
+	return (ret);
+}
+
 int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
@@ -677,8 +708,7 @@ int	simple_block_p(t_flist **gr_list)
 	t_flist	*head;
 	int		i;
 	int		j;
-	int		fi;
-	int		wstatus;
+	pid_t		fi;
 	char	*node_toadd;
 	char	*tmp;
 	int		file;
@@ -691,6 +721,7 @@ int	simple_block_p(t_flist **gr_list)
 	j = 0;
 	node_toadd = NULL;
 	tmp = NULL;
+	//printf("nb of heredoc %d\n", head->nb_heredoc);
 	if	(head->nb_heredoc >= 1)
 	{
 		while (list && list->type != 33)
@@ -700,7 +731,7 @@ int	simple_block_p(t_flist **gr_list)
 			else 
 				break ;
 		}
-		//printf("there %s\n", list->data);
+		//printf("there %s -- nb_hd = %d\n", list->data, head->nb_heredoc);
 		while (i < head->nb_heredoc && list)
 		{
 			fi = fork();
@@ -711,46 +742,55 @@ int	simple_block_p(t_flist **gr_list)
 				error_msgs(errno, "Fork failed");
 				return (-200);
 			}
+			ft_sig_fork(fi);
 			if (fi == 0)
 			{
 				//printf("list data %s \n", list->next->data);
 				manage_one_redir(list->next, head);
-				//printf("prout\n");
+				//if	(g.sigintos == 2)
 				exit(1);
+				//printf("prout\n");
 				//return (1); // a essayer
-			}	
-			if	(waitpid(fi, &wstatus, 0) == -1)
-				perror("wait() error");
-			file = open(".hd1", O_RDONLY);
-			if	(file < 0)
-			{
-				error_msgs(errno, ".hd1");
-				return (-200);
 			}
-			tmp = get_next_line(file);
-			//printf("tmp ==> %s\n", tmp);
-			while (tmp != NULL)
-			{
-				node_toadd = ft_strjoin(node_toadd, tmp);
-				free(tmp);
-				tmp = get_next_line(file);		
-			}
-			close(file);
-			if (list->next)
-				list = list->next;
 			else
-				break ;
-			insert_node(list->data, node_toadd, &head);
-			node_toadd = NULL;
-			tmp = NULL;
-			while(list && list->type != 33)
 			{
+				waiting_child_hd(fi);
+				if (g.status == 130)
+					break ;
+				//manage_signal();
+				file = open(".hd1", O_RDONLY);
+				if	(file < 0)
+				{
+					error_msgs(errno, ".hd1");
+					return (-200);
+				}
+				tmp = get_next_line(file);
+				//printf("tmp ==> %s\n", tmp);
+				while (tmp != NULL)
+				{
+					node_toadd = ft_strjoin(node_toadd, tmp);
+					//printf("node to add %s\n", node_toadd);
+					free(tmp);
+					tmp = get_next_line(file);		
+				}
+				close(file);
 				if (list->next)
 					list = list->next;
 				else
 					break ;
+				//printf("list datataa == %s\n", list->data);
+				insert_node(list->data, node_toadd, &head);
+				node_toadd = NULL;
+				tmp = NULL;
+				while(list && list->type != 33)
+				{
+					if (list->next)
+						list = list->next;
+					else
+						break ;
+				}
+				i ++;
 			}
-			i ++;
 		}
 	}
 	return (0);
@@ -765,7 +805,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	int		j;
 	int		k;
 	int		fi;
-	int		wstatus;
 	char	*node_toadd;
 	char	*tmp;
 	int		file;
@@ -808,6 +847,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			error_msgs(errno, "Fork failed");
 			return (-200);
 		}
+		ft_sig_fork(fi);
 		//printf("total nb heredoc %d \n", totalhd);
 		if (fi == 0)
 		{
@@ -828,8 +868,8 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			}
 			exit(1);
 		}	
-		if	(waitpid(fi, &wstatus, 0) == -1)
-			perror("wait() error");
+		waiting_child_hd(fi);
+		manage_signal();
 		file = open(".hd1", O_RDONLY);
 		if	(file < 0)
 		{
@@ -915,23 +955,22 @@ t_flist	*parse_args(char	*entry, char **env)
 {
 	t_dblist	*fin_li;
 	t_flist		*gr_list;
-	t_dblist	*test;
-	int			file;
-	char 		*tmp;
-	char 		*str_to_get;
 	int			tota_heredoc;
 
 	//printf("test1");
+	(void)**env;
 	fin_li = get_tokens(entry);
 	tota_heredoc = 0;
 	if	(!fin_li)
 		return (NULL);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
+	// affiche(gr_list->next->process);
 	if (my_lstsize(&gr_list) == 1)
 	{
 		if	(simple_block_p(&gr_list) == -200)
 			return (NULL);
+		//affiche(gr_list->process);
 	}
 	else if	(my_lstsize(&gr_list) > 1)
 	{
