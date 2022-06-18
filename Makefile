@@ -36,9 +36,9 @@ SRC = minishell.c \
 
 OBJ = $(SRC:.c=.o)
 
-CC = cc
+CC = cc #A MODIFIER EN GCC AVANT DE RENDRE 
 
-FLAG = -g3 -Wall -Werror -Wextra -fsanitize=address 
+FLAG = -Wall -Werror -Wextra -g3 -fsanitize=address 
 
 HEADER = ./includes/minishell.h
 INC = 	-I./includes/	\
@@ -53,7 +53,7 @@ GNL				=	$(GNL_PATH)/gnl.a
 all : $(NAME)
 
 %.o : %.c
-	$(CC) $(FLAG) -c $< -o $@ 
+	$(CC)  -c $< -o $@ #$(FLAG)
 
 $(NAME) : $(OBJ) $(LIBFT) $(GNL) $(HEADER)
 	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) $(INC) -lreadline -o $(NAME)

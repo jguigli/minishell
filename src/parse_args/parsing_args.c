@@ -97,6 +97,7 @@ void	init_classes(t_glob_infos *tok_info)
 	tok_info->get_chr_c['\\'] = CHR_BS;
 	tok_info->get_chr_c['/'] = CHR_SLASH;
 	tok_info->get_chr_c['.'] = CHR_DOT;
+	tok_info->get_chr_c[':'] = CHR_COLON;
 }
 
 void	init_tokens(t_glob_infos *tok_info)
@@ -137,6 +138,7 @@ void	init_tokens(t_glob_infos *tok_info)
 	tok_info->get_tok_type[CHR_QUERY] = TOKEN_QUERY;
 	tok_info->get_tok_type[CHR_AROB] = TOKEN_AROB;
 	tok_info->get_tok_type[CHR_TILDE] = TOKEN_TILDE;
+	tok_info->get_tok_type[CHR_COLON] = TOKEN_COLON;
 }
 
 void	init_rules(t_glob_infos *tok_info)
@@ -255,6 +257,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_LBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_RBRACE] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_COMA] = 1;
+	tok_info->get_chr_rules[TOKEN_DOL][CHR_COLON] = 1;
+	tok_info->get_chr_rules[TOKEN_DOL][CHR_EQ] = 1;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_ESP] = 1;	
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_EOF] = 0;
 	tok_info->get_chr_rules[TOKEN_DOL][CHR_SP] = 0;
@@ -278,6 +282,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_BS] = 1;	
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_EQ] = 1;
+	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_COLON] = 1;	
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_DOT] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_SLASH] = 1;
 	tok_info->get_chr_rules[TOKEN_DQUOTE][CHR_ESP] = 1;	
@@ -296,6 +302,8 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_COMA] = 1;	
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_DOL] = 1;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_EQ] = 1;
+	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_COLON] = 1;	
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_SP] = 0;
 	tok_info->get_chr_rules[TOKEN_SQUOTE][CHR_EOF] = 0;
@@ -691,21 +699,17 @@ int	waiting_child_hd(pid_t fi)
 int	simple_block_p(t_flist **gr_list)
 {
 	t_datas	*list;
-	t_datas	*list2;
 	t_flist	*head;
 	int		i;
-	int		j;
 	pid_t		fi;
 	char	*node_toadd;
 	char	*tmp;
 	int		file;
 
 	list = (*gr_list)->process->first;
-	list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	//affiche(head->process);
 	i = 0;
-	j = 0;
 	node_toadd = NULL;
 	tmp = NULL;
 	//printf("nb of heredoc %d\n", head->nb_heredoc);
@@ -789,7 +793,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	// t_datas	*list2;
 	t_flist	*head;
 	int		i;
-	int		j;
 	int		k;
 	int		fi;
 	char	*node_toadd;
@@ -800,7 +803,6 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 	// list2 = (*gr_list)->process->first;
 	head = *gr_list;
 	i = 0;
-	j = 0;
 	k = 0;
 	node_toadd = NULL;
 	tmp = NULL;

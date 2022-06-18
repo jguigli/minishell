@@ -259,12 +259,13 @@ t_dblist	*token_tag(t_dblist *list)
 		if (tag->type == 5)
 		{
 			aft_p = 1;
-			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7 || tag->previous->type == 33))
+			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7))
 			{
 				tag->t_token = "TOKEN_FILE";
 				tag->type = 21;
 			}
-			else if (!tag->previous || tag->previous->type == 11 || head->type == 6 || head->type == 38)
+			else if (!tag->previous || tag->previous->type == 11 || tag->previous->type == 35 
+				|| tag->previous->type == 36 ||  tag->previous->type == 37 || head->type == 6 || head->type == 38)
 				tag->t_token = "TOKEN_CMD";
 			else
 				tag->t_token = "TOKEN_OPT";
@@ -337,7 +338,7 @@ t_dblist	*token_tag(t_dblist *list)
 				}
 			}
 		}
-		else if (tag->type == 7)
+		if (tag->type == 7)
 		{
 			aft_p = 1;
 			if (tag->length == 2)
@@ -365,7 +366,11 @@ t_dblist	*token_tag(t_dblist *list)
 					tag->t_token = "SQUOTED_DELIM";
 				}
 				if (tag->next != NULL)
+				{
+					printf("A --- tag data %s\n", tag->data);
 					tag = tag->next;
+					printf("B --- tag data %s\n", tag->data);
+				}
 				else
 					break ;
 				if (tag->type == 5)
@@ -456,7 +461,7 @@ t_dblist	*token_tag(t_dblist *list)
 				aft_p = 0;
 			}
 		}
-		else if (tag->type == 6)
+		if (tag->type == 6)
 		{
 			if (tag->length == 2)
 			{
@@ -471,7 +476,11 @@ t_dblist	*token_tag(t_dblist *list)
 			tag->type = 21;
 		}
 		if	(tag->next != NULL)
+		{
+			printf("C --- tag data %s\n", tag->data);
 			tag = tag->next;
+			printf("D --- tag data %s\n", tag->data);
+		}
 		else
 			break ;
 	}
@@ -551,7 +560,7 @@ t_dblist *p_tok(t_dblist *list)
 
 	p_list = list->first;
 	p_list->length = ft_strlen(p_list->data);
-	affiche(list);
+	//affiche(list);
 	if	(p_list->type != 5 && p_list->type != 13 && p_list->type != 12 && p_list->type != 7
 	 && p_list->type != 1  && p_list->type != 27 && p_list->type != 28
 	 	&& p_list->type != 1 && p_list->type != 44 && p_list->type != 6)
@@ -622,8 +631,9 @@ t_dblist *p_tok(t_dblist *list)
 				return (NULL);
 			}
 		}
-		else
+		else if (p_list->type != 12 && p_list->type != 13)	
 		{
+			printf("hiho\n");
 			syntax_err(SYNTAX_ERR, p_list->data);
 			return (NULL);
 		}

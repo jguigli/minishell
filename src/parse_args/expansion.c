@@ -14,14 +14,16 @@ void	delete_nodes_after_expansion(t_dblist *list)
 		current = current->next;
 		free(stock_curr);
 	}
+	printf("dataaaaa : %s\n", current->data);
 	list->first = current;
 	current = current->next;
 	while(current)
 	{
 		if (current && current->data[0] != '\0')
 			current = current->next;
-		else
+		else if	(current && current->data[0] == '\0')
 		{
+			printf("icii vide ? %s\n", current->data);
 			if (current->next)
 			{
 				stock_next = current->next;
@@ -66,20 +68,21 @@ char	*manage_expansion(t_datas *list, char **env)
 		if (list->data[i] != '\0')
 			i++;
 	}
+	free(list->data);
+	list->data = ft_strdup(str);
 	return (str);	
 }
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 {
 	t_datas	*list;
-	int		i;
 	char	*str;
 
+	str = ft_strdup("");
 	list = gr_list->first;
-	affiche(gr_list);
+	//affiche(gr_list);
 	while (list)
 	{
-		i = 0;
 		if (list->type == 39)
 		{
 			if (list->next)
@@ -89,10 +92,11 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 		}
 		else
 			str = manage_expansion(list, env);
-		free(list->data);
-		list->data = ft_strdup(str);
 		//free(str); Vu Joel et Amina : ok pour enlever pour les noeuds.
-		list = list->next;
+		if (list->next)
+			list = list->next;
+		else
+			break ;
 	}
 	//affiche(gr_list);
 }

@@ -16,10 +16,8 @@ char	**get_copy(char **d_tab)
 {
 	char	**new_dtab;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	new_dtab = (char**)malloc(sizeof(char*) * (ft_strlen_double(d_tab) + 1));
 	if (!new_dtab)
 		return (NULL);

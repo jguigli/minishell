@@ -150,7 +150,7 @@ int	manage_redirections(t_flist **li)
 	file = 0;
 	inp_redir = list->nb_heredoc + list->nb_lred;
 	//printf("inp redir --> %d \n", inp_redir);
-	affiche(list->process);
+	//affiche(list->process);
 	outp_redir = list->nb_rred_app + list->nb_rred;
 	current = list->process->first;
 	while(current)
