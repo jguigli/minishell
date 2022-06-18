@@ -23,22 +23,22 @@ int		is_builtin(char *cmd)
 	return (0);
 }
 
-void	exec_builtin(char **arg, char **env)
+void	exec_builtin(char **arg, t_main *main)
 {
 	if (!strcmp(arg[0], "cd"))
-		ft_cd(arg, env);
+		ft_cd(arg, main);
 	else if (!strcmp(arg[0], "echo"))
 		ft_echo(arg);
 	else if (!strcmp(arg[0], "env"))
-		ft_env(arg, env);
+		ft_env(arg, main->env);
 	else if (!strcmp(arg[0], "exit"))
 		ft_exit(arg);
 	else if (!strcmp(arg[0], "export"))
-		ft_export(arg, &env);
+		ft_export(arg, main);
 	else if (!strcmp(arg[0], "pwd"))
 		ft_pwd();
 	else if (!strcmp(arg[0], "unset"))
-		ft_unset(arg, &env);
+		ft_unset(arg, main);
 	// int i = 0;
 	// while (env[i])
 	// 	printf("%s\n", env[i++]);
@@ -68,28 +68,22 @@ char	**list_to_tab(t_dblist *list)
 	return (tab);
 }
 
-int	exec_launcher(t_flist **li, char **env)
+int	exec_launcher(t_main *main)
 {
 	int	pipe;
-	t_flist	*list;
-	t_flist	*list2;
-
-	list = *li;
-	list2 = *li;
-	pipe = my_lstsize(&list) - 1;
+	
+	pipe = my_lstsize(main->start) - 1;
+	//printf("pippppe %d\n", pipe);
 	if (pipe > 0)
 	{
-		//printf("OKKKKK geuuuurl \n");
-		exec_complex_cmd(list, env);
+		exec_complex_cmd(main);
 	}
 	else if	(pipe == 0)
 	{
-		if (exec_simple_cmd(list, env) == 10)
+		if (exec_simple_cmd(main) == 10)
 		{
-			exit(g.status);
-
+			exit(status);
 		}
 	}
-
 	return (1);
 }

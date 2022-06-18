@@ -1,33 +1,37 @@
 #include "../../includes/minishell.h"
 
-int	output_r(t_datas *output_r)
+int	output_r(t_datas *output_r, t_main *main)
 {
 	if	(output_r->type == 6)
-		g.my_fds[0] = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+	{
+		main->my_fds[0] = open(output_r->next->data, O_TRUNC | O_CREAT | O_RDWR, 000644);
+	}
 	if	(output_r->type == 38)
-		g.my_fds[0] = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
-	if	(g.my_fds[0] < 0)
+		main->my_fds[0] = open(output_r->next->data, O_CREAT | O_RDWR | O_APPEND, 000644);
+	if	(main->my_fds[0] < 0)
 	{
 		error_msgs(errno, output_r->next->data);
 		printf("D --- here\n");
 		return (-5);
 	}
-	g.my_oldfds[0] = dup(STDOUT_FILENO);
-	if (dup2(g.my_fds[0], STDOUT_FILENO) == -1)
+	//close(main->my_fds[0]);
+	//main->my_oldfds[0] = dup(STDOUT_FILENO);
+	if (dup2(main->my_fds[0], STDOUT_FILENO) == -1)
 	{
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
 	}
-	return (g.my_oldfds[0]);
+	printf("tableau de fd, fd[0] == %d, fd[1] == %d\n", main->my_fds[0], main->my_fds[1]);
+	return (0);
 }
 
-int	input_r(t_datas *input_r)
+int	input_r(t_datas *input_r, t_main *main)
 {
 
 	if (input_r->type == 7)
 	{
-		g.my_fds[1] = open(input_r->next->data, O_RDONLY, 000644);
-		if	(g.my_fds[1] < 0)
+		main->my_fds[1] = open(input_r->next->data, O_RDONLY, 000644);
+		if	(main->my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			printf("E --- here\n");
@@ -39,31 +43,31 @@ int	input_r(t_datas *input_r)
 		if (input_r->next->next && input_r->next->next->type == 39)
 			input_r = input_r->next->next;
 		//printf("data == %s --- heredoooooc %d\n", input_r->data, input_r->type);
-		g.my_fds[1] = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000644);
-		if	(g.my_fds[1] < 0)
+		main->my_fds[1] = open(".hd2", O_TRUNC | O_CREAT | O_RDWR, 000644);
+		if	(main->my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			printf("teest\n");
 			return (-5);
 		}
-		write(g.my_fds[1], input_r->data, ft_strlen(input_r->data) + 1);
-		close(g.my_fds[1]);
-		g.my_fds[1] = open(".hd2", O_RDONLY);
-		if	(g.my_fds[1] < 0)
+		write(main->my_fds[1], input_r->data, ft_strlen(input_r->data) + 1);
+		close(main->my_fds[1]);
+		main->my_fds[1] = open(".hd2", O_RDONLY);
+		if	(main->my_fds[1] < 0)
 		{
 			error_msgs(errno, input_r->next->data);
 			printf("F --- here\n");
 			return (-5);
 		}
-		//close(g.my_fds[1]);
+		//close(main->my_fds[1]);
 	}
-	g.my_oldfds[1] = dup(0);
-	if	(dup2(g.my_fds[1], STDIN_FILENO) == -1)
+	main->my_oldfds[1] = dup(0);
+	if	(dup2(main->my_fds[1], STDIN_FILENO) == -1)
 	{
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
 	}
-	return (g.my_fds[1]);
+	return (main->my_fds[1]);
 }
 
 void	delete_node(t_flist **li)
@@ -134,12 +138,11 @@ void	delete_node(t_flist **li)
 }
 
 
-int	manage_redirections(t_flist **li)
+int	manage_redirections(t_flist **li, t_main *main)
 {
 	t_flist	*list;
 	int	inp_redir;
 	int	outp_redir;
-	int	file;
 	int	i;
 	int	j;
 	t_datas	*current;
@@ -147,7 +150,6 @@ int	manage_redirections(t_flist **li)
 	i = 0;
 	j = 0;
 	list = *li;
-	file = 0;
 	inp_redir = list->nb_heredoc + list->nb_lred;
 	//printf("inp redir --> %d \n", inp_redir);
 	//affiche(list->process);
@@ -162,11 +164,12 @@ int	manage_redirections(t_flist **li)
 			if	(i == outp_redir)
 			{
 				//printf("herre i = %d === outp_redir = %d -- data == %s\n", i, outp_redir, current->data);
-				if	(output_r(current) == -5)
+				if	(output_r(current, main) == -5)
 				{
-					//printf("C --- here????\n");
+					printf("C --- here????\n");
 					return (-5);
 				}
+				close(main->my_fds[0]);
 				//printf("data = %s --- next data == %s\n", current->data, current->next->data);
 				current->data = ft_strdup("");
 				if (current->next && current->next->type == 21)
@@ -200,7 +203,7 @@ int	manage_redirections(t_flist **li)
 			if	(j == inp_redir)
 			{
 				//printf("hey -- current data %s\n", current->data);
-				if(input_r(current) == -5)
+				if(input_r(current, main) == -5)
 				{
 					//printf("B --- here????\n");
 					return (-5);
@@ -252,5 +255,5 @@ int	manage_redirections(t_flist **li)
 	}
 	//affiche(list->process);
 	delete_node(&list);
-	return (file);
+	return (0);
 }

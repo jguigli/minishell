@@ -3,9 +3,15 @@
 void	manage_dup(t_exec_c exec)
 {
 	if (exec.pid_number == 0)
+	{
+		printf("here5\n");
 		manage_dup2(exec, 0, exec.pipe[1]);
+	}
 	else if (exec.pid_number == exec.cmd_number - 1)
+	{
+		printf("here6\n");
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2], 1);
+	}
 	else
 	{
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
@@ -13,18 +19,18 @@ void	manage_dup(t_exec_c exec)
 	}	
 }
 
-void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
+void	child_process_complex(t_exec_c exec, t_flist *list, t_main *main)
 {
 	manage_dup(exec);
 	close_pipes(&exec);
-	manage_redirections(&list);
+	manage_redirections(&list, main);
 	exec.cmd_arg = list_to_tab(list->process);
 	if (!exec.cmd_arg)
 		exit(0);
 	if (is_builtin(exec.cmd_arg[0]))
 	{
-		exec_builtin(exec.cmd_arg, envp);
-		exit(g.status);
+		exec_builtin(exec.cmd_arg, main);
+		exit(status);
 	}
 	else
 	{
@@ -35,39 +41,39 @@ void	child_process_complex(t_exec_c exec, t_flist *list, char **envp)
 				syntax_err_file(FILE, exec.cmd_arg[0]);
 			else
 				freeing_cmd_c(exec);
-			exit(g.status);
+			exit(status);
 		}
-		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
+		if (execve(exec.cmd, exec.cmd_arg, main->env) == -1)
 		{
 			freeing_execution_c(exec, errno);
-			exit(g.status);
+			exit(status);
 		}
 	}
 }
 
-void	manage_child_complex(t_exec_c exec, t_flist *list, char **env)
+void	manage_child_complex(t_exec_c exec, t_flist *list, t_main *main)
 {
 	t_flist		*current;
 
 	current = list;
-	if (g.my_fds[0] != -1000)
-		close(g.my_fds[0]);
-	if (g.my_fds[1] != -1000)
-		close(g.my_fds[1]);
-	child_process_complex(exec, current, env);
+	if (main->my_fds[0] != -1000)
+		close(main->my_fds[0]);
+	if (main->my_fds[1] != -1000)
+		close(main->my_fds[1]);
+	child_process_complex(exec, current, main);
 }
 
-void	manage_exec(t_exec_c exec, t_flist *list, char **env)
+void	manage_exec(t_exec_c exec, t_main *main)
 {
 	t_flist		*current;
 
-	current = list;
+	current = main->start;
 	exec.pid_number = 0;
 	create_pipes(&exec);
 	while (current)
 	{
-        shell_parameter_expansion(current->process, env);
-		delete_nodes_after_expansion(list->process);
+        shell_parameter_expansion(current->process, main->env);
+		delete_nodes_after_expansion(current->process);
 		exec.pid[exec.pid_number] = fork();
 		ft_sig_fork(exec.pid[exec.pid_number]);
 		if (exec.pid[exec.pid_number] == -1)
@@ -76,7 +82,7 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 			exit(0);
 		}
 		else if (!exec.pid[exec.pid_number])
-			manage_child_complex(exec, current, env);
+			manage_child_complex(exec, current, main);
 		exec.pid_number++;
 		current = current->next;
 	}
@@ -86,14 +92,14 @@ void	manage_exec(t_exec_c exec, t_flist *list, char **env)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
 }
 
-void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de commande avec l'ast => gestion des pipes
+void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l'ast => gestion des pipes
 {
 	t_exec_c	exec;
 	int		pipe;
 
-	pipe = my_lstsize(&list) - 1;
-	exec.pipe_number = 2 *(my_lstsize(&list) - 1);
-	exec.cmd_number = my_lstsize(&list);
+	pipe = my_lstsize(main->start) - 1;
+	exec.pipe_number = 2 * pipe;
+	exec.cmd_number = my_lstsize(main->start);
 	exec.pipe = (int *)malloc(sizeof(int) * exec.pipe_number);
 	if (!exec.pipe)
 		exit(0);
@@ -103,7 +109,7 @@ void	exec_complex_cmd(t_flist *list, char **env) // exécution de la ligne de co
 		free(exec.pipe);
 		exit(0);
 	}
-	exec.path = search_in_env_var("PATH", env);
+	exec.path = search_in_env_var("PATH", main->env);
 	exec.cmd_path = ft_split(exec.path, ':');
-	manage_exec(exec, list, env);
+	manage_exec(exec, main);
 }

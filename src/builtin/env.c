@@ -5,7 +5,7 @@ void	ft_env(char **arg, char **env)
 	int	i;
 
 	i = 0;
-	g.status = 0;
+	status = 0;
 	printf("LAAAAAAAAAAAAAAAA dans ft env\n");
 	if (!arg[1])
 	{
@@ -20,6 +20,6 @@ void	ft_env(char **arg, char **env)
 	else
 	{
 		printf("env: too much arguments\n");
-		g.status = 2;
+		status = 2;
 	}
 }

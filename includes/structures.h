@@ -96,16 +96,6 @@ typedef enum		e_chr_class {
 	CHR_MAX
 }					t_chr_class;
 
-typedef struct s_glob
-{
-	int		status;
-	char	**env;
-	int		my_fds[2];
-	int		my_oldfds[2];
-	int		sigintos;
-}	t_glob;
-
-
 typedef	struct s_glob_infos
 {
 	t_chr_class	get_chr_c[255];
@@ -189,5 +179,14 @@ typedef struct s_exec_s
 	int		pipe_number;
 	int		cmd_number;
 }	t_exec_s;
+
+typedef struct s_main
+{
+	t_flist	*start;
+	char **env;
+	int		my_fds[2];
+	int		my_oldfds[2];
+	int		sigintos;
+}	t_main;
 
 #endif

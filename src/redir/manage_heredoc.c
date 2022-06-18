@@ -89,8 +89,7 @@ char	*hd_expansion(char *str)
 			while (ft_isalnum(str[i]) && str[i])
 				i++;
 			temp = ft_substr(str, j, i - j);
-			temp = search_in_env_var(temp, g.env);
-			//printf("TEMP = %s\n", temp);
+			//temp = search_in_env_var(temp, env); // A DECOMMENTER
 			if (temp)
 				rep = ft_strjoin(rep, temp);
 		}
@@ -136,7 +135,7 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	if (file < 0)
 	{
 		error_msgs(errno, ".hd1");
-		exit(g.status);
+		exit(status);
 	}
 	while (1)
     {
@@ -154,6 +153,6 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 		
 	}
 	close(file);
-	exit(g.status);
+	exit(status);
 }
 

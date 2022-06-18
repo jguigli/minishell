@@ -4,7 +4,7 @@ char    *case_status(int *i, char *str)
 {
 	char	*temp;
 
-	temp = ft_itoa(g.status);
+	temp = ft_itoa(status);
 	str = ft_strjoin(str, temp);
 	free(temp);
 	(*i)++;

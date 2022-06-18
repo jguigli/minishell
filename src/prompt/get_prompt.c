@@ -40,13 +40,12 @@ static char	*get_prompt_env(void)
 	return (prompt);
 }
 
-void	get_prompt(char **env)
+void	get_prompt(t_main *main)
 {
 	char	*entry;
 	int		int_mode;
 	char	*my_prompt;
 	int		get_p;
-	t_flist	*gr_list;
 
 	int_mode = 1;
 	while (int_mode)
@@ -62,18 +61,18 @@ void	get_prompt(char **env)
 			if (entry == NULL )
 			{
 				write(1, "exit", 5);
-				exit(g.status);
+				exit(status);
 			}
 			add_history(entry);
 			//printf("entryyyyyy %s\n", entry);
-			gr_list = parse_args(entry, env);
-			//affiche(gr_list->process);
-			if	(!gr_list)
+			main->start = parse_args(entry, main->env);
+			//main->start = gr_list;
+			if	(!main->start)
 				get_p = 0;
 			if	(get_p == 1)
 			{
-				//affiche(gr_list->process);
-				exec_launcher(&gr_list, env);
+				//affiche(main->start->process);
+				exec_launcher(main);
 			}
 		}
 	}

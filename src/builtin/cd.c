@@ -19,7 +19,7 @@
 // 	return (data);
 // }
 
-static int	change_directory(char *data, char **env)
+static int	change_directory(char *data, t_main *main)
 {
 	char	*temp;
 
@@ -28,64 +28,64 @@ static int	change_directory(char *data, char **env)
 		return (0);
 	if (!chdir(data))
 	{
-		env = set_var_in_env("OLDPWD", temp, env);
+		main->env = set_var_in_env("OLDPWD", temp, main->env);
 		free (temp);
 		temp = getcwd(NULL, 0);
 		if (!temp)
 			return (0);
-		env = set_var_in_env("PWD", temp, env);
+		main->env = set_var_in_env("PWD", temp, main->env);
 		free (temp);
 		return (1);
 	}
 	else
 	{
 		perror("cd");
-		g.status = 1;
+		status = 1;
 	}
 	return (0);
 }
 
-static int	cd_home(char **env)
+static int	cd_home(t_main *main)
 {
-	if (!search_in_env_var("HOME", env))
+	if (!search_in_env_var("HOME", main->env))
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-		g.status = 1;
+		status = 1;
 		return (0);
 	}
-	return (change_directory(search_in_env_var("HOME", env), env));
+	return (change_directory(search_in_env_var("HOME", main->env), main));
 }
 
-static int	cd_oldpwd(char **env)
+static int	cd_oldpwd(t_main *main)
 {
-	if (!search_in_env_var("OLDPWD", env))
+	if (!search_in_env_var("OLDPWD", main->env))
 	{
 		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-		g.status = 1;
+		status = 1;
 		return (0);
 	}
-	return (change_directory(search_in_env_var("OLDPWD", env), env));
+	return (change_directory(search_in_env_var("OLDPWD", main->env), main));
 }
 
-int	ft_cd(char **arg, char **env)
+int	ft_cd(char **arg, t_main *main)
 {
-	g.status = 0;
+	status = 0;
 	if (!arg[1] || !ft_strcmp(arg[1], "--"))
-		return (cd_home(env));
+		return (cd_home(main));
 	else if (!ft_strcmp(arg[1], "-"))
-		return (cd_oldpwd(env));
+		return (cd_oldpwd(main));
 	else if (arg[1] && !arg[2])
 	{
-		if (change_directory(arg[1], env))
+		if (change_directory(arg[1], main))
 		{
-			g.status = 1;
+			status = 1;
 			return (1);
 		}
 	}
 	else
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		g.status = 1;
+		status = 1;
 		return (1);
 	}
 	return (0);

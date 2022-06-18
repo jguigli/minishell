@@ -43,13 +43,13 @@ void	ft_sigquit(int sig)
 void	ft_sig_child(int sig)
 {
 	(void)sig;
-	close(0);
-	close(1);
+	// close(0);
+	// close(1);
 	//printf("loull\n");
 	kill(getppid(), SIGINT);
-	g.sigintos = 2;
-	g.status = 1;
-	exit(g.status);
+	//g.sigintos = 2;
+	status = 1;
+	exit(status);
 	return ;
 }
 
@@ -73,13 +73,13 @@ void	ft_sig_fork_par(int sig)
 		//close(0);
 		//close(1);
 		//printf("wesssssssssssssh\n");
-		g.status = 130;
+		status = 130;
 		return ;
 	}
 	else if (sig == SIGQUIT)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", 2);
-		g.status = 131;
+		status = 131;
 	}
 	return ;
 }

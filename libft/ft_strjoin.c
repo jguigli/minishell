@@ -12,21 +12,6 @@
 
 #include "libft.h"
 
-static size_t myyy_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	//printf("strrrrrr ===%s\n", str);
-	if (!str)
-		return (0);
-	while (str[i])
-	{
-		i++;
-	}
-	return (i);
-}
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*catech;
@@ -41,7 +26,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		//write(2, "LOL\n", 4);
 		return (NULL);
 	}
-	length = myyy_strlen(s1) + myyy_strlen(s2);
+	length = ft_strlen(s1) + ft_strlen(s2);
 	//printf("test %d\n", length);
 	catech = (char *)malloc(sizeof(char) * (length + 1));
 	if (!catech)

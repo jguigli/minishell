@@ -7,7 +7,7 @@ void	error_msgs(int error, char *data)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(strerror(error), 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 1;
+	status = 1;
 	return ;
 }
 
@@ -18,7 +18,7 @@ void	syntax_err(char *error, char *data) // a changer en syntax_err_token
 	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(data, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 2;
+	status = 2;
 }
 
 void	syntax_err_file(char *error, char *data)
@@ -28,7 +28,7 @@ void	syntax_err_file(char *error, char *data)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 2;
+	status = 2;
 }
 
 void	isdir_err(char *error, char *data)
@@ -38,7 +38,7 @@ void	isdir_err(char *error, char *data)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 2;
+	status = 2;
 }
 
 void	cmd_not_found(char *error, char *cmd)
@@ -48,5 +48,5 @@ void	cmd_not_found(char *error, char *cmd)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 127;
+	status = 127;
 }

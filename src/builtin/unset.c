@@ -17,27 +17,27 @@ static char	**unset_var(int position, char **env)
 	return (tab);
 }
 
-void	ft_unset(char **arg, char **env)
+void	ft_unset(char **arg, t_main *main)
 {
 	size_t		i;
 	size_t		j;
 	size_t		z;
 
 	i = 1;
-	if (!arg || !env)
+	if (!arg || !main->env)
 		return ;
 	while (arg[i])
 	{
 		j = 0;
-		while (env[j])
+		while (main->env[j])
 		{
 			z = 0;
-			while (env[j][z] != '=')
+			while (main->env[j][z] != '=')
 				z++;
 			if (z == ft_strlen(arg[i]))
 			{
-				if (!ft_strncmp(arg[i], env[j], z))
-					env = unset_var(j, env);
+				if (!ft_strncmp(arg[i], main->env[j], z))
+					main->env = unset_var(j, main->env);
 			}
 			j++;
 		}

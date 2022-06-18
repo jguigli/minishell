@@ -514,12 +514,12 @@ void	init_rules(t_glob_infos *tok_info)
 
 }
 
-int	my_lstsize(t_flist **lst)
+int	my_lstsize(t_flist *lst)
 {
 	int		i;
 	t_flist	*lstnext;
 
-	lstnext = *lst;
+	lstnext = lst;
 	i = 0;
 	while (lstnext)
 	{
@@ -692,7 +692,7 @@ int	waiting_child_hd(pid_t fi)
 		ret = (WSTOPSIG(wstatus) + 128);
 	}
 	if (ret == 130)
-		g.status = 130;
+		status = 130;
 	return (ret);
 }
 
@@ -949,19 +949,21 @@ t_flist	*parse_args(char	*entry, char **env)
 	//printf("test1");
 	(void)**env;
 	fin_li = get_tokens(entry);
+	//prntf("t_d%s\n")
+	//affiche(fin_li);
 	tota_heredoc = 0;
 	if	(!fin_li)
 		return (NULL);
 	gr_list = get_processes(fin_li);
 	counting(&gr_list);
-	// affiche(gr_list->next->process);
-	if (my_lstsize(&gr_list) == 1)
+	// // affiche(gr_list->next->process);
+	if (my_lstsize(gr_list) == 1)
 	{
 		if	(simple_block_p(&gr_list) == -200)
 			return (NULL);
 		// affiche(gr_list->process);
 	}
-	else if	(my_lstsize(&gr_list) > 1)
+	else if	(my_lstsize(gr_list) > 1)
 	{
 		tota_heredoc = check_tot_heredoc(&gr_list);
 		if (tota_heredoc >= 1)
@@ -972,4 +974,5 @@ t_flist	*parse_args(char	*entry, char **env)
 	}
 	//printf("dataaaaa -- >%s, siiizeeuh = %zu\n", gr_list->process->first->next->data, ft_strlen(gr_list->process->first->next->data));
 	return (gr_list);
+	//return ("Ok");
 }

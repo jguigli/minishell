@@ -17,13 +17,9 @@ t_dblist	*init_linked_list()
 {
 	t_dblist	*liste;
 
-	//liste = ft_calloc(1, sizeof(t_dblist));
 	liste = ft_calloc(1,sizeof(t_dblist));
 	if (!liste)
 		exit(EXIT_FAILURE);
-	// liste->number = 0;
-	// liste->first = NULL;
-	// liste->last = NULL;
 	liste->infos = initst_infos();
 	return (liste);
 }
@@ -32,27 +28,24 @@ t_flist	*init_struct_flist()
 {
 	t_flist	*finli;
 
-	//liste = ft_calloc(1, sizeof(t_dblist));
 	finli = ft_calloc(1, sizeof(t_flist));
 	if (!finli)
 		exit(EXIT_FAILURE);
 	finli->process = init_linked_list();
-	// finli->next= NULL;
-	// finli->previous = NULL;
-	// finli->nb_rred = 0;
-	// finli->nb_rred_app = 0;
-	// finli->nb_lred = 0;
-	// finli->nb_heredoc = 0;
-	// finli->nb_options = 0;
 	return (finli);
 }
 
-void	init_global(void)
+t_main	*init_main(void)
 {
-	g.status = 0;
-	g.my_fds[0] = -1000;
-	g.my_fds[1] = -1000;
-	g.my_oldfds[0] = -200;
-	g.my_oldfds[1] = -200;
-	g.sigintos = 0;
+	t_main	*main;
+
+	main = ft_calloc(1, sizeof(t_main));
+	if (!main)
+		return (NULL);
+	main->start = init_struct_flist();
+	main->my_fds[0] = -1000;
+	main->my_fds[1] = -1000;
+	main->my_oldfds[0] = -200;
+	main->my_oldfds[1] = -200;
+	return (main);
 }
