@@ -12,14 +12,13 @@
 
 #include "../../includes/minishell.h"
 
-char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
+static char	*get_prompt_env(void)
 {
 	char	*name;
 	char	*pwd;
 	char	*prompt;
 	char	*temp;
 
-	(void)**env;
 	temp = ft_strdup("");
 	temp = ft_strjoin(temp, "\x1b[32m");
 	name = ft_strdup("minishell");
@@ -47,14 +46,13 @@ void	get_prompt(char **env)
 	int		int_mode;
 	char	*my_prompt;
 	int		get_p;
-
 	t_flist	*gr_list;
 
 	int_mode = 1;
 	while (int_mode)
 	{
 		get_p = 1;
-		my_prompt = get_prompt_env(env);
+		my_prompt = get_prompt_env();
 		if (!my_prompt)
 			my_prompt = "~$ ";
 		int_mode = isatty(STDIN_FILENO);

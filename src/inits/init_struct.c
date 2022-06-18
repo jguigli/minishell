@@ -1,5 +1,18 @@
 #include "../../includes/minishell.h"
 
+t_glob_infos	*initst_infos()
+{
+	t_glob_infos	*tok_info;
+
+	tok_info = malloc(sizeof(t_glob_infos));
+	if (!tok_info)
+		return (NULL);
+	init_classes(tok_info);
+	init_tokens(tok_info);
+	init_rules(tok_info);
+	return (tok_info);
+}
+
 t_dblist	*init_linked_list()
 {
 	t_dblist	*liste;
@@ -36,7 +49,6 @@ t_flist	*init_struct_flist()
 
 void	init_global(void)
 {
-	g.env = NULL;
 	g.status = 0;
 	g.my_fds[0] = -1000;
 	g.my_fds[1] = -1000;

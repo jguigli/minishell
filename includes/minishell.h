@@ -48,6 +48,9 @@ int	       		 check_quote(char *str);
 t_dblist		*get_tokens(char *entry);
 t_dblist		*init_linked_list(void);
 t_glob_infos	*initst_infos();
+void	init_classes(t_glob_infos *tok_info);
+void	init_tokens(t_glob_infos *tok_info);
+void	init_rules(t_glob_infos *tok_info);
 void	        init_global(void);
 int 			manage_signal(void);
 int				affiche(t_dblist *list); // A tej dans le futur
@@ -123,9 +126,9 @@ int    ft_cd(char **arg, char **env);
 int    ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
 void    ft_exit(char **arg);
-void	ft_export(char **arg, char ***env);
+void	ft_export(char **arg, char **env);
 void    ft_pwd(void);
-void	ft_unset(char **arg, char ***env);
+void	ft_unset(char **arg, char **env);
 
 
 int		export_appreciate_symbol(char arg);

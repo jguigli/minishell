@@ -506,19 +506,6 @@ void	init_rules(t_glob_infos *tok_info)
 
 }
 
-t_glob_infos	*initst_infos()
-{
-	t_glob_infos	*tok_info;
-
-	tok_info = malloc(sizeof(t_glob_infos));
-	if (!tok_info)
-		return (NULL);
-	init_classes(tok_info);
-	init_tokens(tok_info);
-	init_rules(tok_info);
-	return (tok_info);
-}
-
 int	my_lstsize(t_flist **lst)
 {
 	int		i;

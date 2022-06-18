@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char	**unset_var(int position, char **env)
+static char	**unset_var(int position, char **env)
 {
 	size_t		i;
 	char		**tab;
@@ -17,27 +17,27 @@ char	**unset_var(int position, char **env)
 	return (tab);
 }
 
-void	ft_unset(char **arg, char ***env)
+void	ft_unset(char **arg, char **env)
 {
 	size_t		i;
 	size_t		j;
 	size_t		z;
 
 	i = 1;
-	if (!arg || !*env)
+	if (!arg || !env)
 		return ;
 	while (arg[i])
 	{
 		j = 0;
-		while ((*env)[j])
+		while (env[j])
 		{
 			z = 0;
-			while ((*env)[j][z] != '=')
+			while (env[j][z] != '=')
 				z++;
 			if (z == ft_strlen(arg[i]))
 			{
-				if (!ft_strncmp(arg[i], (*env)[j], z))
-					(*env) = unset_var(j, (*env));
+				if (!ft_strncmp(arg[i], env[j], z))
+					env = unset_var(j, env);
 			}
 			j++;
 		}

@@ -8,7 +8,6 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argv;
 	char **envp;
 
-	envp = NULL;
 	manage_signal();
 	init_global();
 	if (!search_in_env_var("PATH", env))
