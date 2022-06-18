@@ -6,8 +6,11 @@ void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
 		return ;
 	//printf("loullllll\n");
 	//affiche(list->process);
+	exec.cmd_arg = list_to_tab(list->process);
+	if (!exec.cmd_arg)
+		exit(g.status);
+	//printf("exec.cmd arg[0] -- %s\n", exec.cmd_arg[0]);
 	exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-	printf("cmd %s\n", exec.cmd[0]);
 	if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
 	{
 		if (ft_strncmp(exec.cmd, "KO", ft_strlen(exec.cmd)) == 0)
@@ -55,15 +58,23 @@ int	exec_simple_cmd(t_flist *list, char **env) // exécution de la ligne de comm
 	//affiche(list->process);
 	shell_parameter_expansion(list->process, env);
 	delete_nodes_after_expansion(list->process);
-	//affiche(list->process);
 	exec.path = search_in_env_var("PATH", env);
 	exec.cmd_path = ft_split(exec.path, ':');
+	//affiche(list->process);
 	//ft_sig_fork(exec.pid);
-	exec.cmd_arg = list_to_tab(list->process);
-	if (!exec.cmd_arg)
-		exit(g.status);
-	if (is_builtin(exec.cmd_arg[0]))
+	// exec.cmd_arg = list_to_tab(list->process);
+	// if (!exec.cmd_arg)
+	// 	exit(g.status);
+	if (is_builtin(list->process->first->data))
+	{
+		if	(manage_redirections(&list) == -5)
+			return (0);
+		exec.cmd_arg = list_to_tab(list->process);
+		if (!exec.cmd_arg)
+			exit(g.status);
 		exec_builtin(exec.cmd_arg, env);
+	}
+		
 	else
 	{
 		exec.pid = fork();
