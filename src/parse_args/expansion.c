@@ -14,7 +14,7 @@ void	delete_nodes_after_expansion(t_dblist *list)
 		current = current->next;
 		free(stock_curr);
 	}
-	printf("dataaaaa : %s\n", current->data);
+	//printf("dataaaaa : %s\n", current->data);
 	list->first = current;
 	current = current->next;
 	while(current)
@@ -23,7 +23,7 @@ void	delete_nodes_after_expansion(t_dblist *list)
 			current = current->next;
 		else if	(current && current->data[0] == '\0')
 		{
-			printf("icii vide ? %s\n", current->data);
+			//printf("icii vide ? %s\n", current->data);
 			if (current->next)
 			{
 				stock_next = current->next;

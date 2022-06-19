@@ -6,7 +6,7 @@ void	ft_env(char **arg, char **env)
 
 	i = 0;
 	status = 0;
-	printf("LAAAAAAAAAAAAAAAA dans ft env\n");
+	//printf("LAAAAAAAAAAAAAAAA dans ft env\n");
 	if (!arg[1])
 	{
 		if (!env)

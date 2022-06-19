@@ -48,17 +48,12 @@ void	manage_dup2(t_exec_c exec, int first, int second)
 	(void)exec;
 	if (dup2(first, STDIN_FILENO) < 0)
 	{
-		printf("here1\n");
-		printf("errno --> %s\n", strerror(errno));
-		printf("FD 11 --> %d\n", first);
-		printf("FD 22 --> %d\n", dup2(first, STDIN_FILENO));
 		error_msgs(errno, "Fd's duplication failed");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);
 	}
 	if (dup2(second, STDOUT_FILENO) < 0)
 	{
-		printf("here2\n");
 		error_msgs(errno, "Fd's duplication failed");
 		//free_path(&exec);
 		//write_error_path(ERROR_DUP, &exec);

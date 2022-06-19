@@ -4,12 +4,12 @@ void	manage_dup(t_exec_c exec)
 {
 	if (exec.pid_number == 0)
 	{
-		printf("here5\n");
+		//printf("here5\n");
 		manage_dup2(exec, 0, exec.pipe[1]);
 	}
 	else if (exec.pid_number == exec.cmd_number - 1)
 	{
-		printf("here6\n");
+		//printf("here6\n");
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2], 1);
 	}
 	else
@@ -56,10 +56,6 @@ void	manage_child_complex(t_exec_c exec, t_flist *list, t_main *main)
 	t_flist		*current;
 
 	current = list;
-	if (main->my_fds[0] != -1000)
-		close(main->my_fds[0]);
-	if (main->my_fds[1] != -1000)
-		close(main->my_fds[1]);
 	child_process_complex(exec, current, main);
 }
 
@@ -72,6 +68,7 @@ void	manage_exec(t_exec_c exec, t_main *main)
 	create_pipes(&exec);
 	while (current)
 	{
+		//affiche(current->process);
         shell_parameter_expansion(current->process, main->env);
 		delete_nodes_after_expansion(current->process);
 		exec.pid[exec.pid_number] = fork();
@@ -90,6 +87,16 @@ void	manage_exec(t_exec_c exec, t_main *main)
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
 		waitpid(exec.pid[exec.pid_number], NULL, 0);
+	if (main->my_fds[0] != -1000)
+	{
+		dup2(main->my_oldfds[0], STDOUT_FILENO);
+		close(main->my_fds[0]);
+	}
+	if (main->my_fds[1] != -1000)
+	{
+		dup2(main->my_oldfds[1], STDIN_FILENO);
+		close(main->my_fds[1]);
+	}
 }
 
 void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l'ast => gestion des pipes

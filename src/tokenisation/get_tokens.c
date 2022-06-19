@@ -367,9 +367,9 @@ t_dblist	*token_tag(t_dblist *list)
 				}
 				if (tag->next != NULL)
 				{
-					printf("A --- tag data %s\n", tag->data);
+					//printf("A --- tag data %s\n", tag->data);
 					tag = tag->next;
-					printf("B --- tag data %s\n", tag->data);
+					//printf("B --- tag data %s\n", tag->data);
 				}
 				else
 					break ;
@@ -477,9 +477,9 @@ t_dblist	*token_tag(t_dblist *list)
 		}
 		if	(tag->next != NULL)
 		{
-			printf("C --- tag data %s\n", tag->data);
+			//printf("C --- tag data %s\n", tag->data);
 			tag = tag->next;
-			printf("D --- tag data %s\n", tag->data);
+			//printf("D --- tag data %s\n", tag->data);
 		}
 		else
 			break ;
@@ -573,14 +573,6 @@ t_dblist *p_tok(t_dblist *list)
 	while(p_list)
 	{
 		p_list->length = ft_strlen(p_list->data);
-		if	(p_list->type == 13)
-		{
-			printf("OK\n");
-		}
-		else if	(p_list->type == 12)
-		{
-			printf("Kikou\n");
-		}
 		if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
@@ -633,7 +625,7 @@ t_dblist *p_tok(t_dblist *list)
 		}
 		else if (p_list->type != 12 && p_list->type != 13)	
 		{
-			printf("hiho\n");
+		//	printf("hiho\n");
 			syntax_err(SYNTAX_ERR, p_list->data);
 			return (NULL);
 		}

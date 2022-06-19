@@ -61,7 +61,7 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	{
 		if (manage_redirections(&list, main) == -5)
 			return (0);
-		printf("rentre ici \n");
+		//printf("rentre ici \n");
 		exec.cmd_arg = list_to_tab(list->process);
 		if (!exec.cmd_arg)
 			exit(status);
@@ -85,5 +85,16 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		}
 	}
 	waitpid(exec.pid, &wstatus, 0);
+	if (main->my_fds[0] != -1000)
+	{
+		dup2(main->my_oldfds[0], STDOUT_FILENO);
+		close(main->my_fds[0]);
+	}
+	if (main->my_fds[1] != -1000)
+	{
+		dup2(main->my_oldfds[1], STDIN_FILENO);
+		close(main->my_fds[1]);
+	}
+	
 	return (wstatus);
 }
