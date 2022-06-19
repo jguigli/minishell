@@ -701,6 +701,12 @@ t_dblist	*get_tokens(char *entry)
 			{
 				is_squoted = 1;
 				i++;
+				if (entry[i] == '\0')
+				{
+					//printf("TTTTEEESSST\n");
+					syntax_err(SYNTAX_ERR, "\'");
+					return (NULL);
+				}
 				token_type_cpy = token_type;
 				while (is_squoted == 1 && entry[i])
 				{
@@ -754,7 +760,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		j = i;
 	}
-	//affiche(list);
+	affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
