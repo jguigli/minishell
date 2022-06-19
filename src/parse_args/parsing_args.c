@@ -733,7 +733,7 @@ int	simple_block_p(t_flist **gr_list)
 				error_msgs(errno, "Fork failed");
 				return (-200);
 			}
-			ft_sig_fork(fi);
+			//ft_sig_fork(fi);
 			if (fi == 0)
 			{
 				//printf("list data %s \n", list->next->data);
@@ -836,7 +836,7 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			error_msgs(errno, "Fork failed");
 			return (-200);
 		}
-		ft_sig_fork(fi);
+		//ft_sig_fork(fi);
 		//printf("total nb heredoc %d \n", totalhd);
 		if (fi == 0)
 		{

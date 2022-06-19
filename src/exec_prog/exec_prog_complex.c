@@ -75,7 +75,7 @@ void	manage_exec(t_exec_c exec, t_main *main)
         shell_parameter_expansion(current->process, main->env);
 		delete_nodes_after_expansion(current->process);
 		exec.pid[exec.pid_number] = fork();
-		ft_sig_fork(exec.pid[exec.pid_number]);
+		//ft_sig_fork(exec.pid[exec.pid_number]);
 		if (exec.pid[exec.pid_number] == -1)
 		{
 			printf("Fork failed : %s\n", strerror(errno));
