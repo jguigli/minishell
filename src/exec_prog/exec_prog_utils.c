@@ -12,7 +12,10 @@ static int	ft_strchrr(const char *s, int c)
     while (i <= ft_strlen(s))
     {
         if (sent[i] == character)
+		{
+			printf("character %c\n", sent[i]);
             return (2);
+		}
         i++;
     }
     return (0);
@@ -44,7 +47,6 @@ char	*get_command(char **path, char *cmd)
 		return (cmd);
 	if (parse_cmd(cmd) == -1)
 	{
-		//printf("cmd = %s\n", cmd);
 		if	(access(cmd, F_OK) == 0)
 		{
 			write(1, "OKKK\n", 6);

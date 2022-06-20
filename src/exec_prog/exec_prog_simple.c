@@ -8,13 +8,13 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main)
 	if (!exec.cmd_arg)
 		exit(status);
 	exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-	if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
+	if (exec.cmd == NULL || ft_strncmp(exec.cmd, "KO", ft_strlen(exec.cmd)) == 0)
 	{
-		if (ft_strncmp(exec.cmd, "KO", ft_strlen(exec.cmd)) == 0)
+		if (ft_strncmp(exec.cmd, "KO", ft_strlen(exec.cmd)))
 		{
 			syntax_err_file(FILE, exec.cmd_arg[0]);
 		}
-		else
+		else if	(exec.cmd == NULL)
 		{
 			freeing_cmd(exec);
 		}
@@ -25,7 +25,6 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main)
 	}
 	if (execve(exec.cmd, exec.cmd_arg, main->env) == -1)
 	{
-		//printf("hihoo ici1\n");
 		freeing_execution(exec, errno);
 		exit(status);
 	}
@@ -95,6 +94,5 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		dup2(main->my_oldfds[1], STDIN_FILENO);
 		close(main->my_fds[1]);
 	}
-	
 	return (wstatus);
 }

@@ -194,6 +194,32 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_RRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_LRED] = 1;
 	tok_info->get_chr_rules[TOKEN_WORD][CHR_EQ] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_UNDS] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_DIGIT] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_WORD] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_SQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_DQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_BQUOTE] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_LPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_RPAREN] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_LBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_RBRACE] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_COMA] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_DOL] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_SEMI] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_BANG] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_BS] = 1;	
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_SP] = 0;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_DOT] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_SLASH] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_EOF] = 0;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_ESP] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_DASH] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_AROB] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_RRED] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_LRED] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_EQ] = 1;
+	tok_info->get_chr_rules[TOKEN_DIGIT][CHR_UNDS] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_PIPE] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_PIPE][CHR_WORD] = 1;
@@ -511,6 +537,7 @@ void	init_rules(t_glob_infos *tok_info)
 	tok_info->get_chr_rules[TOKEN_TILDE][CHR_SLASH] = 1;	
 	tok_info->get_chr_rules[TOKEN_TILDE][CHR_ESP] = 1;
 	tok_info->get_chr_rules[TOKEN_TILDE][CHR_BS] = 1;
+	tok_info->get_chr_rules[TOKEN_TILDE][CHR_UNDS] = 1;
 
 }
 

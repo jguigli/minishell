@@ -703,7 +703,6 @@ t_dblist	*get_tokens(char *entry)
 				i++;
 				if (entry[i] == '\0')
 				{
-					//printf("TTTTEEESSST\n");
 					syntax_err(SYNTAX_ERR, "\'");
 					return (NULL);
 				}
@@ -717,7 +716,6 @@ t_dblist	*get_tokens(char *entry)
 					}
 					if (entry[i] == '\0')
 					{
-						//printf("TTTTEEESSST\n");
 						syntax_err(SYNTAX_ERR, "\'");
 						return (NULL);
 					}
@@ -760,7 +758,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		j = i;
 	}
-	affiche(list);
+	//affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
