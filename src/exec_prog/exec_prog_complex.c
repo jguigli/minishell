@@ -104,6 +104,7 @@ void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l
 	t_exec_c	exec;
 	int		pipe;
 
+	init_exec_complex(main, &exec);
 	pipe = my_lstsize(main->start) - 1;
 	exec.pipe_number = 2 * pipe;
 	exec.cmd_number = my_lstsize(main->start);

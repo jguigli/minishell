@@ -39,9 +39,6 @@ void	exec_builtin(char **arg, t_main *main)
 		ft_pwd();
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, main);
-	// int i = 0;
-	// while (env[i])
-	// 	printf("%s\n", env[i++]);
 	return ;
 }
 
@@ -73,7 +70,6 @@ int	exec_launcher(t_main *main)
 	int	pipe;
 	
 	pipe = my_lstsize(main->start) - 1;
-	//printf("pippppe %d\n", pipe);
 	if (pipe > 0)
 	{
 		exec_complex_cmd(main);

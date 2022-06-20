@@ -48,6 +48,7 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	int		wstatus;
 	t_flist	*list;
 
+	init_exec_simple(main, &exec);
 	wstatus = 0;
 	//affiche(list->process);
 	list = main->start;

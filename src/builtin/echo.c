@@ -18,7 +18,7 @@ static int	n_option(char *arg)
 
 static void	manage_print_echo(char **arg, int *i, int *delim, int *n)
 {
-	if (n_option(arg[*i]) && !*delim)
+	if (n_option(arg[*i]) && !(*delim))
 	{
 		(*i)++;
 		(*n)++;
@@ -26,9 +26,9 @@ static void	manage_print_echo(char **arg, int *i, int *delim, int *n)
 	else
 	{
 		*delim = 1;
-		ft_putstr_fd(arg[(*i)++], STDOUT_FILENO);
+		ft_putstr_fd(arg[(*i)++], 1);
 		if (arg[*i])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+			ft_putchar_fd(' ', 1);
 	}
 }
 
@@ -40,14 +40,15 @@ int	ft_echo(char **arg)
 
 	i = 1;
 	n = 0;
+	delim = 0;
 	if (!arg[1])
 	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', 1);
 		return (1);
 	}
 	while (arg[i])
 		manage_print_echo(arg, &i, &delim, &n);
 	if (!n)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', 1);
 	return (0);
 }

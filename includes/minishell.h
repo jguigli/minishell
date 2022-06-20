@@ -57,6 +57,8 @@ t_glob_infos	*initst_infos();
 void	init_classes(t_glob_infos *tok_info);
 void	init_tokens(t_glob_infos *tok_info);
 void	init_rules(t_glob_infos *tok_info);
+void	init_exec_simple(t_main *main, t_exec_s *exec);
+void	init_exec_complex(t_main *main, t_exec_c *exec);
 
 //********************
 
@@ -175,6 +177,10 @@ void delete_node(t_flist **li);
 char	*ft_strjoin_path(char *s1, char *s2);
 // **********************
 
+// Free *******************************
+
+
+// ************************************
 
 
 #endif

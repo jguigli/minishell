@@ -6,7 +6,6 @@ int	main(int argc, char *argv[], char *env[])
 {
 	(void)argc;
 	(void)argv;
-	char **envp;
 	t_main	*main;
 
 	manage_signal();

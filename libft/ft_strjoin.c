@@ -22,12 +22,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s1)
 		s1 = ft_strdup("");
 	if (!s2)
-	{
-		//write(2, "LOL\n", 4);
 		return (NULL);
-	}
 	length = ft_strlen(s1) + ft_strlen(s2);
-	//printf("test %d\n", length);
 	catech = (char *)malloc(sizeof(char) * (length + 1));
 	if (!catech)
 		return (NULL);

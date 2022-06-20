@@ -13,7 +13,7 @@ t_glob_infos	*initst_infos()
 	return (tok_info);
 }
 
-t_dblist	*init_linked_list()
+t_dblist	*init_linked_list() // Ou est ce qu'on initialise les datas
 {
 	t_dblist	*liste;
 
@@ -24,7 +24,7 @@ t_dblist	*init_linked_list()
 	return (liste);
 }
 
-t_flist	*init_struct_flist()
+t_flist	*init_struct_flist() // ask amina si utilisation de cette fonction pour creer nouveau maillon
 {
 	t_flist	*finli;
 
@@ -43,9 +43,31 @@ t_main	*init_main(void)
 	if (!main)
 		return (NULL);
 	main->start = init_struct_flist();
+	main->env = NULL;
+	main->exec_c = NULL;
+	main->exec_s = NULL;
 	main->my_fds[0] = -1000;
 	main->my_fds[1] = -1000;
 	main->my_oldfds[0] = -200;
 	main->my_oldfds[1] = -200;
 	return (main);
+}
+
+void	init_exec_simple(t_main *main, t_exec_s *exec)
+{
+	main->exec_s = exec;
+	exec->path = NULL;
+	exec->cmd_path = NULL;
+	exec->cmd_arg = NULL;
+	exec->cmd = NULL;
+}
+
+void	init_exec_complex(t_main *main, t_exec_c *exec)
+{
+	main->exec_c = exec;
+	exec->pipe = NULL;
+	exec->path = NULL;
+	exec->cmd_path = NULL;
+	exec->cmd_arg = NULL;
+	exec->cmd = NULL;
 }

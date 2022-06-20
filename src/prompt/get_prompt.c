@@ -58,7 +58,7 @@ void	get_prompt(t_main *main)
 		if (int_mode == 1)
 		{
 			entry = readline(my_prompt);
-			if (entry == NULL )
+			if (entry == NULL)
 			{
 				write(1, "exit", 5);
 				exit(status);
