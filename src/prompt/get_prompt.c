@@ -65,7 +65,7 @@ void	get_prompt(t_main *main)
 			}
 			add_history(entry);
 			//printf("entryyyyyy %s\n", entry);
-			main->start = parse_args(entry, main->env);
+			main->start = parse_args(entry, main);
 			//main->start = gr_list;
 			if	(!main->start)
 				get_p = 0;

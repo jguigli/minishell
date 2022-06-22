@@ -97,13 +97,14 @@ char	*hd_expansion(char *str)
 	return (rep);
 }
 
-void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
+void	manage_one_redir(t_datas *delimiter, t_flist *gr_list, pid_t pid)
 {
 	t_datas	*copy;
 	int		file;
 	char	*buf;
 	char	*str_to_get;
 	char	*tmp;
+	__sighandler_t 	sigos;
 
 	//manage_signal_hd();
 	(void)*gr_list;
@@ -141,13 +142,17 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
     {
 		write(1, "> ", 3);
 		buf = get_next_line(0);
+		// if (!ft_strncmp("\x03", buf, ft_strlen("\x03")))
+		// 	printf("KIKOUUUUUUU\n");
+		// if (buf == "\x03")
+		// 	printf("KIKOUUUUUUU\n");
 		if (buf == NULL)
 			break ;
 		if (copy->expansion)
 			buf = hd_expansion(buf);
-		//printf("buuuuuf == %s\n", buf);
 		if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
 			break ;
+		//sigos = signal(SIGINT, ft_test);
 		write(file, buf, ft_strlen(buf));
 		free(buf);
 		

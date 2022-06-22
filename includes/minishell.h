@@ -43,10 +43,15 @@ extern int status;
 
 
 // Signals *****
-int 			manage_signal(void);
+int 			manage_signal();
 int				manage_signal_hd();
-void				ft_sig_fork_par(int sig);
+void			ft_sig_fork_par(int sig);
 void			ft_sig_fork(int pid);
+void	        ft_cancel_sigquit(int sig);
+void	        ft_cancel_sigint(int sig);
+int	            cancel_parent_signal(void);
+void            ft_test();
+
 // *****************
 
 // Inits *************
@@ -73,7 +78,7 @@ t_dblist		*get_tokens(char *entry);
 // ******************
 
 //Parse_args
-t_flist			*parse_args(char	*str, char **env);
+t_flist			*parse_args(char	*str, t_main *main);
 t_flist 		*get_processes(t_dblist *list);
 int				my_lstsize(t_flist *lst);
 int	            my_lstsize_dblist(t_dblist *lst);
@@ -99,7 +104,7 @@ int				affiche(t_dblist *list); // A tej dans le futur
 // *******************
 
 //heredoc *****************
-void			manage_one_redir(t_datas *delimiter, t_flist *gr_list);
+void			manage_one_redir(t_datas *delimiter, t_flist *gr_list, pid_t pid);
 // *********************
 
 // Redir *********
