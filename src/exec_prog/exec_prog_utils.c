@@ -23,7 +23,6 @@ char	*get_command(char **path, char *cmd)
 	{
 		if (access(cmd, F_OK) == 0)
 			return (cmd);
-		}
 		else
 			return ("KO");
 	}

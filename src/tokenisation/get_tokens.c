@@ -727,7 +727,7 @@ t_dblist	*get_tokens(char *entry)
 		}
 		j = i;
 	}
-	affiche(list);
+	//affiche(list);
 	if	(p_tok(list) == NULL)
 		return (NULL);
 	return (list);
