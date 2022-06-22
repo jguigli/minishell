@@ -142,20 +142,14 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list, pid_t pid)
     {
 		write(1, "> ", 3);
 		buf = get_next_line(0);
-		// if (!ft_strncmp("\x03", buf, ft_strlen("\x03")))
-		// 	printf("KIKOUUUUUUU\n");
-		// if (buf == "\x03")
-		// 	printf("KIKOUUUUUUU\n");
 		if (buf == NULL)
 			break ;
 		if (copy->expansion)
 			buf = hd_expansion(buf);
 		if (!ft_strncmp(copy->data, buf, ft_strlen(copy->data)))
 			break ;
-		//sigos = signal(SIGINT, ft_test);
 		write(file, buf, ft_strlen(buf));
 		free(buf);
-		
 	}
 	close(file);
 	exit(status);

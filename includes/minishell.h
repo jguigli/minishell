@@ -44,13 +44,14 @@ extern int status;
 
 // Signals *****
 int 			manage_signal();
-int				manage_signal_hd();
-void			ft_sig_fork_par(int sig);
-void			ft_sig_fork(int pid);
-void	        ft_cancel_sigquit(int sig);
-void	        ft_cancel_sigint(int sig);
-int	            cancel_parent_signal(void);
-void            ft_test();
+// int				manage_signal_hd();
+// void			ft_sig_fork_par(int sig);
+// void			ft_sig_fork(int pid);
+// void	        ft_cancel_sigquit(int sig);
+// void	        ft_cancel_sigint(int sig);
+//int	            cancel_parent_signal(void);
+// void            ft_test();
+int	            manage_sig_in_forks(pid_t pid, t_main *main);
 
 // *****************
 
@@ -84,7 +85,7 @@ int				my_lstsize(t_flist *lst);
 int	            my_lstsize_dblist(t_dblist *lst);
 void			insert_node(char *repere, char *node_toadd, t_flist **head);
 int				check_tot_heredoc(t_flist **list);
-int				multiple_block_p(t_flist **gr_list, int totalhd);
+int				multiple_block_p(t_flist **gr_list, int totalhd, t_main *main);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
 void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 t_datas			*my_lstnew(char *data);

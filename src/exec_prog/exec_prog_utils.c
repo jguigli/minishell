@@ -13,7 +13,7 @@ static int	ft_strchrr(const char *s, int c)
     {
         if (sent[i] == character)
 		{
-			printf("character %c\n", sent[i]);
+			//printf("character %c\n", sent[i]);
             return (2);
 		}
         i++;

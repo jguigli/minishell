@@ -691,7 +691,7 @@ void	insert_node(char *repere, char *node_toadd, t_flist **head)
 	// exit(127);
 }
 
-int	waiting_child_hd(pid_t fi)
+int	waiting_child_hd(pid_t fi, t_main *main)
 {
 	int	wstatus;
 	int	ret;
@@ -702,7 +702,10 @@ int	waiting_child_hd(pid_t fi)
 			perror("wait() error");
 	if (WIFSIGNALED(wstatus) > 0)
 	{
-		printf("hehe ---- SIGNAL\n");
+		//printf("hehe ---- SIGNAL\n");
+		write(1, "\n", 2);
+		main->sigintos = 50;
+		return (-20);
 		ret = (WTERMSIG(wstatus) + 128);
 	}
 	if (WIFEXITED(wstatus) > 0)
@@ -749,10 +752,9 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 		}
 		//cancel_parent_signal();
 		//printf("there %s -- nb_hd = %d\n", list->data, head->nb_heredoc);
-		while (i < head->nb_heredoc && list)
+		while (i < head->nb_heredoc && list && main->sigintos == 0)
 		{
 			fi = fork();
-			pid = getppid();
 			//printf("%d \n", fi);
 			if	(fi < 0)
 			{
@@ -760,7 +762,8 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 				error_msgs(errno, "Fork failed");
 				return (-200);
 			}
-			cancel_parent_signal();
+			//cancel_parent_signal();
+			manage_sig_in_forks(fi, main);
 			if (fi == 0)
 			{
 				//ft_sig_fork(fi);
@@ -773,8 +776,12 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 			}
 			else
 			{
-				waiting_child_hd(fi);
-				//manage_signal();
+				if (waiting_child_hd(fi, main) == -20)
+				{
+					manage_signal();
+					return (-200);
+				}
+				manage_signal();
 				file = open(".hd1", O_RDONLY);
 				if	(file < 0)
 				{
@@ -813,7 +820,7 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 	return (0);
 }
 
-int	multiple_block_p(t_flist **gr_list, int totalhd)
+int	multiple_block_p(t_flist **gr_list, int totalhd, t_main *main)
 {
 	t_datas	*list;
 	// t_datas	*list2;
@@ -853,19 +860,18 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			break ;
 	}
 	//printf("Fin boucle 2 list %s\n", list->data);
-	while (i < head->nb_heredoc && list && k < totalhd)
+	while (i < head->nb_heredoc && list && k < totalhd && main->sigintos == 0)
 	{
 		//printf("DEbut boucle 3 i = %d ---- K = %d --- head->heredoc %d --- list data %s --- %d==totalhd\n", i, k, head->nb_heredoc, list->data, totalhd);
 		fi = fork();
-		pid = getppid();
 		//printf("%d \n", fi);
 		if	(fi < 0)
 		{
 			error_msgs(errno, "Fork failed");
 			return (-200);
 		}
-		//ft_sig_fork(fi);
 		//printf("total nb heredoc %d \n", totalhd);
+		manage_sig_in_forks(fi, main);
 		if (fi == 0)
 		{
 			//printf("IIIRGEEENNT %s \n", list->data);
@@ -885,8 +891,9 @@ int	multiple_block_p(t_flist **gr_list, int totalhd)
 			}
 			exit(1);
 		}	
-		waiting_child_hd(fi);
-		//manage_signal();
+		if (waiting_child_hd(fi, main) == -20)
+			return (-200);
+		manage_signal();
 		file = open(".hd1", O_RDONLY);
 		if	(file < 0)
 		{
@@ -992,11 +999,10 @@ t_flist	*parse_args(char	*entry, t_main *main)
 		tota_heredoc = check_tot_heredoc(&gr_list);
 		if (tota_heredoc >= 1)
 		{
-			if	(multiple_block_p(&gr_list, tota_heredoc) == -200)
+			if	(multiple_block_p(&gr_list, tota_heredoc, main) == -200)
 				return (NULL);
 		}
 	}
 	//printf("dataaaaa -- >%s, siiizeeuh = %zu\n", gr_list->process->first->next->data, ft_strlen(gr_list->process->first->next->data));
 	return (gr_list);
-	//return ("Ok");
 }
