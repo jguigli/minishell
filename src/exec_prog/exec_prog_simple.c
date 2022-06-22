@@ -72,6 +72,7 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	{
 		//printf("test\n");
 		exec.pid = fork();
+		manage_sig_in_forks(exec.pid, main);
 		if (exec.pid == -1)
 		{
 			printf("Fork failed : %s\n", strerror(errno));
@@ -83,7 +84,9 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 
 		}
 	}
-	waitpid(exec.pid, &wstatus, 0);
+	//waitpid(exec.pid, &wstatus, 0);
+	if (waiting_child_hd(exec.pid, main) == -20)
+		return (10);
 	if (main->my_fds[0] != -1000)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);

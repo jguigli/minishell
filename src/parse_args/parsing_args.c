@@ -991,7 +991,10 @@ t_flist	*parse_args(char	*entry, t_main *main)
 	if (my_lstsize(gr_list) == 1)
 	{
 		if	(simple_block_p(&gr_list, main) == -200)
+		{
+			main->sigintos = 0;
 			return (NULL);
+		}
 		// affiche(gr_list->process);
 	}
 	else if	(my_lstsize(gr_list) > 1)
@@ -1000,7 +1003,10 @@ t_flist	*parse_args(char	*entry, t_main *main)
 		if (tota_heredoc >= 1)
 		{
 			if	(multiple_block_p(&gr_list, tota_heredoc, main) == -200)
+			{
+				main->sigintos = 0;
 				return (NULL);
+			}
 		}
 	}
 	//printf("dataaaaa -- >%s, siiizeeuh = %zu\n", gr_list->process->first->next->data, ft_strlen(gr_list->process->first->next->data));

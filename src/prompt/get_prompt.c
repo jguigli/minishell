@@ -72,7 +72,7 @@ void	get_prompt(t_main *main)
 			if	(get_p == 1)
 			{
 				//affiche(main->start->process);
-				exec_launcher(main);
+				exec_launcher(main)
 			}
 		}
 	}

@@ -84,6 +84,9 @@ int	exec_launcher(t_main *main)
 		{
 			exit(status);
 		}
+		else if (exe_simple_cmd(main) == -20)
+			return (NULL);
+		
 	}
 	return (1);
 }
