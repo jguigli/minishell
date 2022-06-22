@@ -32,9 +32,6 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main)
 
 void	manage_child_simple(t_exec_s exec, t_flist *list, t_main *main)
 {
-	t_flist		*current;
-
-	current = list;
 	if (main->my_fds[0] != -1000)
 		close(main->my_fds[0]);
 	if (main->my_fds[1] != -1000)
@@ -83,8 +80,8 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 			manage_child_simple(exec, list, main);
 
 		}
+		waitpid(exec.pid, &wstatus, 0);
 	}
-	waitpid(exec.pid, &wstatus, 0);
 	if (main->my_fds[0] != -1000)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);
@@ -95,5 +92,6 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		dup2(main->my_oldfds[1], STDIN_FILENO);
 		close(main->my_fds[1]);
 	}
+	free_exec_simple(&exec);
 	return (wstatus);
 }

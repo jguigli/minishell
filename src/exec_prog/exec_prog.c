@@ -32,7 +32,7 @@ void	exec_builtin(char **arg, t_main *main)
 	else if (!strcmp(arg[0], "env"))
 		ft_env(arg, main->env);
 	else if (!strcmp(arg[0], "exit"))
-		ft_exit(arg);
+		ft_exit(arg, main);
 	else if (!strcmp(arg[0], "export"))
 		ft_export(arg, main);
 	else if (!strcmp(arg[0], "pwd"))

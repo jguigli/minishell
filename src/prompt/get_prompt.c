@@ -19,7 +19,7 @@ static char	*get_prompt_env(void)
 	char	*prompt;
 	char	*temp;
 
-	temp = ft_strdup("");
+	temp = NULL;
 	temp = ft_strjoin(temp, "\x1b[32m");
 	name = ft_strdup("minishell");
 	if (!name)
@@ -27,7 +27,7 @@ static char	*get_prompt_env(void)
 	temp = ft_strjoin(temp, name);
 	free(name);
 	name = ft_strjoin(temp, "\x1b[0m:");
-	temp = ft_strdup("");
+	temp = NULL;
 	temp = ft_strjoin(temp, "\x1b[34m");
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
@@ -45,34 +45,34 @@ void	get_prompt(t_main *main)
 	char	*entry;
 	int		int_mode;
 	char	*my_prompt;
-	int		get_p;
 
 	int_mode = 1;
+	my_prompt = NULL;
 	while (int_mode)
 	{
-		get_p = 1;
-		my_prompt = get_prompt_env();
 		if (!my_prompt)
-			my_prompt = "~$ ";
+			my_prompt = get_prompt_env();
 		int_mode = isatty(STDIN_FILENO);
+		main->start = NULL;
 		if (int_mode == 1)
 		{
 			entry = readline(my_prompt);
 			if (entry == NULL)
 			{
-				write(1, "exit", 5);
+				write(1, "exit\n", 6);
+				ft_free(main);
+				free (my_prompt);
 				exit(status);
 			}
 			add_history(entry);
 			//printf("entryyyyyy %s\n", entry);
 			main->start = parse_args(entry, main->env);
 			//main->start = gr_list;
-			if	(!main->start)
-				get_p = 0;
-			if	(get_p == 1)
+			if (main->start)
 			{
 				//affiche(main->start->process);
 				exec_launcher(main);
+				free_flist(main->start);
 			}
 		}
 	}

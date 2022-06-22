@@ -28,7 +28,9 @@ SRC = minishell.c \
 		./src/builtin/exit.c \
 		./src/builtin/pwd.c \
 		./src/builtin/unset.c \
-		./src/freeing/freeing.c \
+		./src/freeing/free_and_error.c \
+		./src/freeing/free_main.c \
+		./src/freeing/free_exec.c \
 		./src/exec_prog/exec_prog_simple.c \
 		./src/check/check_quote.c \
 

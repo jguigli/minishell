@@ -144,11 +144,9 @@ int	check_dquotes_dol(t_datas *list)
 {
 	int	i;
 	int	dq;
-	int	dol;
 
 	i = 0;
 	dq = 0;
-	dol = 0;
 	while (list->data[i])
 	{
 		if (list->data[i] == 34)
@@ -168,11 +166,9 @@ int	check_squotes_dol(t_datas *list)
 {
 	int	i;
 	int	sq;
-	int	dol;
 
 	i = 0;
 	sq = 0;
-	dol = 0;
 	while (list->data[i])
 	{
 		if (list->data[i] == 39)
@@ -249,16 +245,13 @@ t_dblist	*token_tag(t_dblist *list)
 {
 	t_datas	*tag;
 	t_datas	*head;
-	int		aft_p;
 
 	tag = list->first;
 	head = list->first;
-	aft_p = 1;
 	while(tag)
 	{
 		if (tag->type == 5)
 		{
-			aft_p = 1;
 			if (tag->previous && (tag->previous->type == 6 || tag->previous->type == 7))
 			{
 				tag->t_token = "TOKEN_FILE";
@@ -327,20 +320,17 @@ t_dblist	*token_tag(t_dblist *list)
 						}
 					}
 					if (!tag->next)
-						break ;	
-					aft_p = 0;
+						break ;
 				}
 				else if (tag->type == 11)
 				{
 					if	(tag->next == NULL)
 						break ;
-					aft_p = 0;
 				}
 			}
 		}
 		if (tag->type == 7)
 		{
-			aft_p = 1;
 			if (tag->length == 2)
 			{
 				if (tag->length == 2)
@@ -348,7 +338,6 @@ t_dblist	*token_tag(t_dblist *list)
 					tag->t_token = "TOKEN_HEREDOC";
 					tag->type = 33;
 				}
-				aft_p = 0;
 				tag = tag->next;
 				if (tag->type == 5)
 				{
@@ -417,7 +406,6 @@ t_dblist	*token_tag(t_dblist *list)
 				{
 					tag->t_token = "TOKEN_HEREDOC";
 					tag->type = 33;
-					aft_p = 0;
 					if (tag->next)
 						tag = tag->next;
 					else
@@ -448,7 +436,6 @@ t_dblist	*token_tag(t_dblist *list)
 				}
 				else 
 				{
-					aft_p = 0;
 					tag = tag->next;
 					tag->t_token = "TOKEN_FILE";
 					tag->type = 21;
@@ -458,7 +445,6 @@ t_dblist	*token_tag(t_dblist *list)
 			{
 				if	(tag->next == NULL)
 					break ;
-				aft_p = 0;
 			}
 		}
 		if (tag->type == 6)
@@ -507,7 +493,7 @@ void	my_lstadd_back(t_flist **alst, t_flist *new)
 		return ;
 	}
 	last = my_lstlast(*alst);
-	last -> next = new;
+	last->next = new;
 	new->previous = last;
 	new->next = NULL;
 }
@@ -531,11 +517,12 @@ t_flist *get_processes(t_dblist *list)
 			else
 				break ;
 		}
-		if	(list->first->next != NULL)
+		if (list->first->next != NULL)
 		{
 			list->first = list->first->next;
 			finli_cur = init_struct_flist();
 			my_lstadd_back(&finli, finli_cur);
+			//free_flist(finli);
 			finli = finli_cur;
 		}
 		else 
@@ -650,7 +637,6 @@ t_dblist *p_tok(t_dblist *list)
 t_dblist	*get_tokens(char *entry)
 {
 	unsigned int token_type;
-	unsigned int token_type_cpy;
 	unsigned int i;
 	unsigned int j;
 	int			is_dquoted;
@@ -658,12 +644,10 @@ t_dblist	*get_tokens(char *entry)
 	t_dblist	*list;
 	int pos;
 	char *str;
-	int		k;
 
 	i = 0;
 	pos = 0;
 	j = 0;
-	k = 1;
 	is_dquoted = 1;
 	is_squoted = 1;
 	list = init_linked_list();
@@ -680,7 +664,6 @@ t_dblist	*get_tokens(char *entry)
 			{
 				is_dquoted = 1;
 				i++;
-				token_type_cpy = token_type;
 				while (is_dquoted == 1 && entry[i])
 				{
 					if (entry[i] == '\"')
@@ -706,7 +689,6 @@ t_dblist	*get_tokens(char *entry)
 					syntax_err(SYNTAX_ERR, "\'");
 					return (NULL);
 				}
-				token_type_cpy = token_type;
 				while (is_squoted == 1 && entry[i])
 				{
 					if (entry[i] == '\'')

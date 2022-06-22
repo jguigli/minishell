@@ -24,6 +24,7 @@ char	*case_nodol_quote(char *data, int *i, char *str)
     {					
         temp = ft_substr(data, j, *i - j);
         str = ft_strjoin(str, temp);
+        free(temp);
     }
 	return (str);
 }
@@ -40,9 +41,13 @@ char	*case_dol_quote(char *data, char **env, int *i, char *str)
     while (ft_isalnum(data[*i]) && data[*i])
         (*i)++;
     temp = ft_substr(data, j, *i - j);
+    free(temp);
     temp = search_in_env_var(temp, env);
     if (temp)
+    {
         str = ft_strjoin(str, temp);
+        free(temp);
+    }
     (*i)--;
 	return (str);	
 }

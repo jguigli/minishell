@@ -635,6 +635,7 @@ t_datas	*my_lstnew(char *data)
 	if (!newlist)
 		return (NULL);
 	newlist->data = data;
+	newlist->t_token = NULL;
 	return (newlist);
 }
 

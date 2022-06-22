@@ -42,7 +42,7 @@ t_main	*init_main(void)
 	main = ft_calloc(1, sizeof(t_main));
 	if (!main)
 		return (NULL);
-	main->start = init_struct_flist();
+	main->start = NULL;
 	main->env = NULL;
 	main->exec_c = NULL;
 	main->exec_s = NULL;

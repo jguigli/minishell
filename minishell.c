@@ -7,13 +7,18 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argc;
 	(void)argv;
 	t_main	*main;
+	char	*envcheck;
 
 	manage_signal();
 	main = init_main();
-	if (!search_in_env_var("PATH", env))
+	envcheck = search_in_env_var("PATH", env);
+	if (!envcheck)
 		main->env = manage_env_i();
 	else
+	{
 		main->env = get_copy(env); //A FREE A LA FIN
+		free(envcheck);
+	}
 	get_prompt(main);
 	return (0);
 }

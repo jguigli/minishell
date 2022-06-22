@@ -25,9 +25,6 @@ char	**dup_env_tab_export(char **env)
 
 static int	check_each_arg(char *arg, int *i)
 {
-	int	j;
-
-	j = 0;
 	while (arg[*i] != '=' && arg[*i])
 	{
 		if (!ft_isalnum(arg[*i]))
@@ -54,10 +51,8 @@ static int	check_each_arg(char *arg, int *i)
 static int	check_arg_export(char *arg)
 {
 	int	i;
-	int	pos;
 
 	i = 1;
-	pos = 1;
 	if (!ft_isalpha(arg[0]))
 	{
 		printf("minishell: '%s': not a valid identifier\n", arg);
@@ -85,10 +80,8 @@ static char	**export_var_env(char *arg, char **env)
 void	ft_export(char **arg, t_main *main)
 {
 	int	i;
-	int	pos;
 
 	i = 1;
-	pos = 0;
 	status = 0;
 	if (!arg[1])
 		print_export(main->env);

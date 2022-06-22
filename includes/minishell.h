@@ -110,11 +110,6 @@ void			input_redir(t_datas *file, t_main *main);
 void			output_redir(t_datas *file, t_main *main);
 // *************
 
-void			freeing_cmd(t_exec_s	exec);
-void			freeing_execution(t_exec_s	exec, int error);
-void			freeing_execution_c(t_exec_c	exec, int error);
-void			freeing_cmd_c(t_exec_c	exec);
-
 // Expansion ***************
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
 char	**set_var_in_env(char *var, char *path, char **env);
@@ -141,9 +136,9 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main);
 int 	exec_simple_cmd(t_main *main);
 int		is_builtin(char *cmd);
 void	exec_builtin(char **arg, t_main *main);
-int	count_quote(char *argv);
+int	    count_quote(char *argv);
 char	**split_arg(char *argv);
-int	check_arg(char *argv);
+int	    check_arg(char *argv);
 char	*get_command(char **path, char *cmd);
 char	*find_path(char **envp);
 void	create_pipes(t_exec_c *exec);
@@ -153,10 +148,10 @@ void	delete_nodes_after_expansion(t_dblist *list);
 // ***********************************************
 
 // Builtin ************
-int    ft_cd(char **arg, t_main *main);
-int    ft_echo(char **arg);
+int     ft_cd(char **arg, t_main *main);
+int     ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
-void    ft_exit(char **arg);
+void    ft_exit(char **arg, t_main *main);
 void	ft_export(char **arg, t_main *main);
 void    ft_pwd(void);
 void	ft_unset(char **arg, t_main *main);
@@ -179,6 +174,16 @@ char	*ft_strjoin_path(char *s1, char *s2);
 
 // Free *******************************
 
+void			freeing_cmd(t_exec_s	exec);
+void			freeing_execution(t_exec_s	exec, int error);
+void			freeing_execution_c(t_exec_c	exec, int error);
+void			freeing_cmd_c(t_exec_c	exec);
+void	        ft_free(t_main *main);
+void	        free_flist(t_flist	*first);
+void	        free_dblist(t_dblist *first);
+void	        free_datas(t_datas *data);
+void	        free_exec_simple(t_exec_s *exec);
+void	        free_exec_complex(t_exec_c *exec);
 
 // ************************************
 

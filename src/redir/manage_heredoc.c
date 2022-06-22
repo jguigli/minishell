@@ -102,14 +102,10 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list)
 	t_datas	*copy;
 	int		file;
 	char	*buf;
-	char	*str_to_get;
-	char	*tmp;
 
 	//manage_signal_hd();
 	(void)*gr_list;
 	copy = delimiter;
-	str_to_get = NULL;
-	tmp = NULL;
 	//affiche(gr_list->process);
 	if (copy->type == 35)
 	{
