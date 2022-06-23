@@ -650,10 +650,12 @@ t_dblist	*get_tokens(char *entry)
 	j = 0;
 	is_dquoted = 1;
 	is_squoted = 1;
+	if (entry[0] == '\0')
+		return (NULL);
 	list = init_linked_list();
+	if (list->infos->get_chr_c[(unsigned int)entry[i]] == CHR_SP)
+		return (NULL);
 	str = NULL;
-	if (entry[0] == '\0' || list->infos->get_chr_c[(unsigned int)entry[i]] == CHR_SP)
-			return (NULL);
 	while (entry[i])
 	{
 		token_type = list->infos->get_tok_type[list->infos->get_chr_c[(unsigned int)entry[i]]];
