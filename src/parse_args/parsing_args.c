@@ -736,9 +736,9 @@ int	waiting_child_exec(pid_t fi, t_main *main)
 	{
 		printf("heheeeee ---- SIGNAL\n");
 		write(1, "\n", 2);
-		main->sigintos = 50;
-		exit (130);
 		ret = (WEXITSTATUS(wstatus));
+		status = 130;
+		return (-20);
 	}
 	if (WIFSTOPPED(wstatus))
 	{

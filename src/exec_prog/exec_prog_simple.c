@@ -70,23 +70,23 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	}
 	else
 	{
-		//printf("test\n");
 		exec.pid = fork();
+		//printf("exec.pid == %d\n", exec.pid);
 		manage_sig_in_forks(exec.pid, main);
 		if (exec.pid == -1)
 		{
 			printf("Fork failed : %s\n", strerror(errno));
 			exit(status);
 		}
-		else if (!exec.pid)
+		else if (exec.pid == 0)
 		{
 			manage_child_simple(exec, list, main);
-
+			//exit(0);
 		}
+		if (waiting_child_exec(exec.pid, main) == -20)
+			return (-20);
+		manage_signal();
 	}
-	//waitpid(exec.pid, &wstatus, 0);
-	if (waiting_child_exec(exec.pid, main) == -20)
-		return (-20);
 	if (main->my_fds[0] != -1000)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);

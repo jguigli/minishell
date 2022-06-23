@@ -86,7 +86,8 @@ void	manage_exec(t_exec_c exec, t_main *main)
 	close_pipes(&exec);
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
-		waitpid(exec.pid[exec.pid_number], NULL, 0);
+		waiting_child_exec(exec.pid[exec.pid_number], main);
+	manage_signal();
 	if (main->my_fds[0] != -1000)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);
@@ -111,6 +112,7 @@ void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l
 	if (!exec.pipe)
 		exit(0);
 	exec.pid = (pid_t *)malloc(sizeof(pid_t) * exec.cmd_number);
+	manage_sig_in_forks(exec.pid, main);
 	if (!exec.pid)
 	{
 		free(exec.pipe);

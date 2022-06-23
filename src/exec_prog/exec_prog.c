@@ -80,16 +80,8 @@ int	exec_launcher(t_main *main)
 	}
 	else if	(pipe == 0)
 	{
-		if (exec_simple_cmd(main) == 10)
-		{
-			printf("hihi\n");
-			exit(status);
-		}
-		else if (exec_simple_cmd(main) == -20)
-		{
-			printf("hohooo\n");
-			return (-30);
-		}
+		exec_simple_cmd(main);
+		//exit(status);
 	}
 	return (1);
 }
