@@ -70,7 +70,7 @@ void	get_prompt(t_main *main)
 			//main->start = gr_list;
 			if (main->start)
 			{
-				affiche(main->start->process);
+				//affiche(main->start->process);
 				exec_launcher(main);
 				free_flist(main->start);
 			}

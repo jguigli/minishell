@@ -48,24 +48,25 @@ int affiche(t_dblist *list)
 	return(count);
 }
 
-void	create_grtoken(t_dblist *l, char *data, char *tokt, int type)
+t_dblist	*create_grtoken(t_dblist *l, t_datas *data)
 {
-	t_datas *element;
+	// t_datas *element;
 	t_datas *current;
 
-	element = malloc(sizeof(t_datas));
-	if (!element)
-		exit(EXIT_FAILURE);
+	// element = malloc(sizeof(t_datas));
+	// if (!element)
+	// 	exit(EXIT_FAILURE);
+	printf("DATA %s\n", data->data);
 	if (!l->number)
 	{
-		l->first = element;
-		element->data = data;
-		element->t_token = tokt;
-		element->type = type;
-		element->pos = 0;
-		element->next = NULL;
-		element->previous = NULL;
-		l->last = element;
+		l->first = data;
+		// element->data = data;
+		// element->t_token = tokt;
+		// element->type = type;
+		// element->pos = 0;
+		data->next = NULL;
+		data->previous = NULL;
+		l->last = data;
 		l->number++;
 	}
 	else
@@ -75,16 +76,17 @@ void	create_grtoken(t_dblist *l, char *data, char *tokt, int type)
 		{
 			current = current->next;
 		}
-		current->next = element;
-		element->data = data;
-		element->t_token = tokt;
-		element->pos = 0;
-		element->type = type;
-		element->next = NULL;
-		element->previous = current;
-		l->last = element;
+		current->next = data;
+		// element->data = data;
+		// element->t_token = tokt;
+		// element->pos = 0;
+		// element->type = type;
+		data->next = NULL;
+		data->previous = current;
+		l->last = data;
 		l->number++;
 	}
+	return (l);
 }
 
 void	create_token_list(t_dblist *l, char *s, int pos, unsigned int t)
@@ -503,23 +505,29 @@ t_flist *get_processes(t_dblist *list)
 	t_flist		*finli;
 	t_flist		*finli_cur;
 	t_flist		*head;
+	t_datas	*current;
 
 	finli = init_struct_flist();
+	current = list->first;
 	head = finli;
-	while (list->first)
+	while (current)
 	{
-		while(list->first->type != 11)
+		while(current->type != 11)
 		{
 			//printf(" 7777 ---- data == %s - taille = %zu\n", list->first->data, ft_strlen(list->first->data));			
-			create_grtoken((finli)->process, list->first->data, list->first->t_token, list->first->type);
-			if	(list->first->next != NULL)
-				list->first = list->first->next;
+			(finli)->process = create_grtoken((finli)->process, current);
+			printf("DATA %s\n", current->data);
+			if	(current->next != NULL)
+			{
+				printf("DATA \n");
+				current = current->next;
+			}
 			else
 				break ;
 		}
-		if (list->first->next != NULL)
+		if (current->next != NULL)
 		{
-			list->first = list->first->next;
+			current = current->next;
 			finli_cur = init_struct_flist();
 			my_lstadd_back(&finli, finli_cur);
 			//free_flist(finli);

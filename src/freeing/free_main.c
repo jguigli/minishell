@@ -8,7 +8,7 @@ void	free_datas(t_datas *data)
 	current = data;
 	while (current)
 	{
-		printf("ICICICICICICI\n");
+		//printf("ICICICICICICI\n");
 		to_free = current;
 		if (current->next)
 			current = current->next;

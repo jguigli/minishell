@@ -64,7 +64,7 @@ static void	manage_expansion(t_datas *list, char **env)
 			str = case_dol_noquote(list->data, env, &i, str);
 			if (list->type == 21 && str[0] == '\0')
 			{
-				printf("minishell: : ambiguous redirect\n");
+				printf("minishell: %s: ambiguous redirect\n", list->data);
 				exit(0);
 			}
 		}
@@ -109,5 +109,5 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 		else
 			break ;
 	}
-	affiche(gr_list);
+	//affiche(gr_list);
 }
