@@ -2,31 +2,36 @@
 
 void	free_datas(t_datas *data)
 {
-	if (data->data)
-		free(data->data);
-}
-
-void	free_dblist(t_dblist *first)
-{
 	t_datas	*current;
 	t_datas	*to_free;
 
-	current = first->first;
+	current = data;
 	while (current)
 	{
+		printf("ICICICICICICI\n");
 		to_free = current;
 		if (current->next)
 			current = current->next;
 		else
 		{
-			free_datas(to_free);
+			if (to_free->data)
+				free(to_free->data);
 			free(to_free);
 			break ; //rajouter condition de secu
 		}
-		free_datas(to_free);
+		if (to_free->data)
+			free(to_free->data);
 		free(to_free);
 	}
-	//free (first);
+}
+
+void	free_dblist(t_dblist *first)
+{
+	if (first->first)
+		free_datas(first->first);
+	if (first->infos)
+		free(first->infos);
+	free(first);
 }
 
 void	free_flist(t_flist	*first)

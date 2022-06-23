@@ -21,6 +21,7 @@ t_dblist	*init_linked_list() // Ou est ce qu'on initialise les datas
 	if (!liste)
 		exit(EXIT_FAILURE);
 	liste->infos = initst_infos();
+	liste->first = NULL;
 	return (liste);
 }
 

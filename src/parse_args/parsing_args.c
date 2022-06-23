@@ -983,6 +983,9 @@ t_flist	*parse_args(char	*entry, char **env)
 	if	(!fin_li)
 		return (NULL);
 	gr_list = get_processes(fin_li);
+	free(fin_li->first);
+	free(fin_li->infos);
+	free(fin_li);
 	counting(&gr_list);
 	// // affiche(gr_list->next->process);
 	if (my_lstsize(gr_list) == 1)

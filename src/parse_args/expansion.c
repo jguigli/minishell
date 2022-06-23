@@ -60,9 +60,23 @@ static void	manage_expansion(t_datas *list, char **env)
 		else if (list->data[i] == '$' && list->data[i + 1] == '\0')
 			str = case_dolafterdol(&i, str);
 		else if (list->data[i] == '$')
+		{
 			str = case_dol_noquote(list->data, env, &i, str);
+			if (list->type == 21 && str[0] == '\0')
+			{
+				printf("minishell: : ambiguous redirect\n");
+				exit(0);
+			}
+		}
 		else if (list->data[i] == 34)
+		{
 			str = manage_dquote(list->data, env, &i, str);
+			if (list->type == 21 && str[0] == '\0')
+			{
+				printf("minishell: : No such file or directory\n");
+				exit(0);
+			}
+		}
 		else if (list->data[i] == 39)
 			str = case_single_quote(list->data, &i, str);
 		if (list->data[i] != '\0')
