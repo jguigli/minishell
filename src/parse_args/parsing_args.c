@@ -987,7 +987,7 @@ t_flist	*parse_args(char	*entry, char **env)
 	// // affiche(gr_list->next->process);
 	if (my_lstsize(gr_list) == 1)
 	{
-		if	(simple_block_p(&gr_list) == -200)
+		if (simple_block_p(&gr_list) == -200)
 			return (NULL);
 		// affiche(gr_list->process);
 	}
@@ -996,7 +996,7 @@ t_flist	*parse_args(char	*entry, char **env)
 		tota_heredoc = check_tot_heredoc(&gr_list);
 		if (tota_heredoc >= 1)
 		{
-			if	(multiple_block_p(&gr_list, tota_heredoc) == -200)
+			if (multiple_block_p(&gr_list, tota_heredoc) == -200)
 				return (NULL);
 		}
 	}

@@ -48,6 +48,6 @@ char	*case_dol_quote(char *data, char **env, int *i, char *str)
         str = ft_strjoin(str, temp);
         free(temp);
     }
-    (*i)--;
+    // supp i--
 	return (str);	
 }

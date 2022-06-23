@@ -50,6 +50,7 @@ char	*case_dol_noquote(char *data, char **env, int *i, char *str)
 		str = ft_strjoin(str, "$");
         str = ft_strjoin(str, temp);
 		free(temp);
+		(*i)--; // add
 		return (str);
 	}
     while (ft_isalnum(data[*i]) && data[*i])

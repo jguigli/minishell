@@ -16,9 +16,13 @@ void	free_dblist(t_dblist *first)
 	{
 		to_free = current;
 		if (current->next)
-				current = current->next;
-			else
-				break ; //rajouter condition de secu
+			current = current->next;
+		else
+		{
+			free_datas(to_free);
+			free(to_free);
+			break ; //rajouter condition de secu
+		}
 		free_datas(to_free);
 		free(to_free);
 	}
@@ -40,7 +44,10 @@ void	free_flist(t_flist	*first)
 			if (current->next)
 				current = current->next;
 			else
+			{
+				free(to_free);
 				break ;
+			}
 			free(to_free);
 		}
 	}
