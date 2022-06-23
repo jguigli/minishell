@@ -85,8 +85,8 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		}
 	}
 	//waitpid(exec.pid, &wstatus, 0);
-	if (waiting_child_hd(exec.pid, main) == -20)
-		return (10);
+	if (waiting_child_exec(exec.pid, main) == -20)
+		return (-20);
 	if (main->my_fds[0] != -1000)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);

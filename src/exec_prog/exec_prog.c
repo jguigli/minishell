@@ -82,11 +82,14 @@ int	exec_launcher(t_main *main)
 	{
 		if (exec_simple_cmd(main) == 10)
 		{
+			printf("hihi\n");
 			exit(status);
 		}
-		else if (exe_simple_cmd(main) == -20)
-			return (NULL);
-		
+		else if (exec_simple_cmd(main) == -20)
+		{
+			printf("hohooo\n");
+			return (-30);
+		}
 	}
 	return (1);
 }

@@ -702,7 +702,7 @@ int	waiting_child_hd(pid_t fi, t_main *main)
 			perror("wait() error");
 	if (WIFSIGNALED(wstatus) > 0)
 	{
-		//printf("hehe ---- SIGNAL\n");
+		printf("heheeeee ---- SIGNAL\n");
 		write(1, "\n", 2);
 		main->sigintos = 50;
 		return (-20);
@@ -711,6 +711,33 @@ int	waiting_child_hd(pid_t fi, t_main *main)
 	if (WIFEXITED(wstatus) > 0)
 	{
 		printf("EXIIIITED -- %d\n", wstatus);
+		ret = (WEXITSTATUS(wstatus));
+	}
+	if (WIFSTOPPED(wstatus))
+	{
+		//printf("hoho\n");
+		ret = (WSTOPSIG(wstatus) + 128);
+	}
+	if (ret == 130)
+		status = 130;
+	return (ret);
+}
+
+int	waiting_child_exec(pid_t fi, t_main *main)
+{
+	int	wstatus;
+	int	ret;
+
+	ret = 0;
+	wstatus = 0;
+	if	(waitpid(fi, &wstatus, 0) == -1)
+			perror("wait() error");
+	if (WIFSIGNALED(wstatus) > 0)
+	{
+		printf("heheeeee ---- SIGNAL\n");
+		write(1, "\n", 2);
+		main->sigintos = 50;
+		exit (130);
 		ret = (WEXITSTATUS(wstatus));
 	}
 	if (WIFSTOPPED(wstatus))

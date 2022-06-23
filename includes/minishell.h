@@ -175,6 +175,8 @@ void	free_char_tab(char **tab);
 
 int	manage_redirections(t_flist **li, t_main *main);
 void delete_node(t_flist **li);
+int	waiting_child_hd(pid_t fi, t_main *main);
+int	waiting_child_exec(pid_t fi, t_main *main);
 
 // Ext_funtions *********************
 // //static char	*ft_strcat(char *dest, char *src);
