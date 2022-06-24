@@ -1005,7 +1005,9 @@ t_flist	*parse_args(char	*entry, t_main *main)
 	fin_li = get_tokens(entry);
 	tota_heredoc = 0;
 	if	(!fin_li)
+	{	
 		return (NULL);
+	}
 	gr_list = get_processes(fin_li);
 	// free(fin_li->first);
 	free(fin_li->infos);
@@ -1014,13 +1016,9 @@ t_flist	*parse_args(char	*entry, t_main *main)
 	// // affiche(gr_list->next->process);
 	if (my_lstsize(gr_list) == 1)
 	{
-<<<<<<< HEAD
 		if	(simple_block_p(&gr_list, main) == -200)
 		{
 			main->sigintos = 0;
-=======
-		if (simple_block_p(&gr_list) == -200)
->>>>>>> origin/manage_free2
 			return (NULL);
 		}
 		// affiche(gr_list->process);
@@ -1030,13 +1028,9 @@ t_flist	*parse_args(char	*entry, t_main *main)
 		tota_heredoc = check_tot_heredoc(&gr_list);
 		if (tota_heredoc >= 1)
 		{
-<<<<<<< HEAD
 			if	(multiple_block_p(&gr_list, tota_heredoc, main) == -200)
 			{
 				main->sigintos = 0;
-=======
-			if (multiple_block_p(&gr_list, tota_heredoc) == -200)
->>>>>>> origin/manage_free2
 				return (NULL);
 			}
 		}

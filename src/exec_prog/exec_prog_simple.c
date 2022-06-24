@@ -85,13 +85,9 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 			manage_child_simple(exec, list, main);
 			exit(0);
 		}
-<<<<<<< HEAD
 		if (waiting_child_exec(exec.pid, main) == -20)
 			return (0);
 		manage_signal();
-=======
-		waitpid(exec.pid, &wstatus, 0);
->>>>>>> origin/manage_free2
 	}
 	if (main->my_fds[0] != -1000)
 	{

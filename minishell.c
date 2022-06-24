@@ -9,9 +9,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_main	*main;
 	char	*envcheck;
 
+	manage_signal();
 	main = init_main();
-	manage_signal(main);
-	if (!search_in_env_var("PATH", env))
 	envcheck = search_in_env_var("PATH", env);
 	if (!envcheck)
 		main->env = manage_env_i();

@@ -545,7 +545,7 @@ t_flist *get_processes(t_dblist *list)
 
 int	check_if_pathname(t_datas *data)
 {
-	if	(data->type == 27 && data->length > 1 && (data->data[0] == data->data[1] || data->data[1] != CHR_WORD))
+	if	(data->type == 27 && data->length >= 1 && (data->data[0] == data->data[1] || data->data[1] != CHR_WORD))
 	{
 		isdir_err(DIR_ERR, data->data);
 		return (0);
@@ -567,6 +567,7 @@ t_dblist *p_tok(t_dblist *list)
 		if	(check_if_pathname(p_list) == 0)
 			return (NULL);
 		syntax_err(SYNTAX_ERR, p_list->data);
+		status = 1;
 		return (NULL);
 	}
 	while(p_list)
@@ -575,8 +576,8 @@ t_dblist *p_tok(t_dblist *list)
 		if	(p_list->type == 5 || p_list->type == 31 || p_list->type == 32 
 		 		|| p_list->type == 27 || p_list->type == 28 || p_list->type == 10)
 		{
-			// if	(check_if_pathname(p_list) == 0)
-			// 	return (NULL);
+			if	(check_if_pathname(p_list) == 0)
+				return (NULL);
 			//printf("new line == %s -- %d --- %d \n", p_list->data, p_list->type, p_list->length);
 			if	(check_spec_char(p_list, list) == 0)
 				return (NULL);
@@ -600,11 +601,12 @@ t_dblist *p_tok(t_dblist *list)
 					return (NULL);
 				}
 			}
-			else if (p_list->length > 2)
+			else if (p_list->length > 2 || !p_list->next)
 			{
 				syntax_err(SYNTAX_ERR, p_list->data);
 				return (NULL);
 			}
+			
 		}
 		else if	(p_list->type == 31)
 		{
@@ -756,7 +758,12 @@ t_dblist	*get_tokens(char *entry)
 	}
 	//affiche(list);
 	if	(p_tok(list) == NULL)
+	{
+		free_datas(list->first);
+		free(list->infos);
+		free(list);
 		return (NULL);
+	}
 	return (list);
 }
 

@@ -6,9 +6,9 @@ void	free_datas(t_datas *data)
 	t_datas	*to_free;
 
 	current = data;
+	//printf("ICICICICICICI %s\n", current->data);
 	while (current)
 	{
-		//printf("ICICICICICICI\n");
 		to_free = current;
 		if (current->next)
 			current = current->next;

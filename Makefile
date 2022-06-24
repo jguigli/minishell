@@ -53,7 +53,7 @@ GNL				=	$(GNL_PATH)/gnl.a
 all : $(NAME)
 
 %.o : %.c
-	$(CC) $(FLAG) -c $< -o $@
+	$(CC) -c $< -o $@
 
 $(NAME) : $(OBJ) $(LIBFT) $(GNL) $(HEADER)
 	$(CC) $(FLAG) $(OBJ) $(LIBFT) $(GNL) $(INC) -lreadline -o $(NAME)
