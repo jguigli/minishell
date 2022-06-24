@@ -36,9 +36,13 @@ void	manage_child_simple(t_exec_s exec, t_flist *list, t_main *main)
 
 	current = list;
 	if (main->my_fds[0] != -1000)
+	{
 		close(main->my_fds[0]);
+	}
 	if (main->my_fds[1] != -1000)
+	{
 		close(main->my_fds[1]);
+	}
 	child_process_simple(exec, list, main);
 }
 
@@ -96,6 +100,7 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	{
 		dup2(main->my_oldfds[1], STDIN_FILENO);
 		close(main->my_fds[1]);
+		//unlink(".hd2");
 	}
 	return (wstatus);
 }

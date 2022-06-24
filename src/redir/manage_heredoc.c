@@ -105,12 +105,13 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list, pid_t pid)
 	char	*str_to_get;
 	char	*tmp;
 	__sighandler_t 	sigos;
+	int		ctrl;
 
 	//manage_signal_hd();
-	(void)*gr_list;
 	copy = delimiter;
 	str_to_get = NULL;
 	tmp = NULL;
+	ctrl = 0;
 	//affiche(gr_list->process);
 	if (copy->type == 35)
 	{
@@ -142,7 +143,13 @@ void	manage_one_redir(t_datas *delimiter, t_flist *gr_list, pid_t pid)
     {
 		write(1, "> ", 3);
 		buf = get_next_line(0);
-		if (buf == NULL)
+		if (gr_list->process->infos->get_chr_c[buf[0]] == CHR_EOF)
+		{
+			printf("papaaaa \n");
+			free(buf);
+			break ;
+		}
+		if (!buf[0])
 			break ;
 		if (copy->expansion)
 			buf = hd_expansion(buf);

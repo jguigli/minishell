@@ -72,6 +72,7 @@ void	manage_exec(t_exec_c exec, t_main *main)
         shell_parameter_expansion(current->process, main->env);
 		delete_nodes_after_expansion(current->process);
 		exec.pid[exec.pid_number] = fork();
+		manage_sig_in_forks(exec.pid[exec.pid_number], main);
 		//ft_sig_fork(exec.pid[exec.pid_number]);
 		if (exec.pid[exec.pid_number] == -1)
 		{
@@ -92,6 +93,11 @@ void	manage_exec(t_exec_c exec, t_main *main)
 	{
 		dup2(main->my_oldfds[0], STDOUT_FILENO);
 		close(main->my_fds[0]);
+		if	(unlink(".hd2") == -1)
+		{
+			printf("hiho lol \n");
+			write(1, "File not suppressed\n", 21);
+		}
 	}
 	if (main->my_fds[1] != -1000)
 	{
@@ -112,7 +118,6 @@ void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l
 	if (!exec.pipe)
 		exit(0);
 	exec.pid = (pid_t *)malloc(sizeof(pid_t) * exec.cmd_number);
-	manage_sig_in_forks(exec.pid, main);
 	if (!exec.pid)
 	{
 		free(exec.pipe);

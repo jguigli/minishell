@@ -125,6 +125,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (!next_sentence[0])
 	{
+		//printf("here ??\n");
 		free(next_sentence);
 		next_sentence = NULL;
 		return (NULL);

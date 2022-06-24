@@ -26,17 +26,25 @@ int	manage_signal()
 }
 // ***************************************************
 
-// Cancelling a signal in forks
+// Cancelling parent signal in forks and defining child behaviour *********************
+
+void	sig_quit_child(int sig)
+{
+	ft_putstr_fd("Quit (core dumped)\n", 2);
+	status = 131;
+}
+
 int	manage_sig_in_forks(pid_t pid, t_main *main)
 {
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		//write(1, "\n", 2);
+		signal(SIGQUIT, &sig_quit_child);
 	}
 	if (pid > 0)
 	{
 		signal(SIGINT, SIG_IGN);
-	}
-	
+		signal(SIGQUIT, SIG_IGN);
+	}	
 }
+//****************************************************************

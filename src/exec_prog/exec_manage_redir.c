@@ -70,8 +70,6 @@ int	input_r(t_datas *input_r, t_main *main)
 		error_msgs(errno, "Fd's duplication failed");
 		return (-5);
 	}
-	// dup2(main->my_oldfds[1], STDIN_FILENO);
-	// close(main->my_oldfds[1]);
 	return (main->my_fds[1]);
 }
 

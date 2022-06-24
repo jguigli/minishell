@@ -702,21 +702,21 @@ int	waiting_child_hd(pid_t fi, t_main *main)
 			perror("wait() error");
 	if (WIFSIGNALED(wstatus) > 0)
 	{
-		printf("heheeeee ---- SIGNAL\n");
 		write(1, "\n", 2);
 		main->sigintos = 50;
+		status = 1;
 		return (-20);
-		ret = (WTERMSIG(wstatus) + 128);
 	}
 	if (WIFEXITED(wstatus) > 0)
 	{
-		printf("EXIIIITED -- %d\n", wstatus);
+		printf("here test\n");
 		ret = (WEXITSTATUS(wstatus));
 	}
 	if (WIFSTOPPED(wstatus))
 	{
-		//printf("hoho\n");
+		printf("hoho\n");
 		ret = (WSTOPSIG(wstatus) + 128);
+		status = wstatus;
 	}
 	if (ret == 130)
 		status = 130;
@@ -734,7 +734,6 @@ int	waiting_child_exec(pid_t fi, t_main *main)
 			perror("wait() error");
 	if (WIFSIGNALED(wstatus) > 0)
 	{
-		printf("heheeeee ---- SIGNAL\n");
 		write(1, "\n", 2);
 		ret = (WEXITSTATUS(wstatus));
 		status = 130;
@@ -742,7 +741,6 @@ int	waiting_child_exec(pid_t fi, t_main *main)
 	}
 	if (WIFSTOPPED(wstatus))
 	{
-		//printf("hoho\n");
 		ret = (WSTOPSIG(wstatus) + 128);
 	}
 	if (ret == 130)
@@ -793,16 +791,12 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 			manage_sig_in_forks(fi, main);
 			if (fi == 0)
 			{
-				//ft_sig_fork(fi);
-				//printf("list data %s \n", list->next->data);
 				manage_one_redir(list->next, head, pid);
-				//if	(g.sigintos == 2)
 				exit(0);
-				//printf("prout\n");
-				//return (1); // a essayer
 			}
 			else
 			{
+				printf("iciiiiiiii \n");
 				if (waiting_child_hd(fi, main) == -20)
 				{
 					manage_signal();
@@ -825,6 +819,8 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 					tmp = get_next_line(file);		
 				}
 				close(file);
+				if	(unlink(".hd1") == -1)
+					write(2, "File not suppressed\n", 21);
 				if (list->next)
 					list = list->next;
 				else

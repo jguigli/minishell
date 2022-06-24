@@ -103,6 +103,7 @@ typedef	struct s_glob_infos
 	int		get_chr_rules[255][255];
 	int		sp;
 	int		nb_pipes;
+	int	 	ctrls;
 }	t_glob_infos;
 
 typedef	struct s_datas
