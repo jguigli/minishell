@@ -49,14 +49,20 @@ char	*case_dol_noquote(char *data, char **env, int *i, char *str)
    		temp = ft_substr(data, j, *i - j);
 		str = ft_strjoin(str, "$");
         str = ft_strjoin(str, temp);
+		free(temp);
+		(*i)--; // add
 		return (str);
 	}
     while (ft_isalnum(data[*i]) && data[*i])
         (*i)++;
     temp = ft_substr(data, j, *i - j);
+	free(temp);
     temp = search_in_env_var(temp, env);
     if (temp)
+	{
         str = ft_strjoin(str, temp);
+		free(temp);
+	}
     (*i)--;
 	return (str);
 }
@@ -74,6 +80,7 @@ char	*case_single_quote(char *data, int *i, char *str)
             (*i)++;
         temp = ft_substr(data, j, *i - j);
         str = ft_strjoin(str, temp);
+		free(temp);
     }
 	return (str);
 }

@@ -14,27 +14,23 @@
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*catech;
+	char	*cat;
 	int		length;
 
 	length = 0;
-	catech = NULL;
+	cat = NULL;
 	if (!s1)
 		s1 = ft_strdup("");
 	if (!s2)
-	{
-		//write(2, "LOL\n", 4);
 		return (NULL);
-	}
 	length = ft_strlen(s1) + ft_strlen(s2);
-	//printf("test %d\n", length);
-	catech = (char *)malloc(sizeof(char) * (length + 1));
-	if (!catech)
+	cat = (char *)malloc(sizeof(char) * (length + 1));
+	if (!cat)
 		return (NULL);
-	catech[0] = '\0';
-	catech = ft_strcat(catech, s1);
-	catech = ft_strcat(catech, s2);
-	catech[length] = '\0';
+	cat[0] = '\0';
+	cat = ft_strcat(cat, s1);
+	cat = ft_strcat(cat, s2);
+	cat[length] = '\0';
 	free(s1);
-	return (catech);
+	return (cat);
 }

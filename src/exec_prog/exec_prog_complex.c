@@ -3,20 +3,14 @@
 void	manage_dup(t_exec_c exec)
 {
 	if (exec.pid_number == 0)
-	{
-		//printf("here5\n");
 		manage_dup2(exec, 0, exec.pipe[1]);
-	}
 	else if (exec.pid_number == exec.cmd_number - 1)
-	{
-		//printf("here6\n");
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2], 1);
-	}
 	else
 	{
 		manage_dup2(exec, exec.pipe[2 * exec.pid_number - 2],
 			exec.pipe[2 * exec.pid_number + 1]);
-	}	
+	}
 }
 
 void	child_process_complex(t_exec_c exec, t_flist *list, t_main *main)
@@ -114,6 +108,7 @@ void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l
 	t_exec_c	exec;
 	int		pipe;
 
+	init_exec_complex(main, &exec);
 	pipe = my_lstsize(main->start) - 1;
 	exec.pipe_number = 2 * pipe;
 	exec.cmd_number = my_lstsize(main->start);
@@ -129,4 +124,5 @@ void	exec_complex_cmd(t_main *main) // exécution de la ligne de commande avec l
 	exec.path = search_in_env_var("PATH", main->env);
 	exec.cmd_path = ft_split(exec.path, ':');
 	manage_exec(exec, main);
+	free_exec_complex(&exec);
 }

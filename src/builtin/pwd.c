@@ -9,4 +9,5 @@ void	ft_pwd(void)
 	if (!str)
 		return ;
 	printf("%s\n", str);
+	free (str);
 }

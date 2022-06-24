@@ -45,7 +45,7 @@ void	delete_nodes_after_expansion(t_dblist *list)
 	}
 }
 
-char	*manage_expansion(t_datas *list, char **env)
+static void	manage_expansion(t_datas *list, char **env)
 {
 	int		i;
 	char	*str;
@@ -60,25 +60,36 @@ char	*manage_expansion(t_datas *list, char **env)
 		else if (list->data[i] == '$' && list->data[i + 1] == '\0')
 			str = case_dolafterdol(&i, str);
 		else if (list->data[i] == '$')
+		{
 			str = case_dol_noquote(list->data, env, &i, str);
+			if (list->type == 21 && str[0] == '\0')
+			{
+				printf("minishell: %s: ambiguous redirect\n", list->data);
+				exit(0);
+			}
+		}
 		else if (list->data[i] == 34)
+		{
 			str = manage_dquote(list->data, env, &i, str);
+			if (list->type == 21 && str[0] == '\0')
+			{
+				printf("minishell: : No such file or directory\n");
+				exit(0);
+			}
+		}
 		else if (list->data[i] == 39)
 			str = case_single_quote(list->data, &i, str);
 		if (list->data[i] != '\0')
 			i++;
 	}
 	free(list->data);
-	list->data = ft_strdup(str);
-	return (str);	
+	list->data = str;
 }
 
 void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 {
 	t_datas	*list;
-	char	*str;
 
-	str = ft_strdup("");
 	list = gr_list->first;
 	//affiche(gr_list);
 	while (list)
@@ -91,7 +102,7 @@ void	shell_parameter_expansion(t_dblist *gr_list, char **env)
 				break ;
 		}
 		else
-			str = manage_expansion(list, env);
+			manage_expansion(list, env);
 		//free(str); Vu Joel et Amina : ok pour enlever pour les noeuds.
 		if (list->next)
 			list = list->next;

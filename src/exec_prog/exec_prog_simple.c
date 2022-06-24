@@ -32,9 +32,6 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main)
 
 void	manage_child_simple(t_exec_s exec, t_flist *list, t_main *main)
 {
-	t_flist		*current;
-
-	current = list;
 	if (main->my_fds[0] != -1000)
 	{
 		close(main->my_fds[0]);
@@ -52,9 +49,10 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 	int		wstatus;
 	t_flist	*list;
 
+	init_exec_simple(main, &exec);
 	wstatus = 0;
-	//affiche(list->process);
 	list = main->start;
+	//affiche(main->start->process);
 	shell_parameter_expansion(main->start->process, main->env);
 	delete_nodes_after_expansion(main->start->process);
 	exec.path = search_in_env_var("PATH", main->env);
@@ -87,9 +85,13 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 			manage_child_simple(exec, list, main);
 			exit(0);
 		}
+<<<<<<< HEAD
 		if (waiting_child_exec(exec.pid, main) == -20)
 			return (0);
 		manage_signal();
+=======
+		waitpid(exec.pid, &wstatus, 0);
+>>>>>>> origin/manage_free2
 	}
 	if (main->my_fds[0] != -1000)
 	{
@@ -102,5 +104,6 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		close(main->my_fds[1]);
 		//unlink(".hd2");
 	}
+	free_exec_simple(&exec);
 	return (wstatus);
 }

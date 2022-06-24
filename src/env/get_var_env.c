@@ -39,7 +39,7 @@ char	*search_in_env_var(char *var, char **env)
 		if (j == ft_strlen(var))
 		{
 			if (!ft_strncmp(var, env[i], j))
-				return (&env[i][j + 1]);
+				return (ft_strdup(&env[i][j + 1]));
 		}
 		i++;
 	}
@@ -69,6 +69,7 @@ char	**set_var_in_env(char *var, char *path, char **env)
 			str = ft_strjoin(str, path);
 			free(tab[i]);
 			tab[i] = ft_strdup(str);
+			free (str);
 		}
 		i++;
 	}

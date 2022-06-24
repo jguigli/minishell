@@ -32,16 +32,13 @@ void	exec_builtin(char **arg, t_main *main)
 	else if (!strcmp(arg[0], "env"))
 		ft_env(arg, main->env);
 	else if (!strcmp(arg[0], "exit"))
-		ft_exit(arg);
+		ft_exit(arg, main);
 	else if (!strcmp(arg[0], "export"))
 		ft_export(arg, main);
 	else if (!strcmp(arg[0], "pwd"))
 		ft_pwd();
 	else if (!strcmp(arg[0], "unset"))
 		ft_unset(arg, main);
-	// int i = 0;
-	// while (env[i])
-	// 	printf("%s\n", env[i++]);
 	return ;
 }
 
@@ -73,7 +70,6 @@ int	exec_launcher(t_main *main)
 	int	pipe;
 	
 	pipe = my_lstsize(main->start) - 1;
-	//printf("pippppe %d\n", pipe);
 	if (pipe > 0)
 	{
 		exec_complex_cmd(main);

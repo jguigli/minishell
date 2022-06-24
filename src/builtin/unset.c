@@ -7,9 +7,10 @@ static char	**unset_var(int position, char **env)
 
 	i = position;
 	tab = dup_env_tab(env);
-	while (i < ft_strlen_double(tab) - 1)
+	while (i < ft_strlen_double(tab))
 	{
-		tab[i] = ft_strdup(tab[i + 1]);
+		free(tab[i]);
+		tab[i] = ft_strdup(env[i + 1]);
 		i++;
 	}
 	tab[i] = 0;

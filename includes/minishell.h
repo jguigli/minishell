@@ -63,6 +63,8 @@ t_glob_infos	*initst_infos();
 void	init_classes(t_glob_infos *tok_info);
 void	init_tokens(t_glob_infos *tok_info);
 void	init_rules(t_glob_infos *tok_info);
+void	init_exec_simple(t_main *main, t_exec_s *exec);
+void	init_exec_complex(t_main *main, t_exec_c *exec);
 
 //********************
 
@@ -87,7 +89,7 @@ void			insert_node(char *repere, char *node_toadd, t_flist **head);
 int				check_tot_heredoc(t_flist **list);
 int				multiple_block_p(t_flist **gr_list, int totalhd, t_main *main);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
-void			create_grtoken(t_dblist *l, char *data, char *tokt, int type);
+void            create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 t_datas			*my_lstnew(char *data);
 // void			*get_ll(char **args);
 // int	       		 check_quote(char *str);
@@ -113,11 +115,6 @@ int		manage_multiple_redir(t_datas *delimiter, t_flist **gen_list);
 void			input_redir(t_datas *file, t_main *main);
 void			output_redir(t_datas *file, t_main *main);
 // *************
-
-void			freeing_cmd(t_exec_s	exec);
-void			freeing_execution(t_exec_s	exec, int error);
-void			freeing_execution_c(t_exec_c	exec, int error);
-void			freeing_cmd_c(t_exec_c	exec);
 
 // Expansion ***************
 void	shell_parameter_expansion(t_dblist *gr_list, char **env);
@@ -145,9 +142,9 @@ void	child_process_simple(t_exec_s exec, t_flist *list, t_main *main);
 int 	exec_simple_cmd(t_main *main);
 int		is_builtin(char *cmd);
 void	exec_builtin(char **arg, t_main *main);
-int	count_quote(char *argv);
+int	    count_quote(char *argv);
 char	**split_arg(char *argv);
-int	check_arg(char *argv);
+int	    check_arg(char *argv);
 char	*get_command(char **path, char *cmd);
 char	*find_path(char **envp);
 void	create_pipes(t_exec_c *exec);
@@ -157,10 +154,10 @@ void	delete_nodes_after_expansion(t_dblist *list);
 // ***********************************************
 
 // Builtin ************
-int    ft_cd(char **arg, t_main *main);
-int    ft_echo(char **arg);
+int     ft_cd(char **arg, t_main *main);
+int     ft_echo(char **arg);
 void    ft_env(char **arg, char **env);
-void    ft_exit(char **arg);
+void    ft_exit(char **arg, t_main *main);
 void	ft_export(char **arg, t_main *main);
 void    ft_pwd(void);
 void	ft_unset(char **arg, t_main *main);
@@ -183,6 +180,20 @@ int	waiting_child_exec(pid_t fi, t_main *main);
 char	*ft_strjoin_path(char *s1, char *s2);
 // **********************
 
+// Free *******************************
+
+void			freeing_cmd(t_exec_s	exec);
+void			freeing_execution(t_exec_s	exec, int error);
+void			freeing_execution_c(t_exec_c	exec, int error);
+void			freeing_cmd_c(t_exec_c	exec);
+void	        ft_free(t_main *main);
+void	        free_flist(t_flist	*first);
+void	        free_dblist(t_dblist *first);
+void	        free_datas(t_datas *data);
+void	        free_exec_simple(t_exec_s *exec);
+void	        free_exec_complex(t_exec_c *exec);
+
+// ************************************
 
 
 #endif

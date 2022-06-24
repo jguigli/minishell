@@ -131,6 +131,7 @@ typedef	struct s_datas
 // - length : correspond a la long du mot;
 
 // Struct pour points d'entrée de la liste
+
 typedef struct s_dblist
 {
 	int				number;
@@ -184,7 +185,10 @@ typedef struct s_exec_s
 typedef struct s_main
 {
 	t_flist	*start;
-	char **env;
+	t_exec_c *exec_c;
+	t_exec_s *exec_s;
+	char 	**env;
+	char	*my_prompt;
 	int		my_fds[2];
 	int		my_oldfds[2];
 	int		sigintos;
