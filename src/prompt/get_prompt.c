@@ -72,12 +72,7 @@ void	get_prompt(t_main *main)
 			if	(get_p == 1)
 			{
 				//affiche(main->start->process);
-				if	(exec_launcher(main) == -30)
-				{
-					//get_prompt(main);
-					break ;
-				}
-
+				exec_launcher(main);
 			}
 		}
 	}

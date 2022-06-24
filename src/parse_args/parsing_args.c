@@ -734,6 +734,7 @@ int	waiting_child_exec(pid_t fi, t_main *main)
 			perror("wait() error");
 	if (WIFSIGNALED(wstatus) > 0)
 	{
+		//printf("je suis rentrée ici \n");
 		write(1, "\n", 2);
 		ret = (WEXITSTATUS(wstatus));
 		status = 130;
@@ -775,12 +776,9 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 			else 
 				break ;
 		}
-		//cancel_parent_signal();
-		//printf("there %s -- nb_hd = %d\n", list->data, head->nb_heredoc);
 		while (i < head->nb_heredoc && list && main->sigintos == 0)
 		{
 			fi = fork();
-			//printf("%d \n", fi);
 			if	(fi < 0)
 			{
 				// freee tous les mallocs
@@ -796,7 +794,6 @@ int	simple_block_p(t_flist **gr_list, t_main *main)
 			}
 			else
 			{
-				printf("iciiiiiiii \n");
 				if (waiting_child_hd(fi, main) == -20)
 				{
 					manage_signal();

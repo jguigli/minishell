@@ -87,7 +87,10 @@ void	manage_exec(t_exec_c exec, t_main *main)
 	close_pipes(&exec);
 	exec.pid_number = -1;
 	while (++exec.pid_number < exec.cmd_number)
-		waiting_child_exec(exec.pid[exec.pid_number], main);
+	{
+		if	(waiting_child_exec(exec.pid[exec.pid_number], main) == -20)
+			return ;
+	}
 	manage_signal();
 	if (main->my_fds[0] != -1000)
 	{

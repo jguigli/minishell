@@ -85,10 +85,10 @@ int	exec_simple_cmd(t_main *main) // exécution de la ligne de commande avec le 
 		else if (exec.pid == 0)
 		{
 			manage_child_simple(exec, list, main);
-			//exit(0);
+			exit(0);
 		}
 		if (waiting_child_exec(exec.pid, main) == -20)
-			return (-20);
+			return (0);
 		manage_signal();
 	}
 	if (main->my_fds[0] != -1000)

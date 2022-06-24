@@ -80,7 +80,8 @@ int	exec_launcher(t_main *main)
 	}
 	else if	(pipe == 0)
 	{
-		exec_simple_cmd(main);
+		if(exec_simple_cmd(main) == -20)
+			return (0);
 		//exit(status);
 	}
 	return (1);
