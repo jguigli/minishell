@@ -44,24 +44,20 @@ void	get_prompt(t_main *main)
 {
 	char	*entry;
 	int		int_mode;
-	char	*my_prompt;
 
 	int_mode = 1;
-	my_prompt = NULL;
 	while (int_mode)
 	{
-		if (!my_prompt)
-			my_prompt = get_prompt_env();
+		main->my_prompt = get_prompt_env();
 		int_mode = isatty(STDIN_FILENO);
 		main->start = NULL;
 		if (int_mode == 1)
 		{
-			entry = readline(my_prompt);
+			entry = readline(main->my_prompt);
 			if (entry == NULL)
 			{
 				write(1, "exit\n", 6);
 				ft_free(main);
-				free (my_prompt);
 				exit(status);
 			}
 			add_history(entry);
@@ -74,6 +70,7 @@ void	get_prompt(t_main *main)
 				exec_launcher(main);
 				free_flist(main->start);
 			}
+			free (main->my_prompt);
 		}
 	}
 }

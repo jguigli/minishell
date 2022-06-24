@@ -83,7 +83,7 @@ void			insert_node(char *repere, char *node_toadd, t_flist **head);
 int				check_tot_heredoc(t_flist **list);
 int				multiple_block_p(t_flist **gr_list, int totalhd);
 void			my_lstadd_back(t_flist **alst, t_flist *new);
-t_dblist	    *create_grtoken(t_dblist *l, t_datas *data);
+void            create_grtoken(t_dblist *l, char *data, char *tokt, int type);
 t_datas			*my_lstnew(char *data);
 // void			*get_ll(char **args);
 // int	       		 check_quote(char *str);

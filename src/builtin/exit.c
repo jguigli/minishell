@@ -24,6 +24,7 @@ static void	exit_one_arg(char *arg, t_main *main)
 		status = 2;
 	}
 	ft_free(main);
+	free_exec_simple(main->exec_s);
 	exit(status);
 }
 
@@ -34,6 +35,7 @@ static void	exit_multi_arg(char *arg, t_main *main)
 		printf("minishell: exit: numeric argument required\n");
 		status = 2;
 		ft_free(main);
+		free_exec_simple(main->exec_s);
 		exit(status);
 	}
 	printf("minishell: exit: too much arguments\n");
@@ -43,9 +45,10 @@ static void	exit_multi_arg(char *arg, t_main *main)
 void	ft_exit(char **arg, t_main *main)
 {
 	status = 0;
-	if (!arg[1] && !arg[2])
+	if (!arg[1])
 	{
 		ft_free(main);
+		//free_exec_simple(main->exec_s);
 		exit(status);
 	}
 	else if (arg[1] && !arg[2])

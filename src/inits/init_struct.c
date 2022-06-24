@@ -47,6 +47,7 @@ t_main	*init_main(void)
 	main->env = NULL;
 	main->exec_c = NULL;
 	main->exec_s = NULL;
+	main->my_prompt = NULL;
 	main->my_fds[0] = -1000;
 	main->my_fds[1] = -1000;
 	main->my_oldfds[0] = -200;

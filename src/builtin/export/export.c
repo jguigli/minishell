@@ -8,7 +8,7 @@ char	**dup_env_tab_export(char **env)
 	i = 0;
 	while (env[i])
 		i++;
-	tab = (char **)malloc(sizeof(char *) * (i + 1));
+	tab = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!tab)
 		return (NULL);
 	i = 0;

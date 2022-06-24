@@ -69,6 +69,7 @@ char	**set_var_in_env(char *var, char *path, char **env)
 			str = ft_strjoin(str, path);
 			free(tab[i]);
 			tab[i] = ft_strdup(str);
+			free (str);
 		}
 		i++;
 	}

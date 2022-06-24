@@ -186,7 +186,8 @@ typedef struct s_main
 	t_flist	*start;
 	t_exec_c *exec_c;
 	t_exec_s *exec_s;
-	char **env;
+	char 	**env;
+	char	*my_prompt;
 	int		my_fds[2];
 	int		my_oldfds[2];
 	int		sigintos;

@@ -71,6 +71,8 @@ void	ft_free(t_main *main)
 	}
 	if (main->start)
 		free_flist(main->start);
+	if (main->my_prompt)
+		free(main->my_prompt);
 	// if (main->exec_c)
 	// 	free_exec_complex(main->exec_c);
 	// if (main->exec_s)
