@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-t_flist	*ft_lstnew()
+t_flist	*ft_lstnew(t_dblist *content)
 {
 	t_flist	*newlist;
 
 	newlist = (t_flist *)malloc(sizeof(t_flist));
 	if (!newlist)
 		return (NULL);
-	newlist-> = content;
+	newlist->process = content;
 	newlist->next = NULL;
 	return (newlist);
 }

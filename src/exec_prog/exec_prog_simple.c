@@ -1,83 +1,92 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_prog_simple.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 12:08:28 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/07/20 12:08:30 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-void	child_process_simple(t_exec_s exec, t_flist *list, char **envp)
+static void	manage_child_simple(t_exec_s exec, t_flist *list, t_main *main)
 {
-	if (manage_redirections(&list) == -5)
-		return ;
-	//exec.cmd_arg = list_to_tab(list->process);
-	exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-	if (!exec.cmd)
+	if (main->my_fds[0] != -1000)
 	{
-		// printf("strerror %s\n", strerror(errno));
-		// perror("minishell: cmd");
-		freeing_cmd(exec);
-		exit(g.status);
+		close(main->my_fds[0]);
 	}
-	//printf("exec cmd = %s\n", exec.cmd);
-	if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
+	if (main->my_fds[1] != -1000)
 	{
-		exec.cmd = get_command(exec.cmd_path, exec.cmd_arg[0]);
-		if (!exec.cmd || ft_strcmp(exec.cmd, "KO") == 0)
-		{
-			if (ft_strcmp(exec.cmd, "KO") == 0)
-				syntax_err_file(FILE, exec.cmd_arg[0]);
-			else
-				freeing_cmd(exec);
-				//cmd not found
-			// printf("strerror %s\n", strerror(errno));
-			// perror("minishell: cmd");
-			exit(g.status);
-		}
-		//printf("exec cmd = %s\n", exec.cmd);
-		if (execve(exec.cmd, exec.cmd_arg, envp) == -1)
-		{
-			freeing_execution(exec, errno);
-			exit(g.status);
-		}
+		close(main->my_fds[1]);
 	}
+	child_process_simple(exec, list, main);
 }
 
-void	manage_child_simple(t_exec_s exec, t_flist *list, char **env)
+static int	manage_builtin(t_exec_s *exec, t_main *main)
 {
-	t_flist		*current;
-
-	current = list;
-	if (g.my_fds[0] != -1000)
-		close(g.my_fds[0]);
-	if (g.my_fds[1] != -1000)
-		close(g.my_fds[1]);
-	child_process_simple(exec, list, env);
+	if (manage_redirections(&main->start, main) == -5)
+	{
+		closing_bis(main);
+		free_exec_simple(exec);
+		return (1);
+	}
+	exec->cmd_arg = list_to_tab(main->start->process);
+	if (!exec->cmd_arg)
+	{
+		closing(main);
+		free_exec_simple(exec);
+		return (EXIT_FAILURE);
+	}
+	exec_builtin(exec->cmd_arg, main);
+	return (0);
 }
 
-int	exec_simple_cmd(t_flist *list, char **env)
+static int	manage_fork(t_exec_s exec, t_main *main)
+{
+	exec.pid = fork();
+	manage_sig_in_forks(exec.pid, main);
+	if (exec.pid == -1)
+	{
+		printf("Fork failed : %s\n", strerror(errno));
+		free_exec_simple(&exec);
+		return (1);
+	}
+	else if (exec.pid == 0)
+		manage_child_simple(exec, main->start, main);
+	if (waiting_child_exec(exec.pid, main, 0, 1) == -20)
+	{
+		free_exec_simple(&exec);
+		return (1);
+	}
+	return (0);
+}
+
+int	exec_simple_cmd(t_main *main)
 {
 	t_exec_s	exec;
-	char		**arg;
-	int			file;
-	int			wstatus;
 
-	wstatus = 0;
-	shell_parameter_expansion(list->process, env);
-	exec.path = search_in_env_var("PATH", env); // plantage
+	init_exec_simple(main, &exec);
+	get_origin_fd(main);
+	if (shell_parameter_expansion(main->start->process, main->env))
+		return (-10);
+	delete_nodes_after_expansion(&main->start->process);
+	exec.path = search_in_env_var("PATH", main->env);
 	exec.cmd_path = ft_split(exec.path, ':');
-	exec.cmd_arg = list_to_tab(list->process);
-	if (!exec.cmd_arg)
-		exit(g.status);
-	if (is_builtin(exec.cmd_arg[0]))
-		exec_builtin(exec.cmd_arg, env);
+	if (is_builtin(main->start->process->first->data))
+	{
+		if (manage_builtin(&exec, main))
+			return (closing(main), -10);
+	}
 	else
 	{
-		exec.pid = fork();
-		if (exec.pid == -1)
-		{
-			printf("Fork failed : %s\n", strerror(errno));
-			exit(g.status);
-		}
-		else if (!exec.pid)
-			manage_child_simple(exec, list, env);
+		if (manage_fork(exec, main))
+			return (closing(main), -10);
 	}
-	//close(file);
-	//free(arg);
-	waitpid(exec.pid, &wstatus, 0);
-	return (wstatus);
+	manage_signal();
+	closing(main);
+	free_exec_simple(&exec);
+	return (g_status);
 }

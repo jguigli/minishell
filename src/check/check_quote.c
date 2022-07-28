@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_quote.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 12:20:55 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/07/20 12:20:59 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	check_quote(char *str)
@@ -7,7 +19,6 @@ int	check_quote(char *str)
 	int	doubleq;
 
 	i = 0;
-	// Amina, j'ai initialisé simple q et doubleq sinonon avait des nbres astronomiques
 	simpleq = 0;
 	doubleq = 0;
 	while (str[i])

@@ -1,67 +1,62 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/19 20:46:03 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/07/19 20:47:35 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void    handler(int sig)
+void	ft_sigint(int sig)
 {
-    if (sig == SIGINT)
-    {
-		rl_replace_line("", 0);
-        write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-    }
-    else if (sig == SIGQUIT) // en mode prompt quitter core dumped
-    {
-        return ;
-    }
+	(void)sig;
+	g_status = 130;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-int manage_signal()
+void	ft_sigquit(int sig)
 {
-	signal(SIGINT, handler);
-	signal(SIGQUIT, handler);
-
-    return (0);
+	(void)sig;
+	ft_putstr_fd("\b \b\b \b \b", 2);
+	return ;
 }
 
-// int	manage_signal_hd()
-// {
-// 	//free(buf);
-// 	// close(fd);
-// 	// fd = open(".hd1", O_TRUNC);
-// 	// write(fd, "", 1);
-// 	signal(SIGINT, handler);
-// 	signal(SIGQUIT, handler);
+int	manage_signal(void)
+{
+	signal(SIGINT, &ft_sigint);
+	signal(SIGQUIT, &ft_sigquit);
+	return (0);
+}
 
-//     return (0);
-// 	// return (0);
-// 	// signal(SIGINT, SIG_IGN);
-// 	// signal(SIGQUIT, SIG_IGN);
-// }
+void	sig_quit_child(int sig)
+{
+	if (sig == 3)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", 2);
+		g_status = 131;
+	}
+}
 
-// void	ft_sig_fork_par(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		write(1, "\n", 1);
-// 		g.status = 130;
-// 	}
-// 	else if (sig == SIGQUIT)
-// 	{
-// 		ft_putstr("Quit (core dumped)\n");
-// 		g.status = 131;
-// 	}
-// }
+char	*ft_trunc(char *name)
+{
+	unsigned long	i;
+	char			*ret;
 
-// void	ft_sig_fork(int pid)
-// {
-// 	if (pid == 0)
-// 	{
-// 		signal(SIGINT, SIG_DFL);
-// 		signal(SIGQUIT, SIG_DFL);
-// 	}
-// 	else
-// 	{
-// 		signal(SIGINT, ft_sig_fork_par);
-// 		signal(SIGQUIT, ft_sig_fork_par);
-// 	}	
-// }
+	i = 0;
+	ret = malloc(sizeof(char) * (ft_strlen(name) - 2));
+	while (i < ft_strlen(name) - 2)
+	{
+		ret[i] = name[i];
+		i++;
+	}
+	ret[i] = 0;
+	return (ret);
+}

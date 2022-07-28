@@ -6,20 +6,20 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 19:01:57 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/06/03 19:02:02 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/07/03 17:05:18 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
+static char	*get_prompt_env(void)
 {
 	char	*name;
 	char	*pwd;
 	char	*prompt;
 	char	*temp;
 
-	temp = ft_strdup("");
+	temp = NULL;
 	temp = ft_strjoin(temp, "\x1b[32m");
 	name = ft_strdup("minishell");
 	if (!name)
@@ -27,54 +27,60 @@ char	*get_prompt_env(char **env) // RAJOUTER DES PROTEC
 	temp = ft_strjoin(temp, name);
 	free(name);
 	name = ft_strjoin(temp, "\x1b[0m:");
-	temp = ft_strdup("");
+	temp = NULL;
 	temp = ft_strjoin(temp, "\x1b[34m");
 	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (free(name), free(temp), NULL);
 	temp = ft_strjoin(temp, pwd);
-	free(pwd);
+	if (pwd)
+		free(pwd);
 	pwd = ft_strjoin(temp, "\x1b[0m$ ");
 	prompt = ft_strjoin(name, pwd);
 	free(pwd);
 	return (prompt);
 }
 
-void	get_prompt(void)
+static void	manage_prompt(char *entry, t_main *main)
+{
+	int	get_p;
+
+	get_p = 1;
+	entry = readline(main->my_prompt);
+	main->sigintos = 0;
+	if (entry == NULL)
+	{
+		write(1, "exit\n", 6);
+		closing(main);
+		close(1);
+		ft_free(main);
+		exit(g_status);
+	}
+	add_history(entry);
+	main->start = parse_args(entry, main);
+	if (!main->start)
+		get_p = 0;
+	if (get_p == 1)
+	{
+		exec_launcher(main);
+		free_flist(main->start);
+	}
+}
+
+void	get_prompt(t_main *main)
 {
 	char	*entry;
 	int		int_mode;
-	char	*my_prompt;
-	int		get_p;
-
-	t_flist	*gr_list;
 
 	int_mode = 1;
+	entry = NULL;
 	while (int_mode)
 	{
-		get_p = 1;
-		my_prompt = get_prompt_env(g.env);
-		if (!my_prompt)
-			my_prompt = "~$ ";
+		main->my_prompt = get_prompt_env();
 		int_mode = isatty(STDIN_FILENO);
+		main->start = NULL;
+		main->exec_c = NULL;
+		main->exec_s = NULL;
 		if (int_mode == 1)
-		{
-			entry = readline(my_prompt);
-			if (entry == NULL )
-			{
-				write(1, "exit", 5);
-				exit(g.status);
-			}
-			add_history(entry);
-			//printf("entryyyyyy %s\n", entry);
-			gr_list = parse_args(entry, g.env);
-			if	(!gr_list)
-				get_p = 0;
-			if	(get_p == 1)
-			{
-				affiche(gr_list->process);
-				exec_launcher(&gr_list, g.env);
-			}
-		}
+			manage_prompt(entry, main);
+		free (main->my_prompt);
 	}
 }

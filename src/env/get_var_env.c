@@ -12,10 +12,76 @@
 
 #include "../../includes/minishell.h"
 
-char	*search_in_env_var(char *var, char **env)
+void	free_char_tab(char **tab)
 {
 	int	i;
-	int	j;
+
+	i = 0;
+	while (tab[i])
+		free (tab[i++]);
+	free (tab);
+}
+
+int	search_var_tab(char *var, char **tab)
+{
+	int		i;
+	int		j;
+	int		z;
+
+	i = 0;
+	j = 0;
+	z = 0;
+	if (!var || !tab)
+		return (0);
+	while (tab[i])
+	{
+		j = 0;
+		while (tab[i][j] != '=' && tab[i][j])
+			j++;
+		while (var[z] != '=' && var[z])
+			z++;
+		if (j == z)
+		{
+			if (!ft_strncmp(var, tab[i], j))
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	search_var_tab_plus(char *var, char **tab)
+{
+	int		i;
+	int		j;
+	int		z;
+
+	i = 0;
+	j = 0;
+	z = 0;
+	if (!var || !tab)
+		return (0);
+	while (tab[i])
+	{
+		j = 0;
+		while (tab[i][j] != '=' && tab[i][j])
+			j++;
+		while (var[z] != '+' && var[z])
+			z++;
+		if (j == z)
+		{
+			if (!ft_strncmp(var, tab[i], j))
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+char	*search_in_env_var(char *var, char **env)
+{
+	int		i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -29,7 +95,7 @@ char	*search_in_env_var(char *var, char **env)
 		if (j == ft_strlen(var))
 		{
 			if (!ft_strncmp(var, env[i], j))
-				return (&env[i][j + 1]);
+				return (ft_strdup(&env[i][j + 1]));
 		}
 		i++;
 	}
@@ -41,28 +107,26 @@ char	**set_var_in_env(char *var, char *path, char **env)
 	int		i;
 	int		j;
 	char	*str;
-	char	*temp;
 	char	**tab;
 
-	i = 0;
-	j = 0;
-	if (!var || !*env || !path)
+	i = -1;
+	if (!env)
 		return (NULL);
-	tab = dup_env_tab(g.env);
-	while (tab[i])
+	if (!path)
+		return (env);
+	tab = dup_env_tab(env);
+	while (tab[++i])
 	{
 		j = 0;
-		while (tab[i][j] != '=')
+		while (tab[i][j] != '=' && tab[i][j])
 			j++;
-		if (!ft_strncmp(var, tab[i], j))
+		if (!ft_strncmp(var, env[i], j))
 		{
-			str = ft_substr(tab[i], 0, j + 1);
+			str = ft_substr(env[i], 0, j + 1);
 			str = ft_strjoin(str, path);
-			free(tab[i]);
-			tab[i] = ft_strdup(str);
+			free (tab[i]);
+			tab[i] = str;
 		}
-		i++;
 	}
-	free(str);
-	return (tab);
+	return (free_char_tab(env), tab);
 }

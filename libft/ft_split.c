@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static char	*ft_free(char **liste)
+static char	*free_split(char **liste)
 {
 	unsigned int	i;
 
@@ -43,7 +43,7 @@ static char	*get_word(char const *str, char c, int i, char **liste)
 		j++;
 	dest = (char *)malloc(sizeof(char) * j + 1);
 	if (!dest)
-		return (ft_free(liste));
+		return (free_split(liste));
 	j = 0;
 	while (str[i + j] && !(check_sep(str[i + j], c)))
 	{
@@ -85,6 +85,8 @@ char	**ft_split(char const *str, char c)
 
 	i = 0;
 	p = 0;
+	if (!str)
+		return (NULL);
 	liste = (char **)malloc(sizeof(char *) * (size_list(str, c) + 1));
 	if (!liste)
 		return (NULL);

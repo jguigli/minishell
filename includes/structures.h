@@ -1,60 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structures.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 12:25:57 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/07/20 12:25:59 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
-#include "minishell.h"
+# include "minishell.h"
 
-// on définit tokens selon grammaire shell
-typedef enum		e_toktype {
-	TOKEN_ERROR, //0
-	TOKEN_SP,//1
-	TOKEN_BANG, //2
-	TOKEN_AND, //3
-	TOKEN_SEMI, //4
-	TOKEN_WORD, //5
-	TOKEN_RRED, //6
-	TOKEN_LRED, //7
-	TOKEN_ESCAPE, //8
-	TOKEN_DIGIT, //9
-	TOKEN_DOL, //10
-	TOKEN_PIPE, //11
-	TOKEN_SQUOTE, //12
-	TOKEN_DQUOTE, //13
-	TOKEN_BQUOTE, //14
-	TOKEN_LPAREN, //15
-	TOKEN_RPAREN, //16
-	TOKEN_HYPHEN, //17
-	TOKEN_LBRACE, //18
-	TOKEN_RBRACE, //19
-	TOKEN_WILDC, //20
-	TOKEN_FILE, //21
-	TOKEN_EQ, //22
-	TOKEN_EOF, //23
-	TOKEN_CMD, //24
-	TOKEN_OPT, //25
-	TOKEN_BS, //26
-	TOKEN_SLASH, //27
-	TOKEN_DOT, //28
-	TOKEN_COMA, //29
-	TOKEN_ESP, //30
-	TOKEN_DASH, //31
-	TOKEN_UNDS, //32
-	TOKEN_HEREDOC, //33
-	TOKEN_HEREDOC_DASH, //34=
-	SIMPLE_DELIM, //35
-	DQUOTED_DELIM,//36
-	SQUOTED_DELIM,//37
-	TOKEN_RRED_APPEND,//38
-	TOKEN_HEREDOC_STRING,//39
-	TOKEN_NL,//40
-	TOKEN_QUERY,//41
-	TOKEN_AROB,//42
-	TOKEN_DIEZ,//43
-	TOKEN_TILDE, //44
+typedef enum e_toktype {
+	TOKEN_ERROR,
+	TOKEN_SP,
+	TOKEN_BANG,
+	TOKEN_AND,
+	TOKEN_SEMI,
+	TOKEN_WORD,
+	TOKEN_RRED,
+	TOKEN_LRED,
+	TOKEN_ESCAPE,
+	TOKEN_DIGIT,
+	TOKEN_DOL,
+	TOKEN_PIPE,
+	TOKEN_SQUOTE,
+	TOKEN_DQUOTE,
+	TOKEN_BQUOTE,
+	TOKEN_LPAREN,
+	TOKEN_RPAREN,
+	TOKEN_HYPHEN,
+	TOKEN_LBRACE,
+	TOKEN_RBRACE,
+	TOKEN_WILDC,
+	TOKEN_FILE,
+	TOKEN_EQ,
+	TOKEN_EOF,
+	TOKEN_CMD,
+	TOKEN_OPT,
+	TOKEN_BS,
+	TOKEN_SLASH,
+	TOKEN_DOT,
+	TOKEN_COMA,
+	TOKEN_ESP,
+	TOKEN_DASH,
+	TOKEN_UNDS,
+	TOKEN_HEREDOC,
+	TOKEN_HEREDOC_DASH,
+	SIMPLE_DELIM,
+	DQUOTED_DELIM,
+	SQUOTED_DELIM,
+	TOKEN_RRED_APPEND,
+	TOKEN_HEREDOC_STRING,
+	TOKEN_NL,
+	TOKEN_QUERY,
+	TOKEN_AROB,
+	TOKEN_DIEZ,
+	TOKEN_TILDE,
+	TOKEN_COLON,
+	TOKEN_PERCENT,
+	TOKEN_CIRC,
+	TOKEN_PLUS,
+	TOKEN_UACC,
+	TOKEN_BT,
+	TOKEN_LEMBRACE,
+	TOKEN_REMBRACE,
+	TOKEN_AST,
+	TOKEN_LBRACKET,
+	TOKEN_RBRACKET,
+	TOKEN_DEL,
 	TOKEN_MAX
 }					t_toktype;
 
-// on definit des enums pour reconnaitre chaque char et le categoriser
-typedef enum		e_chr_class {
+typedef enum e_chr_class {
 	CHR_ERROR,
 	CHR_SP,
 	CHR_PIPE,
@@ -91,28 +113,39 @@ typedef enum		e_chr_class {
 	CHR_QUERY,
 	CHR_AROB,
 	CHR_TILDE,
+	CHR_COLON,
+	CHR_PERCENT,
+	CHR_CIRC,
+	CHR_PLUS,
+	CHR_UACC,
+	CHR_BT,
+	CHR_LEMBRACE,
+	CHR_REMBRACE,
+	CHR_AST,
 	CHR_MAX
 }					t_chr_class;
 
-typedef struct s_glob
+typedef struct s_glob_infos
 {
-	int		status;
-	char	**env;
-	int		my_fds[2];
-	int		my_oldfds[2];
-}	t_glob;
-
-
-typedef	struct s_glob_infos
-{
-	t_chr_class	get_chr_c[255];
-	t_toktype	get_tok_type[255];
-	int		get_chr_rules[255][255];
-	int		sp;
-	int		nb_pipes;
+	t_chr_class	gch[255];
+	t_toktype	gtt[255];
+	int			grul[255][255];
+	char		*types[1024];
+	int			nb_pipes;
+	int			ctrls;
+	int			k;
+	int			m;
+	char		*st;
+	int			dq;
+	int			sq;
+	int			tt;
+	int			sp;
+	int			pos;
+	int			incr;
+	int			check;
 }	t_glob_infos;
 
-typedef	struct s_datas
+typedef struct s_datas
 {
 	char			*data;
 	unsigned int	type;
@@ -127,41 +160,35 @@ typedef	struct s_datas
 	int				sp_char;
 	int				length;
 	int				expansion;
-	struct s_datas 	*next;
-	struct s_datas 	*previous;
-} t_datas;
+	struct s_datas	*next;
+	struct s_datas	*previous;
+}	t_datas;
 
-// Jai rajoute quelques param pur identifier un noeud et ce quil contient
-// - 1 : contient le cara
-// - 0 : ne contient pas
-// - length : correspond a la long du mot;
-
-// Struct pour points d'entrée de la liste
 typedef struct s_dblist
 {
 	int				number;
-	t_datas 		*first;
-	t_datas 		*last;
-	t_glob_infos 	*infos;
-} t_dblist;
+	t_datas			*first;
+	t_datas			*last;
+	t_glob_infos	*in;
+}	t_dblist;
 
-typedef	struct s_flist
+typedef struct s_flist
 {
-	int			number;
-	t_dblist	*process;
-	int			nb_rred;
-	int			pos_rred;
-	int			nb_rred_app;
-	int			pos_rred_app;
-	int			nb_lred;
-	int			pos_lred;
-	int			nb_heredoc;
-	int			pos_heredoc;	
-	int			nb_options;
-	int			pos_options;	
-	struct s_flist 	*next;
-	struct s_flist 	*previous;
-} t_flist;
+	int				number;
+	t_dblist		*process;
+	int				nb_rred;
+	int				pos_rred;
+	int				nb_rred_app;
+	int				pos_rred_app;
+	int				nb_lred;
+	int				pos_lred;
+	int				nb_heredoc;
+	int				pos_heredoc;	
+	int				nb_options;
+	int				pos_options;	
+	struct s_flist	*next;
+	struct s_flist	*previous;
+}	t_flist;
 
 typedef struct s_exec_c
 {
@@ -186,5 +213,29 @@ typedef struct s_exec_s
 	int		pipe_number;
 	int		cmd_number;
 }	t_exec_s;
+
+typedef struct s_main
+{
+	t_flist		*start;
+	t_exec_c	*exec_c;
+	t_exec_s	*exec_s;
+	char		**env;
+	char		**export;
+	char		*my_prompt;
+	int			my_fds[2];
+	int			my_oldfds[2];
+	int			sigintos;
+	char		*node_toadd;
+	char		*tmp;
+	int			file;
+	int			i;
+	pid_t		fi;
+	pid_t		pid;
+	int			k;
+	int			hd_wstatus;
+	int			exec_wstatus;
+	int			ret;
+	int			tota_heredoc;
+}	t_main;
 
 #endif

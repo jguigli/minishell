@@ -6,7 +6,7 @@
 /*   By: aminaelk <aminaelk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 17:22:11 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/01/04 15:11:02 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/07/03 15:45:01 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,23 @@ char	*read_get_nls(int fd, char *tmp)
 	v_ret = 1;
 	buf = malloc(sizeof(char) * (1 + 1));
 	if (!buf)
-	{
-		//printf("ici 1");
 		return (NULL);
-	}
 	while (v_ret != 0 && !my_strchr(tmp, '\n'))
 	{
-		// printf("hehe");
 		v_ret = read(fd, buf, 1);
-		// printf("tmp %s", tmp);
-		// printf("strchr%d\n ", my_strchr(tmp, '\n'));
-		// printf("v_ret %d \n ", v_ret);		
-		//printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
 		if (v_ret == -1)
 		{
-			//printf("ici 2");
 			free(buf);
 			return (NULL);
 		}				
 		buf[v_ret] = '\0';
-		//printf("buf %s", buf);
 		tmp = my_strjoin(tmp, buf);
-		//printf("tmp fin %s", tmp);
 	}
-	//printf("hihi\n");
 	free(buf);
-	//printf("hoho \n");
 	return (tmp);
 }
 
-char	*get_string_nl(char		*result)
+char	*get_string_nl(char *result)
 {
 	char			*tmp;
 	unsigned long	j;
@@ -64,10 +51,7 @@ char	*get_string_nl(char		*result)
 	else
 		tmp = malloc(sizeof(char) * (i + 1));
 	if (!tmp)
-	{
-		//printf("ici 3");
 		return (NULL);
-	}
 	while (result[j] && j < i)
 	{
 		tmp[j] = result[j];
@@ -90,16 +74,12 @@ char	*next_sent(char *final)
 		i++;
 	if (!final[i])
 	{
-		//printf("ici 4");
 		free(final);
 		return (NULL);
 	}
 	memory = malloc(sizeof(char) * (my_strlen(final) - i) + 1);
 	if (!memory)
-	{
-		//printf("ici 5");
 		return (NULL);
-	}
 	i++;
 	j = 0;
 	while (final[i + j])
@@ -119,7 +99,6 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || 1 <= 0)
 		return (NULL);
-	//next_sentence = NULL;
 	next_sentence = read_get_nls(fd, next_sentence);
 	if (!next_sentence)
 		return (NULL);

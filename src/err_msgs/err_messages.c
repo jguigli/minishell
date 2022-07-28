@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   err_messages.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 12:19:47 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/07/20 12:19:48 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	error_msgs(int error, char *data)
@@ -5,20 +17,39 @@ void	error_msgs(int error, char *data)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(data, 2);
 	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd(strerror(error), 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 1;
-	return ;
+	g_status = 1;
 }
 
-void	syntax_err(char *error, char *data) // a changer en syntax_err_token
+void	error_msg_redir(char *data, char *error)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
+	g_status = 1;
+}
+
+void	syntax_err(char *error, char *data)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd(" ", 2);
 	ft_putstr_fd(data, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 2;
+	g_status = 2;
+}
+
+void	syntax_err_identifier(char *error, char *data)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(data, 2);
+	ft_putstr_fd(" : ", 2);
+	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
+	g_status = 1;
 }
 
 void	syntax_err_file(char *error, char *data)
@@ -28,25 +59,5 @@ void	syntax_err_file(char *error, char *data)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
-	g.status = 2;
-}
-
-void	isdir_err(char *error, char *data)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(data, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(error, 2);
-	ft_putstr_fd("\n", 2);
-	g.status = 2;
-}
-
-void	cmd_not_found(char *error, char *cmd)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(error, 2);
-	ft_putstr_fd("\n", 2);
-	g.status = 127;
+	g_status = 2;
 }
